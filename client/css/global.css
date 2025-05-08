@@ -1,0 +1,24 @@
+/* CSS Variables for Global Colors and Fonts */
+:root {
+  --text-color: #fff;
+  --background-color1: #1b222c;
+  --background-color2: #12151c;
+  --red-color: #d02b31;
+  --font-family: 'Fira Sans', sans-serif;
+  --font-size: 16px;
+}
+
+/* Reset Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global Body Styles */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  color: var(--text-color);
+  background-color: var(--background-color1);
+}
