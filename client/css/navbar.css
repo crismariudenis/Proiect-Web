@@ -16,20 +16,18 @@ nav ul {
 nav a {
   text-decoration: none;
   color: var(--text-color);
-  font-size: 0.9em;
+  font-size: 1.1em;
 }
 
 nav a:hover {
-  text-decoration: none;
   color: var(--red-color);
-  font-size: 0.9em;
 }
 
 
 
 .logo {
   font-weight: bold;
-  font-size: 1.3em;
+  font-size: 1.5em;
   padding-top: 0.3em;
   padding-bottom: 0.3em;
 }
@@ -37,9 +35,9 @@ nav a:hover {
 .button {
   background-color: var(--red-color);
   border: none;
-  padding: 0.5em 1em;
+  padding: 0.3em 1em;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 1.1em;
   border-radius: 5px;
 }
 
