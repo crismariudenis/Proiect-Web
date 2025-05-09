@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+}
+
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 39%;
+    border-radius: 1rem;
+    /* width: fit-content; */
+    height: 64%;
+    padding: 2rem;
+    transform: translate(-50%, -50%);
+    background-color: rgb(28, 31, 38);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    box-sizing: border-box;
+    /* overflow: auto; */
+}
+
+.pop_up_content {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: rgb(28, 31, 38);
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.pop_up_main {
+    background-color: rgb(28, 31, 38);
+    flex: 0 0 85%;
+    display: flex;
+    flex-direction: row;
+    /* flex-wrap: wrap; */
+}
+
+.pop_up_footer {
+    flex: 0 0 15%;
+    background-color: rgb(28, 31, 38);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.pop_up_text {
+    width: 55%;
+    height: 100%;
+    background-color: rgb(28, 31, 38);
+    display: flex;
+    flex-direction: column;
+
+}
+
+.pop_up_descr {
+    flex: 0 0 40%;
+    background-color: rgb(28, 31, 38);
+}
+
+.pop_up_rank {
+    flex: 0 0 45%;
+    background-color: rgb(28, 31, 38);
+}
+
+.pop_up_tags {
+    flex: 0 0 15%;
+    background-color: rgb(28, 31, 38);
+}
+
+.pop_up_img {
+    width: 45%;
+    height: 100%;
+    background-color: rgb(28, 31, 38);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.pop_up_img img {
+    width: 90%;
+    height: 90%;
+}
+
+.description,
+.ranking,
+.tags {
+    text-align: left;
+    color: rgb(230, 57, 70);
+    font-weight: bold;
+    font-size: 130%;
+
+}
+
+.description_body,
+.ranking_body {
+    text-align: left;
+    color: white;
+
+
+}
+
+button {
+    background-color: rgb(230, 57, 70);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+@media (max-width: 800px) {
+    .popup {
+        width: 90%;
+        height: 40%;
+    }
+
+}
