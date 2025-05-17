@@ -1,9 +1,20 @@
 <nav>
   <ul>
     <div class="logo">HEROQuizz</div>
-    <li><a href="index.html">Quizzes</a></li>
-    <li><a href="index.html">Contact</a></li>
-    <li><a href="index.html">About Us</a></li>
-    <div class="button">Join now</a></li>
+    <div class="hamburger-menu" onclick="toggleMenu()">☰</div>
+    <div class="nav-links">
+      <li><a href="index.html">Quizzes</a></li>
+      <li><a href="index.html">Contact</a></li>
+      <li><a href="index.html">About Us</a></li>
+      <div class="button">Join now</div>
+    </div>
   </ul>
 </nav>
+<script>
+  function toggleMenu() {
+    const navLinks = document.querySelector(".nav-links");
+    if (navLinks) {
+      navLinks.classList.toggle("active");
+    }
+  }
+</script>

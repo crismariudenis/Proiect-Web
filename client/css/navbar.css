@@ -1,16 +1,26 @@
 nav {
   display: flex;
+  justify-content: space-between; /* Space out items evenly */
+  align-items: center; /* Center items vertically */
   color: var(--text-color);
   width: 100%;
   border-bottom: 1px solid #786e6e;
+  padding: 0 1em; /* Add padding to the edges */
 }
 
 nav ul {
   display: flex;
   list-style: none;
-  flex-grow: 1; /* Allow the links to grow and occupy space */
-  justify-content: space-evenly;
+  justify-content: space-around; /* Center the links */
   align-items: center;
+  gap: 3em; /* Increase spacing between links */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+  flex-grow: 1; /* Allow the links to occupy available space */
+}
+
+nav ul li {
+  padding: 0 1em; /* Add horizontal padding to each link */
 }
 
 nav a {
@@ -23,21 +33,59 @@ nav a:hover {
   color: var(--red-color);
 }
 
-
-
 .logo {
   font-weight: bold;
   font-size: 1.5em;
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
+  margin-right: 2em; /* Add spacing between the logo and links */
 }
 
 .button {
   background-color: var(--red-color);
   border: none;
-  padding: 0.3em 1em;
+  padding: 0.5em 1em;
   cursor: pointer;
   font-size: 1.1em;
   border-radius: 5px;
+  margin-left: 2em; /* Add spacing between the links and button */
 }
 
+.hamburger-menu {
+  display: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center; /* Center the links */
+  align-items: center;
+}
+
+.nav-links.active {
+  display: flex; /* Ensure the links are displayed as a flex container */
+  flex-direction: column; /* Stack the links vertically */
+}
+
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: var(--background-color);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 1em 1.5em; /* Add horizontal padding for better readability */
+  }
+
+  .nav-links li,
+  .nav-links .button {
+    margin: 0.5em 0;
+    text-align: center;
+  }
+}

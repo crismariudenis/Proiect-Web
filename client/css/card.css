@@ -1,0 +1,41 @@
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  text-align: center;
+  color: var(--text-color);
+  position: relative; /* Ensure proper stacking context */
+  cursor: pointer; /* hand cursor */
+  background-color: var(--background-color1); /* distinct from section bg */
+  min-height: 340px; /* taller cards */
+  display: flex; /* flex to space content */
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-image {
+  width: 100%;
+  height: 150px; /* Set a fixed height for the image */
+  object-fit: cover; /* Ensure the image scales properly */
+}
+
+.card-content {
+  padding: 1em;
+}
+
+.card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.card-description {
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.card img,
+.card .card-content {
+  cursor: pointer; /* ensure children also show pointer */
+}

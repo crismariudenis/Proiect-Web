@@ -1,0 +1,62 @@
+.hero {
+  display: flex;
+  align-items: center;
+  padding: 2em;
+  background-color: var(--background-color);
+   /* Subtract the navbar height (e.g., 60px) from the viewport height */
+  box-sizing: border-box; /* Include padding in the height and width */
+
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Center items (image and text) vertically */
+  gap: 2em; /* Add spacing between the image and text */
+  max-width: 1400px; /* was 1200px – increase to widen the section */
+  width: 100%;
+  box-sizing: border-box; /* Include padding in the width */
+}
+
+.hero-content img {
+  max-width: 50%; /* Make the image take half the width */
+  height: auto;
+  border-radius: 10px;
+}
+
+.text-content {
+  max-width: 50%; /* Make the text take half the width */
+  color: var(--text-color);
+  text-align: left; /* Align text to the left */
+  display: flex;
+  flex-direction: column; /* Stack text and button vertically */
+  align-items: flex-start; /* Align text and button to the left */
+  padding: 2em 0 0 0; /* Add padding to the top */
+  margin: 0; /* Ensure no extra margin */
+}
+
+.text-content h1 {
+  font-size: 2.5em; /* Revert to the older font size for the heading */
+  font-weight: bold;
+  margin-bottom: 1em; /* Revert spacing below the heading */
+}
+
+.text-content p {
+  font-size: 1.2em; /* Revert to the older font size for the paragraph */
+  line-height: 1.6; /* Revert line height */
+  margin-bottom: 1.5em; /* Revert spacing below the paragraph */
+}
+
+.text-content .button {
+  background-color: var(--red-color);
+  color: #fff;
+  padding: 0.8em 1.5em; /* Revert padding for the button */
+  font-size: 1.1em; /* Revert to the older font size for the button text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0; /* Remove any extra margin */
+  align-self: flex-start; /* Ensure the button aligns with the text */
+}

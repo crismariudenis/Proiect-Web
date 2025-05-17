@@ -1,6 +1,24 @@
-footer {
-  background-color: var(--secondary-color);
-  text-align: center;
-  padding: 1rem;
-  color: #FF0000;
+footer.site-footer {
+  background-color: var(--background-color1);
+  color: var(--text-color);
+  width: 100vw;
+  margin: 0;
+  position: relative; /* allow offsetting outside its parent */
+  left: 50%; /* move left edge to center */
+  margin-left: -50vw; /* pull left edge to viewport left */
+  width: 100vw; /* span full viewport width */
+  padding: 1em 0; /* vertical padding */
+}
+footer.site-footer .footer-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row; /* ensure left, center, right align in one row */
+  max-width: 1200px; /* match your main width */
+  margin: 0 auto; /* center the inner flex row */
+}
+.footer-left,
+.footer-center,
+.footer-right {
+  font-size: 0.9rem;
 }
