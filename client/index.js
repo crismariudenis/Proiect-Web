@@ -36,16 +36,35 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("card-placeholder").innerHTML = data; // Insert the card into the placeholder
     });
 
+  fetch("./components/quiz_window.html")
+    .then((response) => response.text())
+    .then((html) => {
+      const quizContainer = document.getElementById("quiz_window");
+      quizContainer.classList.remove("active");
+      quizContainer.innerHTML = html;
+      window.openQuizWindow = () => quizContainer.classList.add("active");
+    });
+
+
+
   // load pop-up markup
   fetch("./components/pop_up.html")
     .then((res) => res.text())
     .then((html) => {
       const container = document.getElementById("pop_up");
+
       container.innerHTML = html;
       // overlay toggle
       window.openPopUp = () => container.classList.add("active");
       container
         .querySelector(".button_close")
         .addEventListener("click", () => container.classList.remove("active"));
+      container
+        .querySelector(".button_play_quiz")
+        .addEventListener("click", () => {
+          container.classList.remove("active");
+          window.openQuizWindow();
+        });
+
     });
 });
