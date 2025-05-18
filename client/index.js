@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  fetch("./components/login.html") // Fetch the footer HTML file
+    .then((response) => response.text()) // Convert the response to text
+    .then((data) => {
+      document.getElementById("login").innerHTML = data; // Insert the content into the placeholder
+    });
+
   fetch("./components/navbar.html") // Fetch the navbar HTML file
     .then((response) => response.text()) // Convert the response to text
     .then((data) => {
@@ -10,6 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
           navLinks.classList.toggle("active"); // Toggle the active class
         }
       };
+      window.openLogin = function () {
+        const containerLogin = document.getElementById("login");
+        containerLogin.classList.add("active");
+      }
     });
 
   fetch("./components/footer.html") // Fetch the footer HTML file
