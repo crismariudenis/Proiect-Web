@@ -99,3 +99,14 @@
         height: 40%;
     }
 }
+
+.login_actions {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+}
+.login_btn {
+  padding: 0.5em 1em; /* slimmer vertical/horizontal padding */
+  max-width: 120px; /* cap width */
+  width: auto; /* no full-width stretch */
+}
