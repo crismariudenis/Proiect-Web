@@ -10,9 +10,10 @@ db.prepare(
   )`
 ).run();
 
-function addUser(nume, email, callback) {
+function addUser(name, email, callback) {
+  console.log("Adding user:", name, email);
   const sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-  db.run(sql, [nume, email], function (err) {
+  db.run(sql, [name, email], function (err) {
     if (callback) callback(err);
   });
 }
@@ -22,6 +23,7 @@ function getUsers(callback) {
     callback(err, rows);
   });
 }
+
 
 module.exports = {
   addUser,

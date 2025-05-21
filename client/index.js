@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
           fetch("http://127.0.0.1:3000/adauga", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nume: name, email }),
+            body: JSON.stringify({ name, email }),
           })
             .then((r) => r.json())
             .then(() => {
