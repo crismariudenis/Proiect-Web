@@ -90,9 +90,24 @@ document.addEventListener("DOMContentLoaded", () => {
         .addEventListener("click", () => container.classList.remove("active"));
       container
         .querySelector(".button_play_quiz")
-        .addEventListener("click", () => {
-          container.classList.remove("active");
-          window.openQuizWindow();
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          fetch("http://127.0.0.1:3000/quizzes", {
+            method: "GET",
+            headers: { "Accept": "application/json" },
+          })
+            .then((res) => res.json())
+            .then((quizData) => {
+              console.log("Datele primite de la server:", quizData);
+              container.classList.remove("active");
+              window.openQuizWindow(quizData);
+            })
+            .catch((err) => {
+              console.error("Couldn't get quizzes", err);
+              alert("Couldn't load quizzez.");
+            });
         });
     });
 });

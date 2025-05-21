@@ -4,6 +4,64 @@ const path = require("path");
 const url = require("url");
 const db = require("./db");
 const port = 3000;
+let heroesRowsCount;
+const choicesMap = {};
+const fields = ["ID", "ALIGN", "EYE", "UNIVERSE", "YEAR", "HAIR"];
+
+db.numberOfRows((err, count) => {
+  if (err) {
+    console.error("Couldn't find rowcount", err);
+    res.writeHead(500);
+    res.end("Server error");
+    return;
+  }
+  else {
+    console.log("Rows:" + count);
+    heroesRowsCount = count;
+  }
+});
+
+// function loadChoices(i) {
+//   let searchField;
+//   switch (i) {
+//     case 0:
+//       searchField = "ID"
+//       break;
+//     case 1:
+//       searchField = "ALIGN"
+//       break;
+//     case 2:
+//       searchField = "EYE"
+//       break;
+//     case 3:
+//       searchField = "universe"
+//       break;
+//     case 4:
+//       searchField = "year"
+//       break;
+//     case 5:
+//       searchField = "HAIR"
+//       break;
+
+//   }
+//   db.getChoices(searchField, (err, values) => {
+//     if (err) {
+//       console.error("DB error: couldn;t get field values", err);
+//       return;
+//     }
+//     choicesMap[i] = values;
+//     console.log(`${searchField}, map[${i}] =`, choicesMap[i]);
+
+//   });
+// }
+
+// for (let i = 0; i <= 5; i++) {
+//   loadChoices(i);
+// }
+db.loadChoices((choicesMap) => {
+  // console.log('Choices:', choicesMap);
+
+})
 
 const server = http.createServer((req, res) => {
   // CORS headers
@@ -19,21 +77,22 @@ const server = http.createServer((req, res) => {
   const method = req.method;
   const pathname = parsedUrl.pathname;
 
-  if (
-    method === "GET" &&
-    fs.existsSync(filePath) &&
-    !fs.lstatSync(filePath).isDirectory()
-  ) {
-    const ext = path.extname(filePath);
-    const contentType =
-      {
-        ".html": "text/html",
-        ".js": "application/javascript",
-        ".css": "text/css",
-        ".json": "application/json",
-      }[ext] || "text/plain";
-    res.writeHead(200, { "Content-Type": contentType });
-    fs.createReadStream(filePath).pipe(res);
+  console.log(pathname);
+  if (method === "GET" && pathname === "/quizzes") {
+
+    db.getQuizzes(10, heroesRowsCount, (err, quizzes) => {
+      if (err) {
+        console.error("Couldn't get quizzes", err);
+        res.writeHead(500);
+        res.end("Server error");
+        return;
+      }
+
+      //console.log("Generated Quizzes: ", quizzes);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(quizzes));
+    });
+
     return;
   }
 
