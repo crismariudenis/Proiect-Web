@@ -6,7 +6,8 @@ const db = require("./db");
 const port = 3000;
 let heroesRowsCount;
 const choicesMap = {};
-const fields = ["ID", "ALIGN", "EYE", "UNIVERSE", "YEAR", "HAIR"];
+const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
+let currentAnswers = [];
 
 db.numberOfRows((err, count) => {
   if (err) {
@@ -89,6 +90,15 @@ const server = http.createServer((req, res) => {
       }
 
       //console.log("Generated Quizzes: ", quizzes);
+      db.getAnswers((err, answers) => {
+        if (err) {
+          console.error("A apărut o eroare:", err);
+          return;
+        }
+
+        console.log("Current right answers:", answers);
+        currentAnswers = answers;
+      });
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(quizzes));
     });
@@ -131,6 +141,45 @@ const server = http.createServer((req, res) => {
     });
     return;
   }
+
+
+  if (method === "POST" && pathname === "/answer") {
+    let body = "";
+
+    req.on("data", chunk => {
+      body += chunk.toString();
+    });
+
+    req.on("end", () => {
+      try {
+        const parsedData = JSON.parse(body);
+        const answer = parsedData.answer;
+        const id = parsedData.id;
+
+        let isCorrect = false;
+        console.log("Received: " + id + " " + answer);
+        if (currentAnswers[id] == answer) {
+          console.log("Right.");
+          isCorrect = true;
+        }
+        else
+          console.log("Wrong.")
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ correct: isCorrect }));
+      } catch (error) {
+        console.error("Eroare la parsarea JSON:", error.message);
+
+        if (!res.headersSent) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid JSON" }));
+        }
+      }
+    });
+
+    return;
+  }
+
 
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("404 Not Found");

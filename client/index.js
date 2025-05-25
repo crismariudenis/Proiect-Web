@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("hero").innerHTML = data; // Insert the content into the #hero div
     });
 
+
   fetch("./components/quizzes.html") // Fetch the quizzes component
     .then((response) => response.text())
     .then((data) => {
@@ -67,13 +68,109 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("card-placeholder").innerHTML = data; // Insert the card into the placeholder
     });
 
+  let quizContainer;
+  let currentQuizIndex = 0;
+  let quizData = [];
+
   fetch("./components/quiz_window.html")
     .then((response) => response.text())
     .then((html) => {
-      const quizContainer = document.getElementById("quiz_window");
+      currentQuizIndex = 0;
+      quizContainer = document.getElementById("quiz_window");
+
       quizContainer.classList.remove("active");
       quizContainer.innerHTML = html;
-      window.openQuizWindow = () => quizContainer.classList.add("active");
+      window.openQuizWindow = () => {
+        let questionText = [];
+        quizContainer.classList.add("active");
+        const questionElement = quizContainer.querySelector(".question");
+        if (questionElement) {
+          const field = quizData[currentQuizIndex].field;
+          switch (field) {
+            case "ID":
+              questionText.push("What is the identity of the hero ");
+              questionText.push(quizData[currentQuizIndex].name);
+              questionText.push(" ?");
+              break;
+            case "ALIGN":
+              questionText.push("What is ");
+              questionText.push(quizData[currentQuizIndex].name);
+              questionText.push("'s moral alignment?");
+              break;
+            case "EYE":
+              questionText.push("What color are ");
+              questionText.push(quizData[currentQuizIndex].name);
+              questionText.push("'s eyes?");
+              break;
+            case "universe":
+              questionText.push("Which universe does ");
+              questionText.push(quizData[currentQuizIndex].name);
+              questionText.push(" belong to?");
+              break;
+            case "year":
+              questionText.push("In what year was ");
+              questionText.push(quizData[currentQuizIndex].name);
+              questionText.push(" first created?");
+              break;
+            case "HAIR":
+              questionText.push("How is ");
+              questionText.push(quizData[currentQuizIndex].name);
+              questionText.push("'s hair described?");
+              break;
+
+
+
+          }
+          questionElement.textContent = questionText.join("");
+
+          const firstButton = quizContainer.querySelector(".quiz_button1");
+          const secondButton = quizContainer.querySelector(".quiz_button2");
+          const counter = quizContainer.querySelector(".counter");
+          firstButton.textContent = quizData[currentQuizIndex].value[0];
+          secondButton.textContent = quizData[currentQuizIndex].value[1];
+          counter.textContent = currentQuizIndex + 1;
+
+        }
+      }
+      quizContainer.querySelectorAll(".quiz_button1, .quiz_button2").forEach((button) => {
+        button.addEventListener("click", () => {
+          const selectedAnswer = button.textContent.trim();
+          fetch("http://127.0.0.1:3000/answer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: currentQuizIndex, answer: selectedAnswer }),
+          })
+            .then((r) => r.json())
+            .then(data => {
+              console.log(data.correct);
+              let correctAnswer = data.correct;
+              quizContainer.classList.remove("active");
+              currentQuizIndex++;
+              if (!correctAnswer) {
+                let found = false
+                const hearts = document.querySelectorAll('.heart');
+                for (let i = hearts.length - 1; i >= 0; i--) {
+                  if (hearts[i].style.visibility !== 'hidden') {
+                    hearts[i].style.visibility = 'hidden';
+                    found = true;
+                    break;
+                  }
+
+                }
+                if (!found) {
+                  quizContainer.classList.remove("active");
+
+                }
+                else openQuizWindow();
+              }
+              else openQuizWindow();
+            })
+            .catch(console.error);
+
+        });
+      });
+
+
     });
 
   // load pop-up markup
@@ -99,10 +196,11 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: { "Accept": "application/json" },
           })
             .then((res) => res.json())
-            .then((quizData) => {
-              console.log("Datele primite de la server:", quizData);
+            .then((data) => {
+              console.log("Datele primite de la server:", data);
               container.classList.remove("active");
-              window.openQuizWindow(quizData);
+              quizData = data;
+              window.openQuizWindow();
             })
             .catch((err) => {
               console.error("Couldn't get quizzes", err);

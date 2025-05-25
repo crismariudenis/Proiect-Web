@@ -15,6 +15,8 @@ const choicesMap = {};
 
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
 
+let answersToQuizzes = [];
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -93,6 +95,7 @@ function getQuizzes(n, countRows, callback) {
       if (!result || result.value == null || result.value == '') {
         return next(i);
       }
+      answersToQuizzes[i] = result.value;
 
       let answersList = [result.value];
 
@@ -126,6 +129,10 @@ function getQuizzes(n, countRows, callback) {
 
 }
 
+function getAnswers(callback) {
+  callback(null, answersToQuizzes);
+}
+
 
 function getChoices(column, callback) {
   const query = `SELECT DISTINCT ${column} FROM characters where ${column} IS NOT NULL and ${column}!=''`;
@@ -148,4 +155,5 @@ module.exports = {
   numberOfRows,
   getChoices,
   loadChoices,
+  getAnswers,
 };
