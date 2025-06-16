@@ -132,24 +132,28 @@
   font-size: clamp(0.0rem, 1.2vw, 1.3rem);
 }
 
-button {
+.pop_up_footer button {
   background-color: rgb(230, 57, 70);
   color: white;
   border: none;
-  padding: clamp(0.05rem, 0.2vw, 0.3rem) clamp(0.3rem, 1.5vw, 1rem);
+  padding: clamp(0.5rem, 0.9vw, 0.8rem) clamp(1rem, 2vw, 2rem);
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: clamp(0.05rem, 0.1vw, 0.2rem);
-  border-radius: 0.5 rem;
+  font-size: clamp(0.875rem, 1vw, 1.125rem);
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  width: auto;
-  white-space: nowrap;
-  max-width: 25%;
 }
 
-@media (min-width: 500px) and (max-width: 700px) {
+@media (max-width: 500px) {
+  .pop_up_footer button {
+    padding: clamp(0.05rem, 2.7vw, 2.9rem) clamp(1rem, 1.9vw, 2.3rem);
+    font-size: clamp(0.0rem, 0.7vw, 0.9rem);
+  }
+}
+
+@media (min-width: 500px) and (max-width: 780px) {
   .popup {
     width: 90%;
     height: 40%;
@@ -158,13 +162,13 @@ button {
   .description,
   .ranking,
   .tags {
-    font-size: clamp(0.0rem, 0.7vw, 1rem);
+    font-size: clamp(0.0rem, 1.1vw, 1.3rem);
   }
 
   .description_body,
   .ranking_body,
   .pop_up_footer button {
-    font-size: clamp(0.0rem, 0.65vw, 0.9rem);
+    font-size: clamp(0.0rem, 1vw, 1.2rem);
     word-wrap: break-word;
   }
 
@@ -172,9 +176,9 @@ button {
     flex: 0 0 5%;
   }
 
-  button {
-    padding: clamp(0.05rem, 0.2vw, 0.3rem) clamp(0.6rem, 1vw, 1.5rem);
-    font-size: clamp(0.0rem, 0.2vw, 0.25rem);
+  .pop_up_footer button {
+    padding: clamp(0.05rem, 2vw, 2rem) clamp(1rem, 1.5vw, 2rem);
+    font-size: clamp(0.0rem, 0.7vw, 0.9rem);
   }
 }
 
@@ -187,20 +191,19 @@ button {
   .description,
   .ranking,
   .tags {
-    font-size: clamp(0.5rem, 1vw, 1.3rem);
+    font-size: clamp(0.5rem, 1.4vw, 1.6rem);
   }
 
   .description_body,
   .ranking_body,
   .pop_up_footer button {
-    font-size: clamp(0.5rem, 0.9vw, 1.2rem);
+    font-size: clamp(0.5rem, 1.3vw, 1.5rem);
     word-wrap: break-word;
   }
 
-  button {
-    padding: clamp(0.05rem, 0.2vw, 0.3rem) clamp(0.3rem, 1vw, 1rem);
-    font-size: clamp(0.6rem, 0.2vw, 0.25rem);
-    max-width: 20%;
+  .pop_up_footer button {
+    padding: clamp(0.05rem, 1.5vw, 1.7rem) clamp(1rem, 1.9vw, 2.3rem);
+    font-size: clamp(0.6rem, 0.7vw, 1rem);
     border-radius: 0.3 rem;
   }
 

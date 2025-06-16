@@ -84,7 +84,7 @@
 }
 
 .super_hero_title {
-    font-size: 150%;
+    font-size: 2.5vw;
     align-self: center;
 
 }
@@ -111,13 +111,14 @@
     text-align: center;
     text-decoration-color: white;
 
+
 }
 
 .quiz_question {
-    font-size: 130%;
+    font-size: 1.5vw;
 }
 
-button {
+.quiz_answers button {
     background-color: rgb(230, 57, 70);
     color: white;
     border: none;
@@ -189,7 +190,7 @@ button {
 } */
 
 .counter {
-    font-size: 140%;
+    font-size: 2vw;
 }
 
 
