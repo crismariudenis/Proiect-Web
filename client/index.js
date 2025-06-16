@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let quizContainer;
   let currentQuizIndex = 0;
   let quizData = [];
+  let remainingLives = 2;
 
   fetch("./components/quiz_window.html")
     .then((response) => response.text())
@@ -147,21 +148,16 @@ document.addEventListener("DOMContentLoaded", () => {
               quizContainer.classList.remove("active");
               currentQuizIndex++;
               if (!correctAnswer) {
-                let found = false
-                const hearts = document.querySelectorAll('.heart');
-                for (let i = hearts.length - 1; i >= 0; i--) {
-                  if (hearts[i].style.visibility !== 'hidden') {
-                    hearts[i].style.visibility = 'hidden';
-                    found = true;
-                    break;
-                  }
-
-                }
-                if (!found) {
+                remainingLives--;
+                console.log(remainingLives);
+                if (remainingLives <= 0) {
                   quizContainer.classList.remove("active");
-
                 }
-                else openQuizWindow();
+                else {
+                  document.querySelectorAll('.heart')[remainingLives].style.visibility = 'hidden';
+                  openQuizWindow();
+                }
+
               }
               else openQuizWindow();
             })
@@ -200,6 +196,9 @@ document.addEventListener("DOMContentLoaded", () => {
               console.log("Datele primite de la server:", data);
               container.classList.remove("active");
               quizData = data;
+              currentQuizIndex = 0;
+              remainingLives = 2;
+              document.querySelectorAll('.heart').forEach(h => h.style.visibility = 'visible');
               window.openQuizWindow();
             })
             .catch((err) => {
