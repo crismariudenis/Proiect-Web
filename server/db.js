@@ -22,11 +22,60 @@ function addUser(username, password, callback) {
     });
   });
 }
+
+
 const choicesMap = {};
 
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
-
+const SOURCES = [
+  { name: 'wikipedia', base: 'https://en.wikipedia.org' },
+  { name: 'marvel', base: 'https://marvel.fandom.com' },
+  { name: 'dc', base: 'https://dc.fandom.com' },
+];
+const https = require("https");
 let answersToQuizzes = [];
+
+function cleanLink(link) {
+  newLink = link.replace(/\\\//g, '/');
+  if (newLink.startsWith('/wiki/')) {
+    newLink = newLink.substring(5);
+  }
+  if (!newLink.startsWith('/')) {
+    newLink = '/' + newLink;
+  }
+  return newLink;
+}
+
+function createUrl(sourceBase, relativePath) {
+  return `${sourceBase}/wiki${relativePath}`;
+}
+
+function urlExists(url) {
+  return new Promise((resolve) => {
+    const req = https.request(url, { method: 'HEAD' }, (res) => {
+      resolve(res.statusCode === 200);
+    });
+    req.on('error', () => resolve(false));
+    req.end();
+  });
+}
+
+function getValidUrl(link, universe) {
+  const relativeLink = cleanLink(link);
+
+  let url;
+  if (universe === "DC") {
+    url = `${`https://dc.fandom.com`}/wiki${relativeLink}`;
+    return url;
+  }
+  else if (universe == "Marvel") {
+    url = `${`https://marvel.fandom.com`}/wiki${relativeLink}`;
+    return url;
+  }
+  if (url == null) return null;
+
+  //console.log(url);
+}
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -101,7 +150,7 @@ function getQuizzes(n, countRows, callback) {
     const randomIndex = Math.floor(Math.random() * fields.length);
     const chosenField = fields[randomIndex];
     const randomId = Math.floor(Math.random() * countRows) + 1;
-    const sqlQuery = `SELECT name, ${chosenField} AS value FROM characters LIMIT 1 OFFSET ${randomId}`;
+    const sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters LIMIT 1 OFFSET ${randomId}`;
 
     heroes.all(sqlQuery, (err, rows) => {
       if (err) return callback(err);
@@ -131,9 +180,12 @@ function getQuizzes(n, countRows, callback) {
 
       shuffleArray(answersList);
 
+      let pageLink = getValidUrl(result.urlslug, result.universe);
+
       results.push({
         name: result.name,
         field: chosenField,
+        wiki: pageLink,
         value: answersList,
       });
 

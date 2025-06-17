@@ -6,7 +6,44 @@ const port = 3000;
 let heroesRowsCount;
 const choicesMap = {};
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
+
 let currentAnswers = [];
+function getImageUrlFromPage(url) {
+  return new Promise((resolve) => {
+    https.get(url, (res) => {
+      if (res.statusCode !== 200) {
+        resolve(null);
+        res.resume();
+      }
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      if (data.includes("There is currently no text in this page")) {
+        resolve(null);
+        return;
+      }
+
+      res.on("end", () => {
+        const imgMatch = data.match(/<img[^>]+src="([^"]+)"[^>]*>/i);
+
+        if (imgMatch && imgMatch[1]) {
+          const src = imgMatch[1];
+
+          const fullUrl = src.startsWith("http") ? src : "https:" + src;
+          resolve(fullUrl);
+        } else {
+          resolve(null);
+        }
+      });
+    }).on("error", (err) => {
+      console.error("Request error:", err);
+      resolve(null);
+    });
+  });
+}
 
 db.numberOfRows((err, count) => {
   if (err) {
@@ -88,7 +125,10 @@ const server = http.createServer((req, res) => {
         return;
       }
 
-      //console.log("Generated Quizzes: ", quizzes);
+
+      console.log("Generated Quizzes: ", quizzes);
+
+
       db.getAnswers((err, answers) => {
         if (err) {
           console.error("A apărut o eroare:", err);

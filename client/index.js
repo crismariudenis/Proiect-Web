@@ -1,3 +1,79 @@
+
+async function getImageFromURL(url) {
+  try {
+    let universe;
+    if (url.startsWith("https://dc.fandom.com")) universe = "DC";
+    else if (url.startsWith("https://marvel.fandom.com")) universe = "Marvel";
+    const pageTitle = url.split('/wiki/')[1];
+    if (!pageTitle) return null;
+
+    let apiUrl;
+    if (universe === "Marvel")
+      apiUrl = `https://marvel.fandom.com/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=pageimages|images&piprop=original&format=json&origin=*`;
+    else if (universe === "DC") {
+      apiUrl = `https://dc.fandom.com/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=pageimages|images&piprop=original&format=json&origin=*`;
+    }
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    const pages = data.query.pages;
+    const pageId = Object.keys(pages)[0];
+    const pageData = pages[pageId];
+
+    let imageUrl = null;
+
+
+    if (pageData.original && pageData.original.source) {
+      imageUrl = pageData.original.source;
+    }
+
+    else if (pageData.images && pageData.images.length > 0) {
+      const imageTitle = pageData.images[0].title;
+      let imageApiUrl;
+      if (universe === "Marvel")
+        imageApiUrl = `https://marvel.fandom.com/api.php?action=query&titles=${encodeURIComponent(imageTitle)}&prop=imageinfo&iiprop=url&format=json&origin=*`;
+      else if (universe === "DC")
+        imageApiUrl = `https://dc.fandom.com/api.php?action=query&titles=${encodeURIComponent(imageTitle)}&prop=imageinfo&iiprop=url&format=json`;
+      const imgResponse = await fetch(imageApiUrl);
+      const imgData = await imgResponse.json();
+
+      const imgPages = imgData.query.pages;
+      const imgPageId = Object.keys(imgPages)[0];
+
+      if (imgPages[imgPageId].imageinfo) {
+        imageUrl = imgPages[imgPageId].imageinfo[0].url;
+      }
+    }
+
+    if (!imageUrl) return null;
+    return imageUrl;
+
+  } catch (error) {
+    console.error('Eroare:', error.message);
+    return null;
+  }
+
+}
+
+// async function downloadImage(url) {
+//   try {
+//     console.log(url);
+//     const response = await fetch(url);
+//     if (!response.ok) throw new Error("No image");
+
+//     const blob = await response.blob();
+//     const objectURL = URL.createObjectURL(blob);
+
+//     const imageElement = quizContainer.querySelector(".quiz_image img");
+//     if (imageElement) {
+//       imageElement.src = objectURL;
+//     }
+
+//   } catch (error) {
+//     console.error("download error", error);
+//   }
+// }
+
 document.addEventListener("DOMContentLoaded", () => {
   fetch("./components/login.html")
     .then((r) => r.text())
@@ -97,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let quizContainer;
       let currentQuizIndex = 0;
       let quizData = [];
-      let remainingLives = 2;
+      let remainingLives = 3;
 
       fetch("./components/quiz_window.html")
         .then((response) => response.text())
@@ -107,12 +183,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
           quizContainer.classList.remove("active");
           quizContainer.innerHTML = html;
-          window.openQuizWindow = () => {
+          window.openQuizWindow = async () => {
             let questionText = [];
             quizContainer.classList.add("active");
             const questionElement = quizContainer.querySelector(".question");
             if (questionElement) {
               const field = quizData[currentQuizIndex].field;
+              const wiki = quizData[currentQuizIndex].wiki;
+              if (wiki != null) {
+                const imageLink = await getImageFromURL(wiki);
+                if (imageLink != null) {
+                  console.log(imageLink);
+                  // await downloadImage(imageLink);
+
+                  const imageElement = quizContainer.querySelector(".quiz_image img");
+                  if (imageElement) {
+                    imageElement.src = imageLink.startsWith("http") ? imageLink : "https://" + imageLink;
+                    imageElement.alt = "Quiz image";
+                  }
+                }
+              }
+
               switch (field) {
                 case "ID":
                   questionText.push("What is the identity of the hero ");
@@ -222,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   container.classList.remove("active");
                   quizData = data;
                   currentQuizIndex = 0;
-                  remainingLives = 2;
+                  remainingLives = 3;
                   document.querySelectorAll('.heart').forEach(h => h.style.visibility = 'visible');
                   window.openQuizWindow();
                 })
