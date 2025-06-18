@@ -1,5 +1,6 @@
 
 let currentLanguage = "en";
+let langData = null;
 function changeFlag() {
   const flagImg = document.getElementById("flag");
   if (currentLanguage === "ro") {
@@ -11,6 +12,7 @@ function changeFlag() {
     currentLanguage = "ro";
 
   }
+  updateLanguage();
 }
 
 async function getImageFromURL(url) {
@@ -75,7 +77,50 @@ async function getImageFromURL(url) {
 
 let currentCard;
 
-document.addEventListener("DOMContentLoaded", () => {
+async function loadLanguageData() {
+  try {
+    const res = await fetch("./json/language.json");
+    langData = await res.json();
+  } catch (e) {
+    console.error("Eroar fetch language.json:", e);
+  }
+}
+
+function updateLanguage() {
+  const navbar = langData[currentLanguage].navbar;
+  document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
+  document.getElementById("navbar-about").textContent = navbar.about;
+  document.getElementById("navbar-join").textContent = navbar.join;
+  const footer = langData[currentLanguage].footer;
+  document.getElementById("footer-left").textContent = footer.left;
+  document.getElementById("footer-middle").textContent = footer.middle;
+  document.getElementById("footer-right").textContent = footer.right;
+  const landing = langData[currentLanguage].landing;
+  document.getElementById("landing-title").innerHTML = landing.title;
+  document.getElementById("landing-description").textContent = landing.description;
+  document.getElementById("landing-button").textContent = landing.button;
+  const quizzes = langData[currentLanguage].quizzes;
+  document.getElementById("quizzes-featured").innerHTML = quizzes.featured;
+  document.getElementById("quizzes-title1").textContent = quizzes.title1;
+  document.getElementById("quizzes-description1").textContent = quizzes.description1;
+  document.getElementById("quizzes-title2").textContent = quizzes.title2;
+  document.getElementById("quizzes-description2").textContent = quizzes.description2;
+  document.getElementById("quizzes-title3").textContent = quizzes.title3;
+  document.getElementById("quizzes-description3").textContent = quizzes.description3;
+  document.getElementById("quizzes-title4").textContent = quizzes.title4;
+  document.getElementById("quizzes-description4").textContent = quizzes.description4;
+  document.getElementById("quizzes-title5").textContent = quizzes.title5;
+  document.getElementById("quizzes-description5").textContent = quizzes.description5;
+  document.getElementById("quizzes-title6").textContent = quizzes.title6;
+  document.getElementById("quizzes-description6").textContent = quizzes.description6;
+  document.getElementById("quizzes-latest").innerHTML = quizzes.latest;
+
+}
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadLanguageData();
+
   fetch("./components/login.html")
     .then((r) => r.text())
     .then((html) => {
@@ -104,7 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json().then((json) => {
                   alert(
                     json.eroare ||
-                      "Password must be at least 9 characters, include an uppercase letter and a digit"
+
+                    "Password must be at least 9 characters, include an uppercase letter and a digit"
+
                   );
                 });
               }
@@ -160,14 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
-          fetch("./json/language.json")
-            .then(res => res.json())
-            .then(langData => {
-              const navbar = langData[currentLanguage].navbar;
-              document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
-              document.getElementById("navbar-about").textContent = navbar.about;
-              document.getElementById("navbar-join").textContent = navbar.join;
-            });
+
+          const navbar = langData[currentLanguage].navbar;
+          document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
+          document.getElementById("navbar-about").textContent = navbar.about;
+          document.getElementById("navbar-join").textContent = navbar.join;
+
 
           window.toggleMenu = function () {
             const navLinks = document.querySelector(".nav-links");
@@ -215,20 +260,22 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("footer").innerHTML = data;
+          const footer = langData[currentLanguage].footer;
+          document.getElementById("footer-left").textContent = footer.left;
+          document.getElementById("footer-middle").textContent = footer.middle;
+          document.getElementById("footer-right").textContent = footer.right;
+
         });
 
       fetch("./components/landing.html") // Fetch the landing page content
         .then((response) => response.text()) // Convert the response to text
         .then((data) => {
           document.getElementById("hero").innerHTML = data; // Insert the content into the #hero div
-          fetch("./json/language.json")
-            .then(res => res.json())
-            .then(langData => {
-              const landing = langData[currentLanguage].landing;
-              document.getElementById("landing-title").innerHTML = landing.title;
-              document.getElementById("landing-description").textContent = landing.description;
-              document.getElementById("landing-button").textContent = landing.button;
-            });
+          const landing = langData[currentLanguage].landing;
+          document.getElementById("landing-title").innerHTML = landing.title;
+          document.getElementById("landing-description").textContent = landing.description;
+          document.getElementById("landing-button").textContent = landing.button;
+
         });
 
 
@@ -237,16 +284,22 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("quizzes").innerHTML = data; // Insert the quizzes into the placeholder
-          fetch("./json/language.json")
-            .then(res => res.json())
-            .then(langData => {
-              const quizzes = langData[currentLanguage].quizzes;
-              document.getElementById("quizzes-featured").innerHTML = quizzes.featured;
-              document.getElementById("quizzes-title1").textContent = quizzes.title1;
-              document.getElementById("quizzes-description1").textContent = quizzes.description1;
-              document.getElementById("quizzes-title2").textContent = quizzes.title2;
-              document.getElementById("quizzes-description2").textContent = quizzes.description1;
-            });
+          const quizzes = langData[currentLanguage].quizzes;
+          document.getElementById("quizzes-featured").innerHTML = quizzes.featured;
+          document.getElementById("quizzes-title1").textContent = quizzes.title1;
+          document.getElementById("quizzes-description1").textContent = quizzes.description1;
+          document.getElementById("quizzes-title2").textContent = quizzes.title2;
+          document.getElementById("quizzes-description2").textContent = quizzes.description2;
+          document.getElementById("quizzes-title3").textContent = quizzes.title3;
+          document.getElementById("quizzes-description3").textContent = quizzes.description3;
+          document.getElementById("quizzes-title4").textContent = quizzes.title4;
+          document.getElementById("quizzes-description4").textContent = quizzes.description4;
+          document.getElementById("quizzes-title5").textContent = quizzes.title5;
+          document.getElementById("quizzes-description5").textContent = quizzes.description5;
+          document.getElementById("quizzes-title6").textContent = quizzes.title6;
+          document.getElementById("quizzes-description6").textContent = quizzes.description6;
+          document.getElementById("quizzes-latest").innerHTML = quizzes.latest;
+
         });
 
       let quizContainer;
@@ -373,6 +426,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // only allow logged-in users to open
           window.openPopUp = (cardId) => {
+
+            container.classList.add("active"); currentCard = cardId;
+            const quizzes = langData[currentLanguage].quizzes;
+            const pop_up = langData[currentLanguage].pop_up;
+            const imageElement = container.querySelector(".pop_up_img img");
+            const descriptionElement = container.querySelector(".description_body");
+            const description = container.querySelector(".description");
+            const ranking = container.querySelector(".ranking");
+            const play = container.querySelector(".button_play_quiz");
+            const close = container.querySelector(".button_close");
+            description.innerText = pop_up.description;
+            ranking.innerText = pop_up.ranking;
+            play.innerText = pop_up.play;
+            close.innerText = pop_up.close;
+
+            switch (cardId) {
+              case 1:
+                imageElement.src = "./images/MarvelVsDc.jpg";
+                descriptionElement.innerText = quizzes.description1;
+                break;
+              case 2:
+                imageElement.src = "./images/black_widow1.jpg";
+                descriptionElement.innerText = quizzes.description2;
+                break;
+              case 3:
+                imageElement.src = "./images/time.jpg";
+                descriptionElement.innerText = quizzes.description3;
+                break;
+              case 4:
+                imageElement.src = "./images/batman2.jpg";
+                descriptionElement.innerText = quizzes.description4;
+                break;
+              case 5:
+                imageElement.src = "./images/captain_marvel1.jpg";
+                descriptionElement.innerText = quizzes.description5;
+                break;
+              case 6:
+                imageElement.src = "./images/dr_doom.jpg";
+                descriptionElement.innerText = quizzes.description6;
+                break;
+
+            }
+          }
+          container
+            .querySelector(".button_close")
+            .addEventListener("click", () => container.classList.remove("active"));
+
             if (!localStorage.getItem("authToken")) {
               openLogin();
               return;
@@ -380,6 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
             container.classList.add("active");
             currentCard = cardId;
           };
+
 
           container
             .querySelector(".button_play_quiz")

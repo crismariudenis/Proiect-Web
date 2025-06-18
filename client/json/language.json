@@ -15,12 +15,32 @@
             "title1": "Marvel or DC",
             "description1": "Ready to show off your superhero smarts?Test your superhero knowledge by identifying whether a character belongs to the DC or Marvel universe. Choose wisely!",
             "title2": "What Do They Look Like?",
-            "decription2": "Think you know your heroes? In this quiz, you'll have to guess a hero’s physical features — like hair and eye color."
+            "description2": "Think you know your heroes? In this quiz, you'll have to guess a hero’s physical features — like hair and eye color.",
+            "title3": "Guess the Year!",
+            "description3": "  Test your knowledge of superhero history by guessing the year a hero first appeared. From classic legends to modern icons — how well do you know the timeline of your favorite heroes?",
+            "title4": "Inside the DC Multiverse",
+            "description4": "Dive deep into the world of DC superheroes and villains! Answer questions that explore their unique traits.Prove you know the DC universe like a true fan!",
+            "title5": "The Marvel Challenge",
+            "description5": "Step into the Marvel universe and test your knowledge of its iconic heroes and villains. From street-level fighters to cosmic legends, discover how well you know their secrets.",
+            "title6": "Ultimate Superhero Showdown",
+            "description6": " Expect the unexpected! Are you ready to face the ultimate test of your superhero knowledge?",
+            "latest": "Latest Quizzes"
+        },
+        "pop_up": {
+            "description": "Description",
+            "ranking": "Ranking",
+            "play": "Play",
+            "close": "Close"
+        },
+        "footer": {
+            "left": "© 2025 HeroQuizz. All rights reserved.",
+            "middle": "Terms and Conditions",
+            "right": "Privacy policy"
         }
     },
     "ro": {
         "landing": {
-            "title": "Bine ai venit în Lumea <span style='color: var(--red-color)'>Supremă</span> a Quiz-urilor cu Supereroi!",
+            "title": "Bine ai venit în Lumea <span style='color: var(--red-color)'>Fantastică</span> a Quiz-urilor cu Supereroi!",
             "description": "Intră în lumea HEROQuizz, unde îți poți testa cunoștințele despre tot ce înseamnă supereroi! Explorează quiz-urile și dovedește că ești fanul suprem.",
             "button": "Începe acum"
         },
@@ -32,7 +52,29 @@
         "quizzes": {
             "featured": "Quizz-uri recomandate",
             "title1": "Marvel sau DC",
-            "description1": "Ești gata să-ți pui la încercare cunoștințele despre supereroi? Află cât de bine cunoști universurile eroilor tăi preferați, identificând dacă un personaj face parte din lumea DC sau Marvel. Alege cu grijă!"
+            "description1": "Ești gata să-ți pui la încercare cunoștințele despre supereroi? Află cât de bine cunoști universurile eroilor tăi preferați, identificând dacă un personaj face parte din lumea DC sau Marvel. Alege cu grijă!",
+            "title2": "Cum Arată Ei?",
+            "description2": "Crezi că îi cunoști pe eroi? În acest quiz, va trebui să ghicești trăsăturile fizice ale unui erou — cum ar fi culoarea părului și a ochilor.",
+            "title3": "Ghicește anul!",
+            "description3": "Pune-ți la încercare cunoștințele despre istoria supereroilor ghicind anul în care a apărut pentru prima dată un erou. De la legende clasice la icoane moderne — cât de bine cunoști cronologia eroilor tăi preferați?",
+            "title4": "În universul DC",
+            "description4": "Intră în universul eroilor și răufăcătorilor DC! Răspunde la întrebări care le explorează trăsăturile unice și dovedește că cunoști universul DC ca un adevărat fan!",
+            "title5": "Provocarea Marvel",
+            "description5": "Intră în universul Marvel și testează-ți cunoștințele despre eroii și răufăcătorii săi emblematici. De la luptători de stradă la legende cosmice — descoperă cât de bine le cunoști secretele!",
+            "title6": "Confruntarea Supremă a Supereroilor",
+            "description6": "Așteaptă-te la neașteptat! Ești pregătit să faci față testului suprem al cunoștințelor tale despre supereroi?",
+            "latest": "Cele mai recente quizz-uri"
+        },
+        "pop_up": {
+            "description": "Descriere",
+            "ranking": "Clasament",
+            "play": "Joacă",
+            "close": "Închide"
+        },
+        "footer": {
+            "left": "© 2025 HeroQuizz. Toate drepturile rezervate.",
+            "middle": "Termeni și Condiții",
+            "right": "Politica de securitate"
         }
     }
 }
