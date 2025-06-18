@@ -137,7 +137,7 @@ function numberOfRows(callback) {
   });
 }
 
-function getQuizzes(n, countRows, callback) {
+function getQuizzes(n, countRows, card, callback) {
   // const fields = ["ID", "ALIGN", "EYE", "UNIVERSE", "YEAR", "HAIR"];
   const results = [];
 
@@ -147,10 +147,32 @@ function getQuizzes(n, countRows, callback) {
       return;
     }
 
-    const randomIndex = Math.floor(Math.random() * fields.length);
+    let randomIndex;
+    switch (card) {
+      case 1:
+        randomIndex = 3;
+        break;
+      case 2:
+        randomIndex = Math.random() < 0.5 ? 2 : 5;
+        break;
+      case 3:
+        randomIndex = 4;
+        break;
+      case 6:
+        randomIndex = Math.floor(Math.random() * fields.length);
+        break;
+      default:
+        do {
+          randomIndex = Math.floor(Math.random() * fields.length);
+        } while (randomIndex == 3);
+    }
+
     const chosenField = fields[randomIndex];
     const randomId = Math.floor(Math.random() * countRows) + 1;
-    const sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters LIMIT 1 OFFSET ${randomId}`;
+    let sqlQuery;
+    if (card == 4) sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters  WHERE universe='DC' LIMIT 1 OFFSET ${randomId}`;
+    else if (card == 5) sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters WHERE universe='Marvel' LIMIT 1 OFFSET ${randomId}`;
+    else sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters LIMIT 1 OFFSET ${randomId}`;
 
     heroes.all(sqlQuery, (err, rows) => {
       if (err) return callback(err);

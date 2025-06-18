@@ -6,44 +6,45 @@ const port = 3000;
 let heroesRowsCount;
 const choicesMap = {};
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
+let currentCard;
 
 let currentAnswers = [];
-function getImageUrlFromPage(url) {
-  return new Promise((resolve) => {
-    https.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        resolve(null);
-        res.resume();
-      }
-      let data = "";
+// function getImageUrlFromPage(url) {
+//   return new Promise((resolve) => {
+//     https.get(url, (res) => {
+//       if (res.statusCode !== 200) {
+//         resolve(null);
+//         res.resume();
+//       }
+//       let data = "";
 
-      res.on("data", (chunk) => {
-        data += chunk;
-      });
+//       res.on("data", (chunk) => {
+//         data += chunk;
+//       });
 
-      if (data.includes("There is currently no text in this page")) {
-        resolve(null);
-        return;
-      }
+//       if (data.includes("There is currently no text in this page")) {
+//         resolve(null);
+//         return;
+//       }
 
-      res.on("end", () => {
-        const imgMatch = data.match(/<img[^>]+src="([^"]+)"[^>]*>/i);
+//       res.on("end", () => {
+//         const imgMatch = data.match(/<img[^>]+src="([^"]+)"[^>]*>/i);
 
-        if (imgMatch && imgMatch[1]) {
-          const src = imgMatch[1];
+//         if (imgMatch && imgMatch[1]) {
+//           const src = imgMatch[1];
 
-          const fullUrl = src.startsWith("http") ? src : "https:" + src;
-          resolve(fullUrl);
-        } else {
-          resolve(null);
-        }
-      });
-    }).on("error", (err) => {
-      console.error("Request error:", err);
-      resolve(null);
-    });
-  });
-}
+//           const fullUrl = src.startsWith("http") ? src : "https:" + src;
+//           resolve(fullUrl);
+//         } else {
+//           resolve(null);
+//         }
+//       });
+//     }).on("error", (err) => {
+//       console.error("Request error:", err);
+//       resolve(null);
+//     });
+//   });
+// }
 
 db.numberOfRows((err, count) => {
   if (err) {
@@ -115,9 +116,39 @@ const server = http.createServer((req, res) => {
   const pathname = parsedUrl.pathname;
 
   console.log(pathname);
+  if (method === "POST" && pathname === "/selectedCard") {
+    let body = "";
+
+    req.on("data", chunk => {
+      body += chunk.toString();
+    });
+
+    req.on("end", () => {
+      try {
+        const parsedData = JSON.parse(body);
+        const id = parsedData.cardId;
+        console.log("Id: " + id);
+        currentCard = id;
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Card received" }));
+      }
+      catch (error) {
+        console.error("Eroare la parsarea JSON:", error.message);
+
+        if (!res.headersSent) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid JSON" }));
+        }
+      }
+    });
+
+    return;
+
+
+  }
   if (method === "GET" && pathname === "/quizzes") {
 
-    db.getQuizzes(10, heroesRowsCount, (err, quizzes) => {
+    db.getQuizzes(10, heroesRowsCount, currentCard, (err, quizzes) => {
       if (err) {
         console.error("Couldn't get quizzes", err);
         res.writeHead(500);

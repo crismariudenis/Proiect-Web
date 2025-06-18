@@ -55,6 +55,8 @@ async function getImageFromURL(url) {
 
 }
 
+let currentCard;
+
 // async function downloadImage(url) {
 //   try {
 //     console.log(url);
@@ -293,7 +295,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           container.innerHTML = html;
           // overlay toggle
-          window.openPopUp = () => container.classList.add("active");
+          window.openPopUp = (cardId) => {
+            container.classList.add("active"); currentCard = cardId;
+          }
           container
             .querySelector(".button_close")
             .addEventListener("click", () => container.classList.remove("active"));
@@ -303,10 +307,17 @@ document.addEventListener("DOMContentLoaded", () => {
               e.preventDefault();
               e.stopPropagation();
 
-              fetch("http://127.0.0.1:3000/quizzes", {
-                method: "GET",
-                headers: { "Accept": "application/json" },
+              fetch("http://127.0.0.1:3000/selectedCard", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cardId: currentCard })
               })
+                .then(() => {
+                  return fetch("http://127.0.0.1:3000/quizzes", {
+                    method: "GET",
+                    headers: { "Accept": "application/json" },
+                  });
+                })
                 .then((res) => res.json())
                 .then((data) => {
                   console.log("Datele primite de la server:", data);
