@@ -59,6 +59,7 @@ async function getImageFromURL(url) {
     }
 
     if (!imageUrl) return null;
+    imageUrl=imageUrl.split("/revision")[0]; 
     return imageUrl;
 
   } catch (error) {
