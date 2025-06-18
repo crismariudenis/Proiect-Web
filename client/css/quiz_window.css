@@ -193,11 +193,25 @@
     font-size: 2vw;
 }
 
-
+@media (max-width: 500px) {
+    .quiz_counter {
+        height: 55%;
+    }
+}
 
 @media (max-width: 800px) {
     .quiz_window {
         width: 90%;
         height: 40%;
+    }
+
+    .quiz_counter {
+        height: 60%;
+    }
+}
+
+@media (max-width: 1050px) {
+    .quiz_counter {
+        height: 60%;
     }
 }
