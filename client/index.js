@@ -1,4 +1,3 @@
-
 let currentLanguage = "en";
 let langData = null;
 function changeFlag() {
@@ -6,11 +5,9 @@ function changeFlag() {
   if (currentLanguage === "ro") {
     flagImg.src = "./images/usa_flag.jpg";
     currentLanguage = "en";
-  }
-  else {
+  } else {
     flagImg.src = "./images/romanian_flag.jpg";
     currentLanguage = "ro";
-
   }
   updateLanguage();
 }
@@ -97,26 +94,31 @@ function updateLanguage() {
   document.getElementById("footer-right").textContent = footer.right;
   const landing = langData[currentLanguage].landing;
   document.getElementById("landing-title").innerHTML = landing.title;
-  document.getElementById("landing-description").textContent = landing.description;
+  document.getElementById("landing-description").textContent =
+    landing.description;
   document.getElementById("landing-button").textContent = landing.button;
   const quizzes = langData[currentLanguage].quizzes;
   document.getElementById("quizzes-featured").innerHTML = quizzes.featured;
   document.getElementById("quizzes-title1").textContent = quizzes.title1;
-  document.getElementById("quizzes-description1").textContent = quizzes.description1;
+  document.getElementById("quizzes-description1").textContent =
+    quizzes.description1;
   document.getElementById("quizzes-title2").textContent = quizzes.title2;
-  document.getElementById("quizzes-description2").textContent = quizzes.description2;
+  document.getElementById("quizzes-description2").textContent =
+    quizzes.description2;
   document.getElementById("quizzes-title3").textContent = quizzes.title3;
-  document.getElementById("quizzes-description3").textContent = quizzes.description3;
+  document.getElementById("quizzes-description3").textContent =
+    quizzes.description3;
   document.getElementById("quizzes-title4").textContent = quizzes.title4;
-  document.getElementById("quizzes-description4").textContent = quizzes.description4;
+  document.getElementById("quizzes-description4").textContent =
+    quizzes.description4;
   document.getElementById("quizzes-title5").textContent = quizzes.title5;
-  document.getElementById("quizzes-description5").textContent = quizzes.description5;
+  document.getElementById("quizzes-description5").textContent =
+    quizzes.description5;
   document.getElementById("quizzes-title6").textContent = quizzes.title6;
-  document.getElementById("quizzes-description6").textContent = quizzes.description6;
+  document.getElementById("quizzes-description6").textContent =
+    quizzes.description6;
   document.getElementById("quizzes-latest").innerHTML = quizzes.latest;
-
 }
-
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadLanguageData();
@@ -131,7 +133,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (signBtn) {
         signBtn.addEventListener("click", (e) => {
           e.preventDefault();
-          const username = document.getElementById("login_username").value.trim();
+          const username = document
+            .getElementById("login_username")
+            .value.trim();
           const password = document.getElementById("login_password").value;
           const L = document.getElementById("login");
           fetch("http://127.0.0.1:3000/adauga", {
@@ -149,9 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return response.json().then((json) => {
                   alert(
                     json.eroare ||
-
-                    "Password must be at least 9 characters, include an uppercase letter and a digit"
-
+                      "Password must be at least 9 characters, include an uppercase letter and a digit"
                   );
                 });
               }
@@ -209,10 +211,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.getElementById("navbar").innerHTML = data;
 
           const navbar = langData[currentLanguage].navbar;
-          document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
+          document.getElementById("navbar-quizzes").textContent =
+            navbar.quizzes;
           document.getElementById("navbar-about").textContent = navbar.about;
           document.getElementById("navbar-join").textContent = navbar.join;
-
 
           window.toggleMenu = function () {
             const navLinks = document.querySelector(".nav-links");
@@ -224,7 +226,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const containerLogin = document.getElementById("login");
             containerLogin.classList.add("active");
           };
-
 
           const navBtn = document.getElementById("nav_login_btn");
           const userSpan = document.getElementById("user-name");
@@ -253,7 +254,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
 
           window.updateNavbar();
-
         });
 
       fetch("./components/footer.html")
@@ -264,7 +264,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.getElementById("footer-left").textContent = footer.left;
           document.getElementById("footer-middle").textContent = footer.middle;
           document.getElementById("footer-right").textContent = footer.right;
-
         });
 
       fetch("./components/landing.html") // Fetch the landing page content
@@ -273,33 +272,44 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.getElementById("hero").innerHTML = data; // Insert the content into the #hero div
           const landing = langData[currentLanguage].landing;
           document.getElementById("landing-title").innerHTML = landing.title;
-          document.getElementById("landing-description").textContent = landing.description;
-          document.getElementById("landing-button").textContent = landing.button;
-
+          document.getElementById("landing-description").textContent =
+            landing.description;
+          document.getElementById("landing-button").textContent =
+            landing.button;
         });
-
-
 
       fetch("./components/quizzes.html") // Fetch the quizzes component
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("quizzes").innerHTML = data; // Insert the quizzes into the placeholder
           const quizzes = langData[currentLanguage].quizzes;
-          document.getElementById("quizzes-featured").innerHTML = quizzes.featured;
-          document.getElementById("quizzes-title1").textContent = quizzes.title1;
-          document.getElementById("quizzes-description1").textContent = quizzes.description1;
-          document.getElementById("quizzes-title2").textContent = quizzes.title2;
-          document.getElementById("quizzes-description2").textContent = quizzes.description2;
-          document.getElementById("quizzes-title3").textContent = quizzes.title3;
-          document.getElementById("quizzes-description3").textContent = quizzes.description3;
-          document.getElementById("quizzes-title4").textContent = quizzes.title4;
-          document.getElementById("quizzes-description4").textContent = quizzes.description4;
-          document.getElementById("quizzes-title5").textContent = quizzes.title5;
-          document.getElementById("quizzes-description5").textContent = quizzes.description5;
-          document.getElementById("quizzes-title6").textContent = quizzes.title6;
-          document.getElementById("quizzes-description6").textContent = quizzes.description6;
+          document.getElementById("quizzes-featured").innerHTML =
+            quizzes.featured;
+          document.getElementById("quizzes-title1").textContent =
+            quizzes.title1;
+          document.getElementById("quizzes-description1").textContent =
+            quizzes.description1;
+          document.getElementById("quizzes-title2").textContent =
+            quizzes.title2;
+          document.getElementById("quizzes-description2").textContent =
+            quizzes.description2;
+          document.getElementById("quizzes-title3").textContent =
+            quizzes.title3;
+          document.getElementById("quizzes-description3").textContent =
+            quizzes.description3;
+          document.getElementById("quizzes-title4").textContent =
+            quizzes.title4;
+          document.getElementById("quizzes-description4").textContent =
+            quizzes.description4;
+          document.getElementById("quizzes-title5").textContent =
+            quizzes.title5;
+          document.getElementById("quizzes-description5").textContent =
+            quizzes.description5;
+          document.getElementById("quizzes-title6").textContent =
+            quizzes.title6;
+          document.getElementById("quizzes-description6").textContent =
+            quizzes.description6;
           document.getElementById("quizzes-latest").innerHTML = quizzes.latest;
-
         });
 
       let quizContainer;
@@ -424,23 +434,28 @@ document.addEventListener("DOMContentLoaded", async () => {
           const container = document.getElementById("pop_up");
           container.innerHTML = html;
 
-          // only allow logged-in users to open
-          window.openPopUp = (cardId) => {
+          const quizzes = langData[currentLanguage].quizzes;
+          const pop_up = langData[currentLanguage].pop_up;
+          const imageElement = container.querySelector(".pop_up_img img");
+          const descriptionElement =
+            container.querySelector(".description_body");
+          const description = container.querySelector(".description");
+          const ranking = container.querySelector(".ranking");
+          const playBtn = container.querySelector(".button_play_quiz");
+          const closeBtn = container.querySelector(".button_close");
 
-            container.classList.add("active"); currentCard = cardId;
-            const quizzes = langData[currentLanguage].quizzes;
-            const pop_up = langData[currentLanguage].pop_up;
-            const imageElement = container.querySelector(".pop_up_img img");
-            const descriptionElement = container.querySelector(".description_body");
-            const description = container.querySelector(".description");
-            const ranking = container.querySelector(".ranking");
-            const play = container.querySelector(".button_play_quiz");
-            const close = container.querySelector(".button_close");
+          window.openPopUp = (cardId) => {
+            if (!localStorage.getItem("authToken")) {
+              openLogin();
+              return;
+            }
+            currentCard = cardId;
+            // set translated texts
             description.innerText = pop_up.description;
             ranking.innerText = pop_up.ranking;
-            play.innerText = pop_up.play;
-            close.innerText = pop_up.close;
-
+            playBtn.innerText = pop_up.play;
+            closeBtn.innerText = pop_up.close;
+            // set image and specific description
             switch (cardId) {
               case 1:
                 imageElement.src = "./images/MarvelVsDc.jpg";
@@ -466,64 +481,51 @@ document.addEventListener("DOMContentLoaded", async () => {
                 imageElement.src = "./images/dr_doom.jpg";
                 descriptionElement.innerText = quizzes.description6;
                 break;
-
-            }
-          }
-          container
-            .querySelector(".button_close")
-            .addEventListener("click", () => container.classList.remove("active"));
-
-            if (!localStorage.getItem("authToken")) {
-              openLogin();
-              return;
             }
             container.classList.add("active");
-            currentCard = cardId;
           };
 
-
-          container
-            .querySelector(".button_play_quiz")
-            .addEventListener("click", (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-
-              // include authToken in headers
-              const auth = localStorage.getItem("authToken");
-              fetch("http://127.0.0.1:3000/selectedCard", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: auth,
-                },
-                body: JSON.stringify({ cardId: currentCard }),
-              })
-                .then(() =>
-                  fetch("http://127.0.0.1:3000/quizzes", {
-                    method: "GET",
-                    headers: {
-                      Accept: "application/json",
-                      Authorization: auth,
-                    },
-                  })
-                )
-                .then((r) => r.json())
-                .then((data) => {
-                  console.log("Datele primite de la server:", data);
-                  container.classList.remove("active");
-                  quizData = data;
-                  currentQuizIndex = 0;
-                  remainingLives = 3;
-                  document
-                    .querySelectorAll(".heart")
-                    .forEach((h) => (h.style.visibility = "visible"));
-                  window.openQuizWindow();
+          closeBtn.addEventListener("click", () =>
+            container.classList.remove("active")
+          );
+          playBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const auth = localStorage.getItem("authToken");
+            fetch("http://127.0.0.1:3000/selectedCard", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: auth,
+              },
+              body: JSON.stringify({ cardId: currentCard }),
+            })
+              .then(() =>
+                fetch("http://127.0.0.1:3000/quizzes", {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    Authorization: auth,
+                  },
                 })
-                .catch((err) => {
-                  console.error("Couldn't get quizzes", err);
-                  alert("Couldn't load quizzez.");
-                });
-            });
+              )
+              .then((r) => r.json())
+              .then((data) => {
+                console.log("Datele primite de la server:", data);
+                container.classList.remove("active");
+                quizData = data;
+                currentQuizIndex = 0;
+                remainingLives = 3;
+                document
+                  .querySelectorAll(".heart")
+                  .forEach((h) => (h.style.visibility = "visible"));
+                window.openQuizWindow();
+              })
+              .catch((err) => {
+                console.error("Couldn't get quizzes", err);
+                alert("Couldn't load quizzez.");
+              });
+          });
         });
     });
 });
