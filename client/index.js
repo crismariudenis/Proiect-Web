@@ -1,3 +1,4 @@
+
 let currentLanguage = "en";
 let langData = null;
 function changeFlag() {
@@ -19,14 +20,18 @@ async function getImageFromURL(url) {
     let universe;
     if (url.startsWith("https://dc.fandom.com")) universe = "DC";
     else if (url.startsWith("https://marvel.fandom.com")) universe = "Marvel";
-    const pageTitle = url.split('/wiki/')[1];
+    const pageTitle = url.split("/wiki/")[1];
     if (!pageTitle) return null;
 
     let apiUrl;
     if (universe === "Marvel")
-      apiUrl = `https://marvel.fandom.com/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=pageimages|images&piprop=original&format=json&origin=*`;
+      apiUrl = `https://marvel.fandom.com/api.php?action=query&titles=${encodeURIComponent(
+        pageTitle
+      )}&prop=pageimages|images&piprop=original&format=json&origin=*`;
     else if (universe === "DC") {
-      apiUrl = `https://dc.fandom.com/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=pageimages|images&piprop=original&format=json&origin=*`;
+      apiUrl = `https://dc.fandom.com/api.php?action=query&titles=${encodeURIComponent(
+        pageTitle
+      )}&prop=pageimages|images&piprop=original&format=json&origin=*`;
     }
     const response = await fetch(apiUrl);
     const data = await response.json();
@@ -37,18 +42,19 @@ async function getImageFromURL(url) {
 
     let imageUrl = null;
 
-
     if (pageData.original && pageData.original.source) {
       imageUrl = pageData.original.source;
-    }
-
-    else if (pageData.images && pageData.images.length > 0) {
+    } else if (pageData.images && pageData.images.length > 0) {
       const imageTitle = pageData.images[0].title;
       let imageApiUrl;
       if (universe === "Marvel")
-        imageApiUrl = `https://marvel.fandom.com/api.php?action=query&titles=${encodeURIComponent(imageTitle)}&prop=imageinfo&iiprop=url&format=json&origin=*`;
+        imageApiUrl = `https://marvel.fandom.com/api.php?action=query&titles=${encodeURIComponent(
+          imageTitle
+        )}&prop=imageinfo&iiprop=url&format=json&origin=*`;
       else if (universe === "DC")
-        imageApiUrl = `https://dc.fandom.com/api.php?action=query&titles=${encodeURIComponent(imageTitle)}&prop=imageinfo&iiprop=url&format=json`;
+        imageApiUrl = `https://dc.fandom.com/api.php?action=query&titles=${encodeURIComponent(
+          imageTitle
+        )}&prop=imageinfo&iiprop=url&format=json`;
       const imgResponse = await fetch(imageApiUrl);
       const imgData = await imgResponse.json();
 
@@ -63,12 +69,10 @@ async function getImageFromURL(url) {
     if (!imageUrl) return null;
     imageUrl = imageUrl.split("/revision")[0];
     return imageUrl;
-
   } catch (error) {
-    console.error('Eroare:', error.message);
+    console.error("Eroare:", error.message);
     return null;
   }
-
 }
 
 let currentCard;
@@ -91,6 +95,7 @@ let currentCard;
 //     console.error("download error", error);
 //   }
 // }
+
 async function loadLanguageData() {
   try {
     const res = await fetch("./json/language.json");
@@ -131,6 +136,7 @@ function updateLanguage() {
 
 }
 
+
 document.addEventListener("DOMContentLoaded", async () => {
   await loadLanguageData();
   fetch("./components/login.html")
@@ -143,19 +149,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (signBtn) {
         signBtn.addEventListener("click", (e) => {
           e.preventDefault();
-          const username = document
-            .getElementById("login_username")
-            .value.trim();
+          const username = document.getElementById("login_username").value.trim();
           const password = document.getElementById("login_password").value;
+          const L = document.getElementById("login");
           fetch("http://127.0.0.1:3000/adauga", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
           })
-            .then((r) => r.json())
-            .then((json) => {
-              alert(json.succes ? "Registered!" : "Error");
-              if (json.succes) L.classList.remove("active");
+            .then((response) => {
+              if (response.status === 409) {
+                return response.json().then((json) => {
+                  alert(json.eroare || "Username already taken");
+                });
+              }
+              if (response.status === 400) {
+                return response.json().then((json) => {
+                  alert(
+                    json.eroare ||
+                    "Password must be at least 9 characters, include an uppercase letter and a digit"
+                  );
+                });
+              }
+              if (!response.ok) {
+                return response.json().then((json) => {
+                  alert(json.eroare || "Error registering");
+                });
+              }
+              return response.json().then(() => {
+                alert("Registered!");
+                L.classList.remove("active");
+              });
+            })
+            .catch((err) => {
+              console.error("Registration failed", err);
+              alert("Error registering");
             });
         });
       }
@@ -179,8 +207,11 @@ document.addEventListener("DOMContentLoaded", async () => {
               if (json.succes) {
                 const authToken = btoa(username + ":" + password);
                 localStorage.setItem("authToken", authToken);
+                localStorage.setItem("username", username);
                 alert("Welcome back, " + username);
                 L.classList.remove("active");
+                // reflect in navbar
+                if (window.updateNavbar) window.updateNavbar();
               } else {
                 alert("Error");
               }
@@ -209,6 +240,35 @@ document.addEventListener("DOMContentLoaded", async () => {
             const containerLogin = document.getElementById("login");
             containerLogin.classList.add("active");
           };
+
+
+          const navBtn = document.getElementById("nav_login_btn");
+          const userSpan = document.getElementById("user-name");
+
+          // updateNavbar exposed globally so we can call it after login
+          window.updateNavbar = function () {
+            const username = localStorage.getItem("username");
+            if (username) {
+              navBtn.textContent = "Log out";
+              userSpan.textContent = `Hello, ${username}`;
+            } else {
+              navBtn.textContent = "Join now";
+              userSpan.textContent = "";
+            }
+          };
+
+          navBtn.addEventListener("click", () => {
+            if (localStorage.getItem("username")) {
+              // logout
+              localStorage.removeItem("authToken");
+              localStorage.removeItem("username");
+              window.updateNavbar();
+            } else {
+              openLogin();
+            }
+          });
+
+          window.updateNavbar();
 
         });
 
@@ -284,9 +344,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                   console.log(imageLink);
                   // await downloadImage(imageLink);
 
-                  const imageElement = quizContainer.querySelector(".quiz_image img");
+                  const imageElement =
+                    quizContainer.querySelector(".quiz_image img");
                   if (imageElement) {
-                    imageElement.src = imageLink.startsWith("http") ? imageLink : "https://" + imageLink;
+                    imageElement.src = imageLink.startsWith("http")
+                      ? imageLink
+                      : "https://" + imageLink;
                     imageElement.alt = "Quiz image";
                   }
                 }
@@ -323,9 +386,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                   questionText.push(quizData[currentQuizIndex].name);
                   questionText.push("'s hair described?");
                   break;
-
-
-
               }
               questionElement.textContent = questionText.join("");
 
@@ -335,52 +395,51 @@ document.addEventListener("DOMContentLoaded", async () => {
               firstButton.textContent = quizData[currentQuizIndex].value[0];
               secondButton.textContent = quizData[currentQuizIndex].value[1];
               counter.textContent = currentQuizIndex + 1;
-
             }
-          }
-          quizContainer.querySelectorAll(".quiz_button1, .quiz_button2").forEach((button) => {
-            button.addEventListener("click", () => {
-              const selectedAnswer = button.textContent.trim();
-              fetch("http://127.0.0.1:3000/answer", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: currentQuizIndex, answer: selectedAnswer }),
-              })
-                .then((r) => r.json())
-                .then(data => {
-                  console.log(data.correct);
-                  let correctAnswer = data.correct;
-                  quizContainer.classList.remove("active");
-                  currentQuizIndex++;
-                  if (!correctAnswer) {
-                    remainingLives--;
-                    console.log(remainingLives);
-                    if (remainingLives <= 0) {
-                      quizContainer.classList.remove("active");
-                    }
-                    else {
-                      document.querySelectorAll('.heart')[remainingLives].style.visibility = 'hidden';
-                      openQuizWindow();
-                    }
-
-                  }
-                  else openQuizWindow();
+          };
+          quizContainer
+            .querySelectorAll(".quiz_button1, .quiz_button2")
+            .forEach((button) => {
+              button.addEventListener("click", () => {
+                const selectedAnswer = button.textContent.trim();
+                fetch("http://127.0.0.1:3000/answer", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id: currentQuizIndex,
+                    answer: selectedAnswer,
+                  }),
                 })
-                .catch(console.error);
-
+                  .then((r) => r.json())
+                  .then((data) => {
+                    console.log(data.correct);
+                    let correctAnswer = data.correct;
+                    quizContainer.classList.remove("active");
+                    currentQuizIndex++;
+                    if (!correctAnswer) {
+                      remainingLives--;
+                      console.log(remainingLives);
+                      if (remainingLives <= 0) {
+                        quizContainer.classList.remove("active");
+                      } else {
+                        document.querySelectorAll(".heart")[
+                          remainingLives
+                        ].style.visibility = "hidden";
+                        openQuizWindow();
+                      }
+                    } else openQuizWindow();
+                  })
+                  .catch(console.error);
+              });
             });
-          });
-
-
         });
 
       fetch("./components/pop_up.html")
         .then((res) => res.text())
         .then((html) => {
           const container = document.getElementById("pop_up");
-
           container.innerHTML = html;
-          console.log(currentLanguage);
+          // overlay toggle
           window.openPopUp = (cardId) => {
             container.classList.add("active"); currentCard = cardId;
             const quizzes = langData[currentLanguage].quizzes;
@@ -424,8 +483,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             }
           }
-
-
           container
             .querySelector(".button_close")
             .addEventListener("click", () => container.classList.remove("active"));
@@ -435,25 +492,35 @@ document.addEventListener("DOMContentLoaded", async () => {
               e.preventDefault();
               e.stopPropagation();
 
+              // include authToken in headers
+              const auth = localStorage.getItem("authToken");
               fetch("http://127.0.0.1:3000/selectedCard", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cardId: currentCard })
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: auth,
+                },
+                body: JSON.stringify({ cardId: currentCard }),
               })
-                .then(() => {
-                  return fetch("http://127.0.0.1:3000/quizzes", {
+                .then(() =>
+                  fetch("http://127.0.0.1:3000/quizzes", {
                     method: "GET",
-                    headers: { "Accept": "application/json" },
-                  });
-                })
-                .then((res) => res.json())
+                    headers: {
+                      Accept: "application/json",
+                      Authorization: auth,
+                    },
+                  })
+                )
+                .then((r) => r.json())
                 .then((data) => {
                   console.log("Datele primite de la server:", data);
                   container.classList.remove("active");
                   quizData = data;
                   currentQuizIndex = 0;
                   remainingLives = 3;
-                  document.querySelectorAll('.heart').forEach(h => h.style.visibility = 'visible');
+                  document
+                    .querySelectorAll(".heart")
+                    .forEach((h) => (h.style.visibility = "visible"));
                   window.openQuizWindow();
                 })
                 .catch((err) => {
@@ -462,5 +529,5 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             });
         });
-    })
+    });
 });
