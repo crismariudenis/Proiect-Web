@@ -3,48 +3,11 @@ const url = require("url");
 const db = require("./db");
 const bcrypt = require("bcrypt");
 const port = 3000;
+const userAnswersMap = {};
 let heroesRowsCount;
 const choicesMap = {};
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
 let currentCard;
-
-let currentAnswers = [];
-// function getImageUrlFromPage(url) {
-//   return new Promise((resolve) => {
-//     https.get(url, (res) => {
-//       if (res.statusCode !== 200) {
-//         resolve(null);
-//         res.resume();
-//       }
-//       let data = "";
-
-//       res.on("data", (chunk) => {
-//         data += chunk;
-//       });
-
-//       if (data.includes("There is currently no text in this page")) {
-//         resolve(null);
-//         return;
-//       }
-
-//       res.on("end", () => {
-//         const imgMatch = data.match(/<img[^>]+src="([^"]+)"[^>]*>/i);
-
-//         if (imgMatch && imgMatch[1]) {
-//           const src = imgMatch[1];
-
-//           const fullUrl = src.startsWith("http") ? src : "https:" + src;
-//           resolve(fullUrl);
-//         } else {
-//           resolve(null);
-//         }
-//       });
-//     }).on("error", (err) => {
-//       console.error("Request error:", err);
-//       resolve(null);
-//     });
-//   });
-// }
 
 db.numberOfRows((err, count) => {
   if (err) {
@@ -52,54 +15,44 @@ db.numberOfRows((err, count) => {
     res.writeHead(500);
     res.end("Server error");
     return;
-  }
-  else {
+  } else {
     console.log("Rows:" + count);
     heroesRowsCount = count;
   }
 });
 
-// function loadChoices(i) {
-//   let searchField;
-//   switch (i) {
-//     case 0:
-//       searchField = "ID"
-//       break;
-//     case 1:
-//       searchField = "ALIGN"
-//       break;
-//     case 2:
-//       searchField = "EYE"
-//       break;
-//     case 3:
-//       searchField = "universe"
-//       break;
-//     case 4:
-//       searchField = "year"
-//       break;
-//     case 5:
-//       searchField = "HAIR"
-//       break;
+db.loadChoices((choicesMap) => {});
 
-//   }
-//   db.getChoices(searchField, (err, values) => {
-//     if (err) {
-//       console.error("DB error: couldn;t get field values", err);
-//       return;
-//     }
-//     choicesMap[i] = values;
-//     console.log(`${searchField}, map[${i}] =`, choicesMap[i]);
-
-//   });
-// }
-
-// for (let i = 0; i <= 5; i++) {
-//   loadChoices(i);
-// }
-db.loadChoices((choicesMap) => {
-  // console.log('Choices:', choicesMap);
-
-})
+// modify authenticate to attach username
+function authenticate(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) {
+    res.writeHead(401, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ error: "Unauthorized" }));
+  }
+  let creds;
+  try {
+    creds = Buffer.from(token, "base64").toString().split(":");
+  } catch {
+    res.writeHead(400);
+    return res.end();
+  }
+  const [username, password] = creds;
+  db.getUserByUsername(username, (err, user) => {
+    if (err || !user) {
+      res.writeHead(401, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Unauthorized" }));
+    }
+    bcrypt.compare(password, user.password, (err, match) => {
+      if (match) {
+        req.authUser = username; // store for downstream
+        return next();
+      }
+      res.writeHead(401, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Unauthorized" }));
+    });
+  });
+}
 
 const server = http.createServer((req, res) => {
   // CORS headers
@@ -116,64 +69,54 @@ const server = http.createServer((req, res) => {
   const pathname = parsedUrl.pathname;
 
   console.log(pathname);
+  // /selectedCard: just record card selection doesn't need answers
   if (method === "POST" && pathname === "/selectedCard") {
-    let body = "";
+    return authenticate(req, res, () => {
+      let body = "";
+      req.on("data", (c) => (body += c));
+      req.on("end", () => {
+        try {
+          const parsedData = JSON.parse(body);
+          const id = parsedData.cardId;
+          console.log("Id: " + id);
+          currentCard = id;
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Card received" }));
+        } catch (error) {
+          console.error("Eroare la parsarea JSON:", error.message);
 
-    req.on("data", chunk => {
-      body += chunk.toString();
-    });
-
-    req.on("end", () => {
-      try {
-        const parsedData = JSON.parse(body);
-        const id = parsedData.cardId;
-        console.log("Id: " + id);
-        currentCard = id;
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Card received" }));
-      }
-      catch (error) {
-        console.error("Eroare la parsarea JSON:", error.message);
-
-        if (!res.headersSent) {
-          res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Invalid JSON" }));
+          if (!res.headersSent) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Invalid JSON" }));
+          }
         }
-      }
+      });
+
+      return;
     });
-
-    return;
-
-
   }
+
+  // /quizzes: generate and store answers per user
   if (method === "GET" && pathname === "/quizzes") {
-
-    db.getQuizzes(10, heroesRowsCount, currentCard, (err, quizzes) => {
-      if (err) {
-        console.error("Couldn't get quizzes", err);
-        res.writeHead(500);
-        res.end("Server error");
-        return;
-      }
-
-
-      console.log("Generated Quizzes: ", quizzes);
-
-
-      db.getAnswers((err, answers) => {
+    return authenticate(req, res, () => {
+      db.getQuizzes(10, heroesRowsCount, currentCard, (err, quizzes) => {
         if (err) {
-          console.error("A apărut o eroare:", err);
+          console.error("Couldn't get quizzes", err);
+          res.writeHead(500);
+          res.end("Server error");
           return;
         }
 
-        console.log("Current right answers:", answers);
-        currentAnswers = answers;
-      });
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify(quizzes));
-    });
+        console.log("Generated Quizzes: ", quizzes);
 
-    return;
+        // load correct answers and store in map
+        db.getAnswers((err, answers) => {
+          userAnswersMap[req.authUser] = answers;
+        });
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify(quizzes));
+      });
+    });
   }
 
   if (method === "POST" && pathname === "/adauga") {
@@ -181,38 +124,55 @@ const server = http.createServer((req, res) => {
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
       const { username, password } = JSON.parse(body);
-      const pwd = password;
-      let hasUpper = false,
-        hasDigit = false;
-      if (pwd.length < 9) {
-        hasUpper = hasDigit = false;
-      } else {
-        for (const ch of pwd) {
-          if (ch >= "0" && ch <= "9") hasDigit = true;
-          if (ch !== ch.toLowerCase() && ch === ch.toUpperCase())
-            hasUpper = true;
-          if (hasUpper && hasDigit) break;
-        }
-      }
-      if (!hasUpper || !hasDigit || pwd.length < 9) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        return res.end(
-          JSON.stringify({
-            succes: false,
-            eroare:
-              "Password must be at least 9 characters, include an uppercase letter and a digit",
-          })
-        );
-      }
-      db.addUser(username, password, (err) => {
-        if (err) {
-          res.writeHead(400, { "Content-Type": "application/json" });
+
+      // === new: reject if username already exists ===
+      db.getUserByUsername(username, (err, user) => {
+        if (user) {
+          res.writeHead(409, { "Content-Type": "application/json" });
           return res.end(
-            JSON.stringify({ succes: false, eroare: err.message })
+            JSON.stringify({
+              succes: false,
+              eroare: "Username already taken",
+            })
           );
         }
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ succes: true }));
+
+        // ...existing password‐strength checks...
+        const pwd = password;
+        let hasUpper = false,
+          hasDigit = false;
+        if (pwd.length < 9) {
+          hasUpper = hasDigit = false;
+        } else {
+          for (const ch of pwd) {
+            if (ch >= "0" && ch <= "9") hasDigit = true;
+            if (ch !== ch.toLowerCase() && ch === ch.toUpperCase())
+              hasUpper = true;
+            if (hasUpper && hasDigit) break;
+          }
+        }
+        if (!hasUpper || !hasDigit || pwd.length < 9) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          return res.end(
+            JSON.stringify({
+              succes: false,
+              eroare:
+                "Password must be at least 9 characters, include an uppercase letter and a digit",
+            })
+          );
+        }
+
+        // ...existing insertion...
+        db.addUser(username, password, (err) => {
+          if (err) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            return res.end(
+              JSON.stringify({ succes: false, eroare: err.message })
+            );
+          }
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ succes: true }));
+        });
       });
     });
     return;
@@ -246,43 +206,25 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // /answer: check against this user’s answers
   if (method === "POST" && pathname === "/answer") {
-    let body = "";
-
-    req.on("data", chunk => {
-      body += chunk.toString();
-    });
-
-    req.on("end", () => {
-      try {
-        const parsedData = JSON.parse(body);
-        const answer = parsedData.answer;
-        const id = parsedData.id;
-
-        let isCorrect = false;
-        console.log("Received: " + id + " " + answer);
-        if (currentAnswers[id] == answer) {
-          console.log("Right.");
-          isCorrect = true;
-        }
-        else
-          console.log("Wrong.")
-
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ correct: isCorrect }));
-      } catch (error) {
-        console.error("Eroare la parsarea JSON:", error.message);
-
-        if (!res.headersSent) {
+    return authenticate(req, res, () => {
+      let body = "";
+      req.on("data", (c) => (body += c));
+      req.on("end", () => {
+        try {
+          const { id, answer } = JSON.parse(body);
+          const answers = userAnswersMap[req.authUser] || [];
+          const correct = answers[id] === answer;
+          res.writeHead(200, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ correct }));
+        } catch {
           res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Invalid JSON" }));
+          return res.end(JSON.stringify({ error: "Invalid JSON" }));
         }
-      }
+      });
     });
-
-    return;
   }
-
 
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("404 Not Found");
