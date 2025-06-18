@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             // set image and specific description
             switch (cardId) {
               case 1:
-                imageElement.src = "./images/MarvelVsDc.jpg";
+                imageElement.src = "./images/MarvelVsDC.jpg";
                 descriptionElement.innerText = quizzes.description1;
                 break;
               case 2:
