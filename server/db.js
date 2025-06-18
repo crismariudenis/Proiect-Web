@@ -16,32 +16,31 @@ db.prepare(
 function addUser(username, password, callback) {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) return callback(err);
-    const sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    const sql = "INSERT INTO users(username, password) VALUES(?, ?)";
     db.run(sql, [username, hash], function (err) {
       callback(err);
     });
   });
 }
 
-
 const choicesMap = {};
 
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
 const SOURCES = [
-  { name: 'wikipedia', base: 'https://en.wikipedia.org' },
-  { name: 'marvel', base: 'https://marvel.fandom.com' },
-  { name: 'dc', base: 'https://dc.fandom.com' },
+  { name: "wikipedia", base: "https://en.wikipedia.org" },
+  { name: "marvel", base: "https://marvel.fandom.com" },
+  { name: "dc", base: "https://dc.fandom.com" },
 ];
 const https = require("https");
 let answersToQuizzes = [];
 
 function cleanLink(link) {
-  newLink = link.replace(/\\\//g, '/');
-  if (newLink.startsWith('/wiki/')) {
+  newLink = link.replace(/\\\//g, "/");
+  if (newLink.startsWith("/wiki/")) {
     newLink = newLink.substring(5);
   }
-  if (!newLink.startsWith('/')) {
-    newLink = '/' + newLink;
+  if (!newLink.startsWith("/")) {
+    newLink = "/" + newLink;
   }
   return newLink;
 }
@@ -52,10 +51,10 @@ function createUrl(sourceBase, relativePath) {
 
 function urlExists(url) {
   return new Promise((resolve) => {
-    const req = https.request(url, { method: 'HEAD' }, (res) => {
+    const req = https.request(url, { method: "HEAD" }, (res) => {
       resolve(res.statusCode === 200);
     });
-    req.on('error', () => resolve(false));
+    req.on("error", () => resolve(false));
     req.end();
   });
 }
@@ -67,8 +66,7 @@ function getValidUrl(link, universe) {
   if (universe === "DC") {
     url = `${`https://dc.fandom.com`}/wiki${relativeLink}`;
     return url;
-  }
-  else if (universe == "Marvel") {
+  } else if (universe == "Marvel") {
     url = `${`https://marvel.fandom.com`}/wiki${relativeLink}`;
     return url;
   }
@@ -108,11 +106,13 @@ function loadChoices(callback) {
   }
 }
 
-function addUser(name, email, callback) {
-  console.log("Adding user:", name, email);
-  const sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-  db.run(sql, [name, email], function (err) {
-    if (callback) callback(err);
+function addUser(username, password, callback) {
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) return callback(err);
+    const sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    db.run(sql, [username, hash], function (err) {
+      callback(err);
+    });
   });
 }
 
@@ -170,9 +170,12 @@ function getQuizzes(n, countRows, card, callback) {
     const chosenField = fields[randomIndex];
     const randomId = Math.floor(Math.random() * countRows) + 1;
     let sqlQuery;
-    if (card == 4) sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters  WHERE universe='DC' LIMIT 1 OFFSET ${randomId}`;
-    else if (card == 5) sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters WHERE universe='Marvel' LIMIT 1 OFFSET ${randomId}`;
-    else sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters LIMIT 1 OFFSET ${randomId}`;
+    if (card == 4)
+      sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters  WHERE universe='DC' LIMIT 1 OFFSET ${randomId}`;
+    else if (card == 5)
+      sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters WHERE universe='Marvel' LIMIT 1 OFFSET ${randomId}`;
+    else
+      sqlQuery = `SELECT name, urlslug, universe, ${chosenField} AS value FROM characters LIMIT 1 OFFSET ${randomId}`;
 
     heroes.all(sqlQuery, (err, rows) => {
       if (err) return callback(err);
