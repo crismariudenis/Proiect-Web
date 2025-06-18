@@ -1,3 +1,16 @@
+let currentLanguage = "en";
+function changeFlag() {
+  const flagImg = document.getElementById("flag");
+  if (currentLanguage === "ro") {
+    flagImg.src = "./images/usa_flag.jpg";
+    currentLanguage = "en";
+  }
+  else {
+    flagImg.src = "./images/romanian_flag.jpg";
+    currentLanguage = "ro";
+
+  }
+}
 
 async function getImageFromURL(url) {
   try {
@@ -136,6 +149,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
+          fetch("./json/language.json")
+            .then(res => res.json())
+            .then(langData => {
+              const navbar = langData[currentLanguage].navbar;
+              document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
+              document.getElementById("navbar-about").textContent = navbar.about;
+              document.getElementById("navbar-join").textContent = navbar.join;
+            });
+
           window.toggleMenu = function () {
             const navLinks = document.querySelector(".nav-links");
             if (navLinks) {
@@ -146,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const containerLogin = document.getElementById("login");
             containerLogin.classList.add("active");
           };
+
         });
 
       fetch("./components/footer.html")
@@ -158,18 +181,32 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.text()) // Convert the response to text
         .then((data) => {
           document.getElementById("hero").innerHTML = data; // Insert the content into the #hero div
+          fetch("./json/language.json")
+            .then(res => res.json())
+            .then(langData => {
+              const landing = langData[currentLanguage].landing;
+              document.getElementById("landing-title").innerHTML = landing.title;
+              document.getElementById("landing-description").textContent = landing.description;
+              document.getElementById("landing-button").textContent = landing.button;
+            });
         });
+
+
 
       fetch("./components/quizzes.html") // Fetch the quizzes component
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("quizzes").innerHTML = data; // Insert the quizzes into the placeholder
-        });
-
-      fetch("./components/quizzes.html")
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("quizzes").innerHTML = data;
+          fetch("./json/language.json")
+            .then(res => res.json())
+            .then(langData => {
+              const quizzes = langData[currentLanguage].quizzes;
+              document.getElementById("quizzes-featured").innerHTML = quizzes.featured;
+              document.getElementById("quizzes-title1").textContent = quizzes.title1;
+              document.getElementById("quizzes-description1").textContent = quizzes.description1;
+              document.getElementById("quizzes-title2").textContent = quizzes.title2;
+              document.getElementById("quizzes-description2").textContent = quizzes.description1;
+            });
         });
 
       let quizContainer;

@@ -1,0 +1,38 @@
+{
+    "en": {
+        "landing": {
+            "title": "Welcome to the <span style='color: var(--red-color)'>Ultimate</span> Superhero Quiz Hub!",
+            "description": "Dive into the world of HEROQuizz, where you can test your knowledge of all things superhero! Explore quizzes and prove you’re the ultimate fan.",
+            "button": "Start now"
+        },
+        "navbar": {
+            "quizzes": "Quizzes",
+            "about": "About Us",
+            "join": "Join now"
+        },
+        "quizzes": {
+            "featured": "Featured Quizzes",
+            "title1": "Marvel or DC",
+            "description1": "Ready to show off your superhero smarts?Test your superhero knowledge by identifying whether a character belongs to the DC or Marvel universe. Choose wisely!",
+            "title2": "What Do They Look Like?",
+            "decription2": "Think you know your heroes? In this quiz, you'll have to guess a hero’s physical features — like hair and eye color."
+        }
+    },
+    "ro": {
+        "landing": {
+            "title": "Bine ai venit în Lumea <span style='color: var(--red-color)'>Supremă</span> a Quiz-urilor cu Supereroi!",
+            "description": "Intră în lumea HEROQuizz, unde îți poți testa cunoștințele despre tot ce înseamnă supereroi! Explorează quiz-urile și dovedește că ești fanul suprem.",
+            "button": "Începe acum"
+        },
+        "navbar": {
+            "quizzes": "Quizz-uri",
+            "about": "Despre noi",
+            "join": "Alătură-te acum"
+        },
+        "quizzes": {
+            "featured": "Quizz-uri recomandate",
+            "title1": "Marvel sau DC",
+            "description1": "Ești gata să-ți pui la încercare cunoștințele despre supereroi? Află cât de bine cunoști universurile eroilor tăi preferați, identificând dacă un personaj face parte din lumea DC sau Marvel. Alege cu grijă!"
+        }
+    }
+}
