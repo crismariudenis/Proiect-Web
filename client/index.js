@@ -348,46 +348,103 @@ document.addEventListener("DOMContentLoaded", async () => {
                   }
                 }
               }
+              const quiz = langData[currentLanguage].quiz;
+              document.getElementById("quiz-title").innerHTML =
+                quiz.title;
+              const question = quiz.question;
+              const firstButton = quizContainer.querySelector(".quiz_button1");
+              const secondButton = quizContainer.querySelector(".quiz_button2");
+              let answers;
+              if (currentLanguage === "ro") answers = quiz.answers;
 
               switch (field) {
                 case "ID":
-                  questionText.push("What is the identity of the hero ");
+                  questionText.push(question.id);
                   questionText.push(quizData[currentQuizIndex].name);
                   questionText.push(" ?");
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+
+
+                  }
+                  else {
+                    firstButton.textContent = quizData[currentQuizIndex].value[0];
+                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  }
                   break;
                 case "ALIGN":
-                  questionText.push("What is ");
+                  questionText.push(question.align1);
                   questionText.push(quizData[currentQuizIndex].name);
-                  questionText.push("'s moral alignment?");
+                  questionText.push(question.align2);
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+
+
+                  }
+                  else {
+                    firstButton.textContent = quizData[currentQuizIndex].value[0];
+                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  }
                   break;
                 case "EYE":
-                  questionText.push("What color are ");
+                  questionText.push(question.eye1);
                   questionText.push(quizData[currentQuizIndex].name);
-                  questionText.push("'s eyes?");
+                  questionText.push(question.eye2);
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+
+
+                  }
+                  else {
+                    firstButton.textContent = quizData[currentQuizIndex].value[0];
+                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  }
                   break;
                 case "universe":
-                  questionText.push("Which universe does ");
+                  questionText.push(question.universe1);
                   questionText.push(quizData[currentQuizIndex].name);
-                  questionText.push(" belong to?");
+                  questionText.push(question.universe2);
+                  firstButton.textContent = quizData[currentQuizIndex].value[0];
+                  secondButton.textContent = quizData[currentQuizIndex].value[1];
                   break;
                 case "year":
-                  questionText.push("In what year was ");
+                  questionText.push(question.year1);
                   questionText.push(quizData[currentQuizIndex].name);
-                  questionText.push(" first created?");
+                  questionText.push(question.year2);
+                  firstButton.textContent = quizData[currentQuizIndex].value[0];
+                  secondButton.textContent = quizData[currentQuizIndex].value[1];
                   break;
                 case "HAIR":
-                  questionText.push("How is ");
+                  questionText.push(question.hair1);
                   questionText.push(quizData[currentQuizIndex].name);
-                  questionText.push("'s hair described?");
+                  questionText.push(question.hair2);
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+
+
+                  }
+                  else {
+                    firstButton.textContent = quizData[currentQuizIndex].value[0];
+                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  }
                   break;
               }
               questionElement.textContent = questionText.join("");
 
-              const firstButton = quizContainer.querySelector(".quiz_button1");
-              const secondButton = quizContainer.querySelector(".quiz_button2");
+
               const counter = quizContainer.querySelector(".counter");
-              firstButton.textContent = quizData[currentQuizIndex].value[0];
-              secondButton.textContent = quizData[currentQuizIndex].value[1];
               counter.textContent = currentQuizIndex + 1;
             }
           };
