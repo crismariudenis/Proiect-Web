@@ -77,25 +77,6 @@ async function getImageFromURL(url) {
 
 let currentCard;
 
-// async function downloadImage(url) {
-//   try {
-//     console.log(url);
-//     const response = await fetch(url);
-//     if (!response.ok) throw new Error("No image");
-
-//     const blob = await response.blob();
-//     const objectURL = URL.createObjectURL(blob);
-
-//     const imageElement = quizContainer.querySelector(".quiz_image img");
-//     if (imageElement) {
-//       imageElement.src = objectURL;
-//     }
-
-//   } catch (error) {
-//     console.error("download error", error);
-//   }
-// }
-
 async function loadLanguageData() {
   try {
     const res = await fetch("./json/language.json");
@@ -139,6 +120,7 @@ function updateLanguage() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadLanguageData();
+
   fetch("./components/login.html")
     .then((r) => r.text())
     .then((html) => {
@@ -167,7 +149,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return response.json().then((json) => {
                   alert(
                     json.eroare ||
+
                     "Password must be at least 9 characters, include an uppercase letter and a digit"
+
                   );
                 });
               }
@@ -439,8 +423,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         .then((html) => {
           const container = document.getElementById("pop_up");
           container.innerHTML = html;
-          // overlay toggle
+
+          // only allow logged-in users to open
           window.openPopUp = (cardId) => {
+
             container.classList.add("active"); currentCard = cardId;
             const quizzes = langData[currentLanguage].quizzes;
             const pop_up = langData[currentLanguage].pop_up;
@@ -486,6 +472,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           container
             .querySelector(".button_close")
             .addEventListener("click", () => container.classList.remove("active"));
+
+            if (!localStorage.getItem("authToken")) {
+              openLogin();
+              return;
+            }
+            container.classList.add("active");
+            currentCard = cardId;
+          };
+
+
           container
             .querySelector(".button_play_quiz")
             .addEventListener("click", (e) => {
