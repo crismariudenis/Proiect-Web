@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return response.json().then((json) => {
                   alert(
                     json.eroare ||
-                      "Password must be at least 9 characters, include an uppercase letter and a digit"
+                    "Password must be at least 9 characters, include an uppercase letter and a digit"
                   );
                 });
               }
@@ -434,8 +434,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const container = document.getElementById("pop_up");
           container.innerHTML = html;
 
-          const quizzes = langData[currentLanguage].quizzes;
-          const pop_up = langData[currentLanguage].pop_up;
+
           const imageElement = container.querySelector(".pop_up_img img");
           const descriptionElement =
             container.querySelector(".description_body");
@@ -450,6 +449,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               return;
             }
             currentCard = cardId;
+            const quizzes = langData[currentLanguage].quizzes;
+            const pop_up = langData[currentLanguage].pop_up;
             // set translated texts
             description.innerText = pop_up.description;
             ranking.innerText = pop_up.ranking;
