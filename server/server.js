@@ -21,7 +21,7 @@ db.numberOfRows((err, count) => {
   }
 });
 
-db.loadChoices((choicesMap) => {});
+db.loadChoices((choicesMap) => { });
 
 // modify authenticate to attach username
 function authenticate(req, res, next) {

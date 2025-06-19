@@ -51,6 +51,12 @@
                 "year2": " first created?",
                 "hair1": "How is ",
                 "hair2": "'s hair described?"
+            },
+            "about": {
+                "home": "Home",
+                "quizzes": "Quizzes",
+                "title": "Who’s Saving the Day Behind the Screen?",
+                "description": "Behind every great quiz, there's a great team. Connect with us below!"
             }
         }
     },

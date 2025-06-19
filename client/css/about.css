@@ -1,0 +1,112 @@
+:root {
+    --primary-color: #e74c3c;
+    --background-dark: #0f111a;
+    --card-bg: #1c1f2a;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-dark);
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+header {
+    background-color: var(--card-bg);
+    padding: 1.25rem 2vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.highlight {
+    color: var(--primary-color);
+}
+
+nav a {
+    margin-left: 1.5rem;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin: 4rem auto;
+    max-width: 90%;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 0.625rem;
+    text-align: center;
+    width: 90%;
+    max-width: 18rem;
+    box-shadow: 0 0 0.625rem rgba(255, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.625rem;
+    margin-bottom: 1rem;
+}
+
+.links a {
+    display: inline-block;
+    margin: 0.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+h2 {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.about-header {
+    text-align: center;
+    margin-top: 4vh;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.about-header h1 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.about-header p {
+    font-size: 1.1rem;
+    color: #cccccc;
+    max-width: 800px;
+    margin: 0 auto;
+}
