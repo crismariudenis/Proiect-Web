@@ -2,7 +2,6 @@ let currentLanguage;
 if (currentLanguage == null) {
   currentLanguage = "en";
   localStorage.setItem("language", currentLanguage);
-
 }
 let langData = null;
 function changeFlag() {
@@ -11,11 +10,9 @@ function changeFlag() {
   if (currentLanguage === "ro") {
     flagImg.src = "./images/usa_flag.jpg";
     currentLanguage = "en";
-
   } else {
     flagImg.src = "./images/romanian_flag.jpg";
     currentLanguage = "ro";
-
   }
   localStorage.setItem("language", currentLanguage);
 
@@ -97,7 +94,7 @@ function updateLanguage() {
   const navbar = langData[currentLanguage].navbar;
   document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
   document.getElementById("navbar-about").textContent = navbar.about;
-  document.getElementById("navbar-join").textContent = navbar.join;
+  document.getElementById("nav_login_btn").textContent = navbar.join;
   const footer = langData[currentLanguage].footer;
   document.getElementById("footer-left").textContent = footer.left;
   document.getElementById("footer-middle").textContent = footer.middle;
@@ -163,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return response.json().then((json) => {
                   alert(
                     json.eroare ||
-                    "Password must be at least 9 characters, include an uppercase letter and a digit"
+                      "Password must be at least 9 characters, include an uppercase letter and a digit"
                   );
                 });
               }
@@ -219,12 +216,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
-
           const navbar = langData[currentLanguage].navbar;
           document.getElementById("navbar-quizzes").textContent =
             navbar.quizzes;
           document.getElementById("navbar-about").textContent = navbar.about;
-          document.getElementById("navbar-join").textContent = navbar.join;
+          document.getElementById("nav_login_btn").textContent = navbar.join;
 
           window.toggleMenu = function () {
             const navLinks = document.querySelector(".nav-links");
@@ -326,6 +322,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let currentQuizIndex = 0;
       let quizData = [];
       let remainingLives = 3;
+      let questionOffset = 0; // total questions shown so far
 
       fetch("./components/quiz_window.html")
         .then((response) => response.text())
@@ -359,8 +356,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
               }
               const quiz = langData[currentLanguage].quiz;
-              document.getElementById("quiz-title").innerHTML =
-                quiz.title;
+              document.getElementById("quiz-title").innerHTML = quiz.title;
               const question = quiz.question;
               const firstButton = quizContainer.querySelector(".quiz_button1");
               const secondButton = quizContainer.querySelector(".quiz_button2");
@@ -377,12 +373,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let var2 = quizData[currentQuizIndex].value[1];
                     firstButton.textContent = answers[var1];
                     secondButton.textContent = answers[var2];
-
-
-                  }
-                  else {
-                    firstButton.textContent = quizData[currentQuizIndex].value[0];
-                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
                   }
                   break;
                 case "ALIGN":
@@ -394,12 +389,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let var2 = quizData[currentQuizIndex].value[1];
                     firstButton.textContent = answers[var1];
                     secondButton.textContent = answers[var2];
-
-
-                  }
-                  else {
-                    firstButton.textContent = quizData[currentQuizIndex].value[0];
-                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
                   }
                   break;
                 case "EYE":
@@ -411,12 +405,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let var2 = quizData[currentQuizIndex].value[1];
                     firstButton.textContent = answers[var1];
                     secondButton.textContent = answers[var2];
-
-
-                  }
-                  else {
-                    firstButton.textContent = quizData[currentQuizIndex].value[0];
-                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
                   }
                   break;
                 case "universe":
@@ -424,14 +417,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                   questionText.push(quizData[currentQuizIndex].name);
                   questionText.push(question.universe2);
                   firstButton.textContent = quizData[currentQuizIndex].value[0];
-                  secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  secondButton.textContent =
+                    quizData[currentQuizIndex].value[1];
                   break;
                 case "year":
                   questionText.push(question.year1);
                   questionText.push(quizData[currentQuizIndex].name);
                   questionText.push(question.year2);
                   firstButton.textContent = quizData[currentQuizIndex].value[0];
-                  secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  secondButton.textContent =
+                    quizData[currentQuizIndex].value[1];
                   break;
                 case "HAIR":
                   questionText.push(question.hair1);
@@ -442,20 +437,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let var2 = quizData[currentQuizIndex].value[1];
                     firstButton.textContent = answers[var1];
                     secondButton.textContent = answers[var2];
-
-
-                  }
-                  else {
-                    firstButton.textContent = quizData[currentQuizIndex].value[0];
-                    secondButton.textContent = quizData[currentQuizIndex].value[1];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
                   }
                   break;
               }
               questionElement.textContent = questionText.join("");
 
-
               const counter = quizContainer.querySelector(".counter");
-              counter.textContent = currentQuizIndex + 1;
+              counter.textContent = questionOffset + currentQuizIndex + 1;
             }
           };
           quizContainer
@@ -463,9 +456,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             .forEach((button) => {
               button.addEventListener("click", () => {
                 const selectedAnswer = button.textContent.trim();
+                const auth = localStorage.getItem("authToken");
                 fetch("http://127.0.0.1:3000/answer", {
                   method: "POST",
-                  headers: { "Content-Type": "application/json" },
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: auth,
+                  },
                   body: JSON.stringify({
                     id: currentQuizIndex,
                     answer: selectedAnswer,
@@ -474,12 +471,45 @@ document.addEventListener("DOMContentLoaded", async () => {
                   .then((r) => r.json())
                   .then((data) => {
                     console.log(data.correct);
-                    let correctAnswer = data.correct;
-                    quizContainer.classList.remove("active");
                     currentQuizIndex++;
-                    if (!correctAnswer) {
+
+                    // if we've exhausted this batch, bump offset and load next
+                    if (currentQuizIndex >= quizData.length) {
+                      questionOffset += quizData.length;
+                      fetch("http://127.0.0.1:3000/selectedCard", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: auth,
+                        },
+                        body: JSON.stringify({ cardId: currentCard }),
+                      })
+                        .then(() =>
+                          fetch("http://127.0.0.1:3000/quizzes", {
+                            method: "GET",
+                            headers: {
+                              Accept: "application/json",
+                              Authorization: auth,
+                            },
+                          })
+                        )
+                        .then((r) => r.json())
+                        .then((newBatch) => {
+                          quizData = newBatch;
+                          currentQuizIndex = 0;
+                          remainingLives = 3;
+                          document
+                            .querySelectorAll(".heart")
+                            .forEach((h) => (h.style.visibility = "visible"));
+                          openQuizWindow();
+                        })
+                        .catch(console.error);
+                      return;
+                    }
+
+                    // ...existing correct/incorrect handling...
+                    if (!data.correct) {
                       remainingLives--;
-                      console.log(remainingLives);
                       if (remainingLives <= 0) {
                         quizContainer.classList.remove("active");
                       } else {
@@ -488,7 +518,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                         ].style.visibility = "hidden";
                         openQuizWindow();
                       }
-                    } else openQuizWindow();
+                    } else {
+                      openQuizWindow();
+                    }
                   })
                   .catch(console.error);
               });
@@ -500,7 +532,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         .then((html) => {
           const container = document.getElementById("pop_up");
           container.innerHTML = html;
-
 
           const imageElement = container.querySelector(".pop_up_img img");
           const descriptionElement =
