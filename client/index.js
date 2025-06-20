@@ -1,14 +1,24 @@
-let currentLanguage = "en";
+let currentLanguage;
+if (currentLanguage == null) {
+  currentLanguage = "en";
+  localStorage.setItem("language", currentLanguage);
+
+}
 let langData = null;
 function changeFlag() {
   const flagImg = document.getElementById("flag");
+
   if (currentLanguage === "ro") {
     flagImg.src = "./images/usa_flag.jpg";
     currentLanguage = "en";
+
   } else {
     flagImg.src = "./images/romanian_flag.jpg";
     currentLanguage = "ro";
+
   }
+  localStorage.setItem("language", currentLanguage);
+
   updateLanguage();
 }
 

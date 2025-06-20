@@ -1,4 +1,5 @@
 {
+    "lang": "en",
     "en": {
         "landing": {
             "title": "Welcome to the <span style='color: var(--red-color)'>Ultimate</span> Superhero Quiz Hub!",
@@ -51,13 +52,14 @@
                 "year2": " first created?",
                 "hair1": "How is ",
                 "hair2": "'s hair described?"
-            },
-            "about": {
-                "home": "Home",
-                "quizzes": "Quizzes",
-                "title": "Who’s Saving the Day Behind the Screen?",
-                "description": "Behind every great quiz, there's a great team. Connect with us below!"
             }
+        },
+        "about": {
+            "home": "Home",
+            "quizzes": "Quizzes",
+            "title": "Who’s Saving the Day Behind the Screen?",
+            "description": "Behind every great quiz, there's a great team. Connect with us below!",
+            "footer": "Website made for Web Development course at FII UAIC."
         }
     },
     "ro": {
@@ -181,6 +183,13 @@
                 "No Dual Identity": "Fără identitate dublă",
                 "Known to Authorities Identity": "Identitate cunoscută autorităților"
             }
+        },
+        "about": {
+            "home": "Acasă",
+            "quizzes": "Quizz-uri",
+            "title": "Cine salvează ziua din spatele ecranului?",
+            "description": "În spatele fiecărui quiz grozav, se află o echipă pe măsură. Conectează-te cu noi!",
+            "footer": "Site realizat pentru cursul de Tehnologii Web la FII UAIC."
         }
     }
 }
