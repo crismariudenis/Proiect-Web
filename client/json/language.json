@@ -9,7 +9,8 @@
         "navbar": {
             "quizzes": "Quizzes",
             "about": "About Us",
-            "join": "Join now"
+            "join": "Join now",
+            "dashboard": "Dashboard"
         },
         "quizzes": {
             "featured": "Featured Quizzes",
@@ -71,7 +72,8 @@
         "navbar": {
             "quizzes": "Quizz-uri",
             "about": "Despre noi",
-            "join": "Alătură-te acum"
+            "join": "Alătură-te acum",
+            "dashboard": "Tablou de bord"
         },
         "quizzes": {
             "featured": "Quizz-uri recomandate",

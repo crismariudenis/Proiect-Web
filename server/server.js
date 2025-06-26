@@ -21,9 +21,8 @@ db.numberOfRows((err, count) => {
   }
 });
 
-db.loadChoices((choicesMap) => { });
+db.loadChoices((choicesMap) => {});
 
-// modify authenticate to attach username
 function authenticate(req, res, next) {
   const token = req.headers.authorization;
   if (!token) {
@@ -215,6 +214,7 @@ const server = http.createServer((req, res) => {
         try {
           const { id, answer } = JSON.parse(body);
           const answers = userAnswersMap[req.authUser] || [];
+          console.log(req.authUser, answers);
           const correct = answers[id] === answer;
           res.writeHead(200, { "Content-Type": "application/json" });
           return res.end(JSON.stringify({ correct }));
@@ -222,6 +222,62 @@ const server = http.createServer((req, res) => {
           res.writeHead(400, { "Content-Type": "application/json" });
           return res.end(JSON.stringify({ error: "Invalid JSON" }));
         }
+      });
+    });
+  }
+
+  // GET /dashboard: list all users, admin only
+  if (method === "GET" && pathname === "/dashboard") {
+    return authenticate(req, res, () => {
+      db.getUserByUsername(req.authUser, (err, user) => {
+        if (err || !user) {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ error: "Unauthorized" }));
+        }
+        if (user.isAdmin) {
+          db.getUsers((err, users) => {
+            if (err) {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              return res.end(JSON.stringify({ error: "Server error" }));
+            }
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ users }));
+          });
+        } else {
+          res.writeHead(403, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Forbidden" }));
+        }
+      });
+    });
+  }
+
+  // POST /grantAdmin: only admins can promote another user
+  if (method === "POST" && pathname === "/grantAdmin") {
+    return authenticate(req, res, () => {
+      // ensure caller is admin
+      db.getUserByUsername(req.authUser, (err, user) => {
+        if (err || !user || !user.isAdmin) {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ error: "Unauthorized" }));
+        }
+        let body = "";
+        req.on("data", (chunk) => (body += chunk));
+        req.on("end", () => {
+          try {
+            const { id } = JSON.parse(body);
+            db.grantAdmin(id, (err) => {
+              if (err) {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                return res.end(JSON.stringify({ error: "Database error" }));
+              }
+              res.writeHead(200, { "Content-Type": "application/json" });
+              return res.end(JSON.stringify({ success: true }));
+            });
+          } catch {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "Invalid JSON" }));
+          }
+        });
       });
     });
   }

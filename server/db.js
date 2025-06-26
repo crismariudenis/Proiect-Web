@@ -9,14 +9,16 @@ db.prepare(
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    isAdmin INTEGER DEFAULT 0
   )`
 ).run();
 
 function addUser(username, password, callback) {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) return callback(err);
-    const sql = "INSERT INTO users(username, password) VALUES(?, ?)";
+    const sql =
+      "INSERT INTO users(username, password, isAdmin) VALUES (?, ?, 0)";
     db.run(sql, [username, hash], function (err) {
       callback(err);
     });
@@ -236,6 +238,14 @@ function getChoices(column, callback) {
   });
 }
 
+// grantAdmin: flip isAdmin flag on a user
+function grantAdmin(id, callback) {
+  const sql = "UPDATE users SET isAdmin = 1 WHERE id = ?";
+  db.run(sql, [id], function (err) {
+    callback(err);
+  });
+}
+
 module.exports = {
   addUser,
   getUsers,
@@ -245,4 +255,8 @@ module.exports = {
   getChoices,
   loadChoices,
   getAnswers,
+  grantAdmin,
 };
+
+// export addUser for seeding
+module.exports.addUser = addUser;
