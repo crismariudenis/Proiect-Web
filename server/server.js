@@ -4,10 +4,12 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const port = 3000;
 const userAnswersMap = {};
+const userScoreMap = {};
 let heroesRowsCount;
 const choicesMap = {};
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
 let currentCard;
+let usersUpdatingScores = {};
 
 db.numberOfRows((err, count) => {
   if (err) {
@@ -95,6 +97,52 @@ const server = http.createServer((req, res) => {
     });
   }
 
+  if (method === "GET" && pathname === "/score") {
+    return authenticate(req, res, () => {
+      const username = req.authUser;
+      const score = userScoreMap[username];
+      console.log("Score from server: " + score);
+
+
+      if (score === undefined) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "No score." }));
+      }
+      else {
+        db.updateRanking(score, username, err => {
+          if (err) {
+            console.error("Couldn't get quizzes", err);
+            res.writeHead(500);
+            res.end("Server error");
+            return;
+          }
+        });
+
+      }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ score }));
+    });
+  }
+
+  if (method === "GET" && pathname === "/rankings") {
+    return authenticate(req, res, () => {
+      userScoreMap[req.authUser] = 0;
+      usersUpdatingScores[req.authUser] = 20;
+      db.getRanking((err, result) => {
+        if (err) {
+          res.writeHead(500, { "Content-Type": "application/json" });
+          return res.end(JSON.stringify({ error: "Database error-rank" }));
+        }
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify(result));
+      });
+
+    });
+  }
+
+
   // /quizzes: generate and store answers per user
   if (method === "GET" && pathname === "/quizzes") {
     return authenticate(req, res, () => {
@@ -111,7 +159,9 @@ const server = http.createServer((req, res) => {
         // load correct answers and store in map
         db.getAnswers((err, answers) => {
           userAnswersMap[req.authUser] = answers;
+          console.log(answers);
         });
+
         res.writeHead(200, { "Content-Type": "application/json" });
         return res.end(JSON.stringify(quizzes));
       });
@@ -216,6 +266,12 @@ const server = http.createServer((req, res) => {
           const answers = userAnswersMap[req.authUser] || [];
           console.log(req.authUser, answers);
           const correct = answers[id] === answer;
+          if (correct) {
+            username = req.authUser;
+            userScoreMap[username] += 10 * usersUpdatingScores[username];
+            usersUpdatingScores[username] += 30;
+          }
+          console.log("Current score " + req.authUser + " " + userScoreMap[req.authUser]);
           res.writeHead(200, { "Content-Type": "application/json" });
           return res.end(JSON.stringify({ correct }));
         } catch {

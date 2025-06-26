@@ -2,6 +2,7 @@ let currentLanguage;
 if (currentLanguage == null) {
   currentLanguage = "en";
   localStorage.setItem("language", currentLanguage);
+
 }
 let langData = null;
 function changeFlag() {
@@ -10,9 +11,11 @@ function changeFlag() {
   if (currentLanguage === "ro") {
     flagImg.src = "./images/usa_flag.jpg";
     currentLanguage = "en";
+
   } else {
     flagImg.src = "./images/romanian_flag.jpg";
     currentLanguage = "ro";
+
   }
   localStorage.setItem("language", currentLanguage);
 
@@ -95,7 +98,7 @@ function updateLanguage() {
   document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
   document.getElementById("navbar-about").textContent = navbar.about;
   document.getElementById("navbar-dashboard").textContent = navbar.dashboard; // new
-  document.getElementById("nav_login_btn").textContent = navbar.join;
+  document.getElementById("navbar-join").textContent = navbar.join;
   const footer = langData[currentLanguage].footer;
   document.getElementById("footer-left").textContent = footer.left;
   document.getElementById("footer-middle").textContent = footer.middle;
@@ -380,223 +383,205 @@ document.addEventListener("DOMContentLoaded", async () => {
             let answers;
             if (currentLanguage === "ro") answers = quiz.answers;
 
-            switch (field) {
-              case "ID":
-                questionText.push(question.id);
-                questionText.push(quizData[currentQuizIndex].name);
-                questionText.push(" ?");
-                if (currentLanguage == "ro") {
-                  let var1 = quizData[currentQuizIndex].value[0];
-                  let var2 = quizData[currentQuizIndex].value[1];
-                  firstButton.textContent = answers[var1];
-                  secondButton.textContent = answers[var2];
-                } else {
+              switch (field) {
+                case "ID":
+                  questionText.push(question.id);
+                  questionText.push(quizData[currentQuizIndex].name);
+                  questionText.push(" ?");
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
+                  }
+                  break;
+                case "ALIGN":
+                  questionText.push(question.align1);
+                  questionText.push(quizData[currentQuizIndex].name);
+                  questionText.push(question.align2);
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
+                  }
+                  break;
+                case "EYE":
+                  questionText.push(question.eye1);
+                  questionText.push(quizData[currentQuizIndex].name);
+                  questionText.push(question.eye2);
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
+                  }
+                  break;
+                case "universe":
+                  questionText.push(question.universe1);
+                  questionText.push(quizData[currentQuizIndex].name);
+                  questionText.push(question.universe2);
                   firstButton.textContent = quizData[currentQuizIndex].value[0];
                   secondButton.textContent =
                     quizData[currentQuizIndex].value[1];
-                }
-                break;
-              case "ALIGN":
-                questionText.push(question.align1);
-                questionText.push(quizData[currentQuizIndex].name);
-                questionText.push(question.align2);
-                if (currentLanguage == "ro") {
-                  let var1 = quizData[currentQuizIndex].value[0];
-                  let var2 = quizData[currentQuizIndex].value[1];
-                  firstButton.textContent = answers[var1];
-                  secondButton.textContent = answers[var2];
-                } else {
+                  break;
+                case "year":
+                  questionText.push(question.year1);
+                  questionText.push(quizData[currentQuizIndex].name);
+                  questionText.push(question.year2);
                   firstButton.textContent = quizData[currentQuizIndex].value[0];
                   secondButton.textContent =
                     quizData[currentQuizIndex].value[1];
-                }
-                break;
-              case "EYE":
-                questionText.push(question.eye1);
-                questionText.push(quizData[currentQuizIndex].name);
-                questionText.push(question.eye2);
-                if (currentLanguage == "ro") {
-                  let var1 = quizData[currentQuizIndex].value[0];
-                  let var2 = quizData[currentQuizIndex].value[1];
-                  firstButton.textContent = answers[var1];
-                  secondButton.textContent = answers[var2];
-                } else {
-                  firstButton.textContent = quizData[currentQuizIndex].value[0];
-                  secondButton.textContent =
-                    quizData[currentQuizIndex].value[1];
-                }
-                break;
-              case "universe":
-                questionText.push(question.universe1);
-                questionText.push(quizData[currentQuizIndex].name);
-                questionText.push(question.universe2);
-                firstButton.textContent = quizData[currentQuizIndex].value[0];
-                secondButton.textContent = quizData[currentQuizIndex].value[1];
-                break;
-              case "year":
-                questionText.push(question.year1);
-                questionText.push(quizData[currentQuizIndex].name);
-                questionText.push(question.year2);
-                firstButton.textContent = quizData[currentQuizIndex].value[0];
-                secondButton.textContent = quizData[currentQuizIndex].value[1];
-                break;
-              case "HAIR":
-                questionText.push(question.hair1);
-                questionText.push(quizData[currentQuizIndex].name);
-                questionText.push(question.hair2);
-                if (currentLanguage == "ro") {
-                  let var1 = quizData[currentQuizIndex].value[0];
-                  let var2 = quizData[currentQuizIndex].value[1];
-                  firstButton.textContent = answers[var1];
-                  secondButton.textContent = answers[var2];
-                } else {
-                  firstButton.textContent = quizData[currentQuizIndex].value[0];
-                  secondButton.textContent =
-                    quizData[currentQuizIndex].value[1];
-                }
-                break;
+                  break;
+                case "HAIR":
+                  questionText.push(question.hair1);
+                  questionText.push(quizData[currentQuizIndex].name);
+                  questionText.push(question.hair2);
+                  if (currentLanguage == "ro") {
+                    let var1 = quizData[currentQuizIndex].value[0];
+                    let var2 = quizData[currentQuizIndex].value[1];
+                    firstButton.textContent = answers[var1];
+                    secondButton.textContent = answers[var2];
+                  } else {
+                    firstButton.textContent =
+                      quizData[currentQuizIndex].value[0];
+                    secondButton.textContent =
+                      quizData[currentQuizIndex].value[1];
+                  }
+                  break;
+              }
+              questionElement.textContent = questionText.join("");
+
+              const counter = quizContainer.querySelector(".counter");
+              counter.textContent = currentQuizIndex + 1;
             }
-            questionElement.textContent = questionText.join("");
-
-            const counter = quizContainer.querySelector(".counter");
-            counter.textContent = questionOffset + currentQuizIndex + 1;
-          }
-        };
-        quizContainer
-          .querySelectorAll(".quiz_button1, .quiz_button2")
-          .forEach((button) => {
-            button.addEventListener("click", () => {
-              const selectedAnswer = button.textContent.trim();
-              const auth = localStorage.getItem("authToken");
-              fetch("http://127.0.0.1:3000/answer", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: auth,
-                },
-                body: JSON.stringify({
-                  id: currentQuizIndex,
-                  answer: selectedAnswer,
-                }),
-              })
-                .then((r) => r.json())
-                .then((data) => {
-                  console.log(data.correct);
-                  currentQuizIndex++;
-
-                  // if we've exhausted this batch, bump offset and load next
-                  if (currentQuizIndex >= quizData.length) {
-                    questionOffset += quizData.length;
-                    fetch("http://127.0.0.1:3000/selectedCard", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: auth,
-                      },
-                      body: JSON.stringify({ cardId: currentCard }),
-                    })
-                      .then(() =>
-                        fetch("http://127.0.0.1:3000/quizzes", {
+          };
+          quizContainer
+            .querySelectorAll(".quiz_button1, .quiz_button2")
+            .forEach((button) => {
+              button.addEventListener("click", () => {
+                const selectedAnswer = button.textContent.trim();
+                fetch("http://127.0.0.1:3000/answer", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id: currentQuizIndex,
+                    answer: selectedAnswer,
+                  }),
+                })
+                  .then((r) => r.json())
+                  .then((data) => {
+                    console.log(data.correct);
+                    let correctAnswer = data.correct;
+                    quizContainer.classList.remove("active");
+                    currentQuizIndex++;
+                    if (!correctAnswer) {
+                      remainingLives--;
+                      console.log(remainingLives);
+                      if (remainingLives <= 0) {
+                        const auth = localStorage.getItem("authToken");
+                        fetch("http://127.0.0.1:3000/score", {
                           method: "GET",
                           headers: {
                             Accept: "application/json",
                             Authorization: auth,
                           },
                         })
-                      )
-                      .then((r) => r.json())
-                      .then((newBatch) => {
-                        quizData = newBatch;
-                        currentQuizIndex = 0;
-                        remainingLives = 3;
-                        document
-                          .querySelectorAll(".heart")
-                          .forEach((h) => (h.style.visibility = "visible"));
+                          .then(response => response.json())
+                          .then(data => {
+                            const score = data.score;
+                            console.log("Your score: " + score);
+                          }
+                          )
+                          .catch(error => {
+                            console.error("Erorr : couldn't get score", error);
+                          });
+                        quizContainer.classList.remove("active");
+
+                      } else {
+                        document.querySelectorAll(".heart")[
+                          remainingLives
+                        ].style.visibility = "hidden";
                         openQuizWindow();
-                      })
-                      .catch(console.error);
-                    return;
-                  }
-
-                  // ...existing correct/incorrect handling...
-                  if (!data.correct) {
-                    remainingLives--;
-                    if (remainingLives <= 0) {
-                      quizContainer.classList.remove("active");
-                    } else {
-                      document.querySelectorAll(".heart")[
-                        remainingLives
-                      ].style.visibility = "hidden";
-                      openQuizWindow();
-                    }
-                  } else {
-                    openQuizWindow();
-                  }
-                })
-                .catch(console.error);
+                      }
+                    } else openQuizWindow();
+                  })
+                  .catch(console.error);
+              });
             });
-          });
-      })
-      .catch(console.error);
-  }
+        });
 
-  // 7) POP-UP
-  const popUp = document.getElementById("pop_up");
-  if (popUp) {
-    fetch("./components/pop_up.html")
-      .then((r) => r.text())
-      .then((html) => {
-        const container = document.getElementById("pop_up");
-        container.innerHTML = html;
-        const imageElement = container.querySelector(".pop_up_img img");
-        const descriptionElement = container.querySelector(".description_body");
-        const description = container.querySelector(".description");
-        const ranking = container.querySelector(".ranking");
-        const playBtn = container.querySelector(".button_play_quiz");
-        const closeBtn = container.querySelector(".button_close");
+      fetch("./components/pop_up.html")
+        .then((res) => res.text())
+        .then((html) => {
+          const container = document.getElementById("pop_up");
+          container.innerHTML = html;
 
-        window.openPopUp = (cardId) => {
-          if (!localStorage.getItem("authToken")) {
-            openLogin();
-            return;
-          }
-          currentCard = cardId;
-          const quizzes = langData[currentLanguage].quizzes;
-          const pop_up = langData[currentLanguage].pop_up;
-          // set translated texts
-          description.innerText = pop_up.description;
-          ranking.innerText = pop_up.ranking;
-          playBtn.innerText = pop_up.play;
-          closeBtn.innerText = pop_up.close;
-          // set image and specific description
-          switch (cardId) {
-            case 1:
-              imageElement.src = "./images/marvel_vs_dc.jpg";
-              descriptionElement.innerText = quizzes.description1;
-              break;
-            case 2:
-              imageElement.src = "./images/black_widow1.jpg";
-              descriptionElement.innerText = quizzes.description2;
-              break;
-            case 3:
-              imageElement.src = "./images/time.jpg";
-              descriptionElement.innerText = quizzes.description3;
-              break;
-            case 4:
-              imageElement.src = "./images/batman2.jpg";
-              descriptionElement.innerText = quizzes.description4;
-              break;
-            case 5:
-              imageElement.src = "./images/captain_marvel1.jpg";
-              descriptionElement.innerText = quizzes.description5;
-              break;
-            case 6:
-              imageElement.src = "./images/dr_doom.jpg";
-              descriptionElement.innerText = quizzes.description6;
-              break;
-          }
-          container.classList.add("active");
-        };
+          const imageElement = container.querySelector(".pop_up_img img");
+          const descriptionElement =
+            container.querySelector(".description_body");
+          const description = container.querySelector(".description");
+          const ranking = container.querySelector(".ranking");
+          const playBtn = container.querySelector(".button_play_quiz");
+          const closeBtn = container.querySelector(".button_close");
+
+          window.openPopUp = (cardId) => {
+            if (!localStorage.getItem("authToken")) {
+              openLogin();
+              return;
+            }
+            currentCard = cardId;
+            const quizzes = langData[currentLanguage].quizzes;
+            const pop_up = langData[currentLanguage].pop_up;
+            // set translated texts
+            description.innerText = pop_up.description;
+            ranking.innerText = pop_up.ranking;
+            playBtn.innerText = pop_up.play;
+            closeBtn.innerText = pop_up.close;
+            // set image and specific description
+            switch (cardId) {
+              case 1:
+                imageElement.src = "./images/marvel_vs_dc.jpg";
+                descriptionElement.innerText = quizzes.description1;
+                break;
+              case 2:
+                imageElement.src = "./images/black_widow1.jpg";
+                descriptionElement.innerText = quizzes.description2;
+                break;
+              case 3:
+                imageElement.src = "./images/time.jpg";
+                descriptionElement.innerText = quizzes.description3;
+                break;
+              case 4:
+                imageElement.src = "./images/batman2.jpg";
+                descriptionElement.innerText = quizzes.description4;
+                break;
+              case 5:
+                imageElement.src = "./images/captain_marvel1.jpg";
+                descriptionElement.innerText = quizzes.description5;
+                break;
+              case 6:
+                imageElement.src = "./images/dr_doom.jpg";
+                descriptionElement.innerText = quizzes.description6;
+                break;
+            }
+            container.classList.add("active");
+          };
 
         closeBtn.addEventListener("click", () =>
           container.classList.remove("active")
