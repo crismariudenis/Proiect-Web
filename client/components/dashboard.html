@@ -2,3 +2,10 @@
   <button id="dashboard_button">Dashboard</button>
   <div id="dashboard_container"></div>
 </section>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // initial view
+    setActive("dashboard_show_ranking");
+    loadRanking();
+  });
+</script>

@@ -12,7 +12,11 @@
     <div id="navbar"></div>
     <main>
       <section>
-        <h2>Users</h2>
+        <h2>Dashboard</h2>
+        <div id="dashboard_controls">
+          <button id="dashboard_show_users">Users</button>
+          <button id="dashboard_show_ranking">Ranking</button>
+        </div>
         <div id="dashboard_container">Loading...</div>
       </section>
     </main>
@@ -31,17 +35,18 @@
             document.getElementById("footer").innerHTML = html;
           });
 
-        // fetch dashboard data
         const container = document.getElementById("dashboard_container");
-        try {
-          const res = await fetch("http://127.0.0.1:3000/dashboard", {
-            headers: { Authorization: localStorage.getItem("authToken") },
-          });
-          if (!res.ok) throw new Error("Access denied");
-          const { users } = await res.json();
-          const rows = users
-            .map(
-              (u) => `
+        async function loadUsers() {
+          container.textContent = "Loading...";
+          try {
+            const res = await fetch("http://localhost:3000/dashboard", {
+              headers: { Authorization: localStorage.getItem("authToken") },
+            });
+            if (!res.ok) throw new Error("Access denied");
+            const { users } = await res.json();
+            const rows = users
+              .map(
+                (u) => `
                 <tr>
                   <td>${u.id}</td>
                   <td>${u.username}</td>
@@ -54,9 +59,9 @@
                   }</td>
                 </tr>
               `
-            )
-            .join("");
-          container.innerHTML = `
+              )
+              .join("");
+            container.innerHTML = `
             <table>
               <thead>
                 <tr>
@@ -66,24 +71,88 @@
               <tbody>${rows}</tbody>
             </table>
           `;
-          // wire the grant buttons
-          document.querySelectorAll(".grant-btn").forEach((btn) =>
-            btn.addEventListener("click", async () => {
-              const id = btn.dataset.id;
-              await fetch("http://127.0.0.1:3000/grantAdmin", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: localStorage.getItem("authToken"),
-                },
-                body: JSON.stringify({ id }),
-              });
-              window.location.reload();
-            })
-          );
-        } catch (e) {
-          container.textContent = e.message;
+            // wire the grant buttons
+            document.querySelectorAll(".grant-btn").forEach((btn) =>
+              btn.addEventListener("click", async () => {
+                const id = btn.dataset.id;
+                await fetch("http://localhost:3000/grantAdmin", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: localStorage.getItem("authToken"),
+                  },
+                  body: JSON.stringify({ id }),
+                });
+                loadUsers();
+              })
+            );
+          } catch (e) {
+            container.textContent = e.message;
+          }
         }
+
+        async function loadRanking() {
+          container.textContent = "Loading...";
+          try {
+            const res = await fetch("http://localhost:3000/rankings", {
+              headers: { Authorization: localStorage.getItem("authToken") },
+            });
+            if (!res.ok) throw new Error("Access denied");
+            const list = await res.json();
+
+            // build rows including question_id
+            const rows = list
+              .map(
+                (e, i) => `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${e.username}</td>
+              <td>${e.question_id}</td>
+              <td>${e.score}</td>
+            </tr>
+          `
+              )
+              .join("");
+
+            // render header with a Question ID column
+            container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Username</th><th>Question ID</th><th>Score</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+          } catch (e) {
+            container.textContent = e.message;
+          }
+        }
+
+        function setActive(id) {
+          document
+            .querySelectorAll("#dashboard_controls button")
+            .forEach((b) => b.classList.remove("active"));
+          document.getElementById(id).classList.add("active");
+        }
+
+        document
+          .getElementById("dashboard_show_users")
+          .addEventListener("click", () => {
+            loadUsers();
+            setActive("dashboard_show_users");
+          });
+        document
+          .getElementById("dashboard_show_ranking")
+          .addEventListener("click", () => {
+            loadRanking();
+            setActive("dashboard_show_ranking");
+          });
+
+        // initial view
+        setActive("dashboard_show_users");
+        loadUsers();
       });
     </script>
   </body>

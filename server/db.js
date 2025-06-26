@@ -14,13 +14,15 @@ db.prepare(
   )`
 ).run();
 
+// include question_id and enforce one row per (username, question):
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS rankings (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT,
-  score INTEGER
-)`
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    score INTEGER,
+    question_id INTEGER NOT NULL
+  )`
 ).run();
 
 function addUser(username, password, callback) {
@@ -255,24 +257,50 @@ function grantAdmin(id, callback) {
   });
 }
 
-function updateRanking(score, username, callback) {
-  const sql = `SELECT * FROM rankings WHERE username = ?`;
-  db.get(sql, [username], (err, row) => {
+// updateRanking now takes questionId
+function updateRanking(score, username, questionId, callback) {
+  const sql = `SELECT * FROM rankings WHERE username = ? AND question_id = ?`;
+  db.get(sql, [username, questionId], (err, row) => {
     if (err) return callback(err);
-
     if (row) {
-      const updateSql = `UPDATE rankings SET score = ? WHERE username = ?`;
-      db.run(updateSql, [score, username], callback);
+      db.run(
+        `UPDATE rankings SET score = ? WHERE username = ? AND question_id = ?`,
+        [score, username, questionId],
+        callback
+      );
     } else {
-      const insertSql = `INSERT INTO rankings (username, score) VALUES (?, ?)`;
-      db.run(insertSql, [username, score], callback);
+      db.run(
+        `INSERT INTO rankings (username, score, question_id) VALUES (?, ?, ?)`,
+        [username, score, questionId],
+        callback
+      );
     }
   });
 }
 
-function getRanking(callback) {
-  const sql = `SELECT username, score FROM rankings ORDER BY score DESC LIMIT 4`;
+/* getRanking now filters by questionId and limits to top 4 */
+function getRanking(questionId, callback) {
+  const sql = `
+    SELECT username, score, question_id
+      FROM rankings
+     WHERE question_id = ?
+  ORDER BY score DESC
+     LIMIT 4
+  `;
+  db.all(sql, [questionId], (err, rows) => {
+    if (err) return callback(err);
+    callback(null, rows);
+  });
+}
 
+function getOverallRanking(callback) {
+  const sql = `
+    SELECT
+      username,
+      score,
+      question_id
+    FROM rankings
+  `;
   db.all(sql, [], (err, rows) => {
     if (err) return callback(err);
     callback(null, rows);
@@ -291,4 +319,5 @@ module.exports = {
   grantAdmin,
   updateRanking,
   getRanking,
+  getOverallRanking,
 };

@@ -101,47 +101,35 @@ const server = http.createServer((req, res) => {
     return authenticate(req, res, () => {
       const username = req.authUser;
       const score = userScoreMap[username];
-      console.log("Score from server: " + score);
-
-
       if (score === undefined) {
         res.writeHead(404, { "Content-Type": "application/json" });
         return res.end(JSON.stringify({ error: "No score." }));
       }
-      else {
-        db.updateRanking(score, username, err => {
-          if (err) {
-            console.error("Couldn't get quizzes", err);
-            res.writeHead(500);
-            res.end("Server error");
-            return;
-          }
-        });
-
-      }
-
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ score }));
+      // save per-question
+      db.updateRanking(score, username, currentCard, (err) => {
+        if (err) {
+          res.writeHead(500);
+          return res.end("Server error");
+        }
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ score }));
+      });
     });
   }
 
   if (method === "GET" && pathname === "/rankings") {
     return authenticate(req, res, () => {
-      userScoreMap[req.authUser] = 0;
-      usersUpdatingScores[req.authUser] = 20;
-      db.getRanking((err, result) => {
+      db.getOverallRanking((err, rows) => {
         if (err) {
           res.writeHead(500, { "Content-Type": "application/json" });
-          return res.end(JSON.stringify({ error: "Database error-rank" }));
+          return res.end(JSON.stringify({ error: "DB error" }));
         }
-
+        console.log("Ranking rows:", rows);
         res.writeHead(200, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify(result));
+        res.end(JSON.stringify(rows));
       });
-
     });
   }
-
 
   // /quizzes: generate and store answers per user
   if (method === "GET" && pathname === "/quizzes") {
@@ -254,7 +242,6 @@ const server = http.createServer((req, res) => {
     });
     return;
   }
-
   // /answer: check against this user’s answers
   if (method === "POST" && pathname === "/answer") {
     return authenticate(req, res, () => {
@@ -271,7 +258,9 @@ const server = http.createServer((req, res) => {
             userScoreMap[username] += 10 * usersUpdatingScores[username];
             usersUpdatingScores[username] += 30;
           }
-          console.log("Current score " + req.authUser + " " + userScoreMap[req.authUser]);
+          console.log(
+            "Current score " + req.authUser + " " + userScoreMap[req.authUser]
+          );
           res.writeHead(200, { "Content-Type": "application/json" });
           return res.end(JSON.stringify({ correct }));
         } catch {

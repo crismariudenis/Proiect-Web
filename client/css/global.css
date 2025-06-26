@@ -173,3 +173,24 @@ main .content .button {
 #dashboard_container tr:hover {
   background-color: #2e3340;
 }
+
+/* dashboard controls styling */
+#dashboard_controls {
+  display: flex;
+  gap: 1rem;
+  margin: 1em 0;
+}
+#dashboard_controls button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.1em; /* slightly larger text */
+  padding: 0.3em 0.6em; /* add some click area */
+  cursor: pointer;
+  padding: 0;
+}
+#dashboard_controls button:hover,
+#dashboard_controls button:focus,
+#dashboard_controls button.active {
+  color: var(--red-color);
+}
