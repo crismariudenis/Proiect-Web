@@ -236,6 +236,33 @@ function getChoices(column, callback) {
   });
 }
 
+function updateRanking(score, username, callback) {
+  const sql = `SELECT * FROM rankings WHERE username = ?`;
+  db.get(sql, [username], (err, row) => {
+    if (err) return callback(err);
+
+    if (row) {
+      const updateSql = `UPDATE rankings SET score = ? WHERE username = ?`;
+      db.run(updateSql, [score, username], callback);
+    } else {
+      const insertSql = `INSERT INTO rankings (username, score) VALUES (?, ?)`;
+      db.run(insertSql, [username, score], callback);
+    }
+  });
+
+}
+
+function getRanking(callback) {
+  const sql = `SELECT username, score FROM rankings ORDER BY score DESC LIMIT 4`;
+
+  db.all(sql, [], (err, rows) => {
+    if (err) return callback(err);
+    callback(null, rows);
+  });
+
+}
+
+
 module.exports = {
   addUser,
   getUsers,
@@ -245,4 +272,6 @@ module.exports = {
   getChoices,
   loadChoices,
   getAnswers,
+  updateRanking,
+  getRanking,
 };

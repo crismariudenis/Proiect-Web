@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return response.json().then((json) => {
                   alert(
                     json.eroare ||
-                      "Password must be at least 9 characters, include an uppercase letter and a digit"
+                    "Password must be at least 9 characters, include an uppercase letter and a digit"
                   );
                 });
               }
@@ -511,7 +511,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (!data.correct) {
                       remainingLives--;
                       if (remainingLives <= 0) {
+                        const auth = localStorage.getItem("authToken");
+                        fetch("http://127.0.0.1:3000/score", {
+                          method: "GET",
+                          headers: {
+                            Accept: "application/json",
+                            Authorization: auth,
+                          },
+                        })
+                          .then(response => response.json())
+                          .then(data => {
+                            const score = data.score;
+                            console.log("Your score: " + score);
+                          }
+                          )
+                          .catch(error => {
+                            console.error("Erorr : couldn't get score", error);
+                          });
                         quizContainer.classList.remove("active");
+
                       } else {
                         document.querySelectorAll(".heart")[
                           remainingLives
@@ -546,6 +564,27 @@ document.addEventListener("DOMContentLoaded", async () => {
               openLogin();
               return;
             }
+            const auth = localStorage.getItem("authToken");
+            fetch("http://127.0.0.1:3000/rankings", {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                Authorization: auth,
+              },
+            })
+              .then(response => response.json())
+              .then(data => {
+                const rankingBody = document.getElementById("ranking_body");
+                rankingBody.innerHTML = "";
+                data.forEach((entry, index) => {
+                  rankingBody.innerHTML += `${index + 1}. ${entry.username} - ${entry.score} points <br>`;
+                  console.log(`${index + 1}. ${entry.username} - ${entry.score} points <br>`);
+                });
+              }
+              )
+              .catch(error => {
+                console.error("Erorr : couldn't get rank", error);
+              });
             currentCard = cardId;
             const quizzes = langData[currentLanguage].quizzes;
             const pop_up = langData[currentLanguage].pop_up;
