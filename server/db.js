@@ -14,6 +14,15 @@ db.prepare(
   )`
 ).run();
 
+db.prepare(
+  `
+  CREATE TABLE IF NOT EXISTS rankings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT,
+  score INTEGER
+)`
+).run();
+
 function addUser(username, password, callback) {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) return callback(err);
@@ -259,7 +268,6 @@ function updateRanking(score, username, callback) {
       db.run(insertSql, [username, score], callback);
     }
   });
-
 }
 
 function getRanking(callback) {
@@ -269,9 +277,7 @@ function getRanking(callback) {
     if (err) return callback(err);
     callback(null, rows);
   });
-
 }
-
 
 module.exports = {
   addUser,
@@ -286,4 +292,3 @@ module.exports = {
   updateRanking,
   getRanking,
 };
-
