@@ -150,11 +150,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               .value.trim();
             const password = document.getElementById("login_password").value;
             const L = document.getElementById("login");
-            fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/adauga", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ username, password }),
-            })
+            fetch(
+              "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/adauga",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+              }
+            )
               .then((response) => {
                 if (response.status === 409) {
                   return response.json().then((json) => {
@@ -195,11 +198,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               .value.trim();
             const password = document.getElementById("login_password").value;
 
-            fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ username, password }),
-            })
+            fetch(
+              "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/login",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+              }
+            )
               .then((r) => r.json())
               .then((json) => {
                 if (json.succes) {
@@ -471,17 +477,20 @@ document.addEventListener("DOMContentLoaded", async () => {
               if (!gameOver) {
                 const selectedAnswer = button.textContent.trim();
                 const auth = localStorage.getItem("authToken");
-                fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/answer", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: auth,
-                  },
-                  body: JSON.stringify({
-                    id: currentQuizIndex,
-                    answer: selectedAnswer,
-                  }),
-                })
+                fetch(
+                  "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/answer",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: auth,
+                    },
+                    body: JSON.stringify({
+                      id: currentQuizIndex,
+                      answer: selectedAnswer,
+                    }),
+                  }
+                )
                   .then((r) => r.json())
                   .then((data) => {
                     console.log(data.correct);
@@ -489,22 +498,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     if (currentQuizIndex >= quizData.length) {
                       questionOffset += quizData.length;
-                      fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/selectedCard", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: auth,
-                        },
-                        body: JSON.stringify({ cardId: currentCard }),
-                      })
+                      fetch(
+                        "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/selectedCard",
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: auth,
+                          },
+                          body: JSON.stringify({ cardId: currentCard }),
+                        }
+                      )
                         .then(() =>
-                          fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/quizzes", {
-                            method: "GET",
-                            headers: {
-                              Accept: "application/json",
-                              Authorization: auth,
-                            },
-                          })
+                          fetch(
+                            "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/quizzes",
+                            {
+                              method: "GET",
+                              headers: {
+                                Accept: "application/json",
+                                Authorization: auth,
+                              },
+                            }
+                          )
                         )
                         .then((r) => r.json())
                         .then((newBatch) => {
@@ -524,13 +539,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                       remainingLives--;
                       if (remainingLives <= 0) {
                         const auth = localStorage.getItem("authToken");
-                        fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/score", {
-                          method: "GET",
-                          headers: {
-                            Accept: "application/json",
-                            Authorization: auth,
-                          },
-                        })
+                        fetch(
+                          "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/score",
+                          {
+                            method: "GET",
+                            headers: {
+                              Accept: "application/json",
+                              Authorization: auth,
+                            },
+                          }
+                        )
                           .then((response) => response.json())
                           .then((data) => {
                             currentScore = data.score;
@@ -605,7 +623,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           // pop-up rankings
           fetch(
-            `https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings?question=${cardId}`,
+            `https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/rankings?question=${cardId}`,
             {
               headers: { Authorization: auth },
             }
@@ -667,22 +685,28 @@ document.addEventListener("DOMContentLoaded", async () => {
           e.preventDefault();
           e.stopPropagation();
           const auth = localStorage.getItem("authToken");
-          fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/selectedCard", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: auth,
-            },
-            body: JSON.stringify({ cardId: currentCard }),
-          })
+          fetch(
+            "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/selectedCard",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: auth,
+              },
+              body: JSON.stringify({ cardId: currentCard }),
+            }
+          )
             .then(() =>
-              fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/quizzes", {
-                method: "GET",
-                headers: {
-                  Accept: "application/json",
-                  Authorization: auth,
-                },
-              })
+              fetch(
+                "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/quizzes",
+                {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/json",
+                    Authorization: auth,
+                  },
+                }
+              )
             )
             .then((r) => r.json())
             .then((data) => {
@@ -717,7 +741,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       rankingContainer.textContent = "Loading...";
       try {
         const res = await fetch(
-          "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings",
+          "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/rankings",
           {
             headers: { Authorization: localStorage.getItem("authToken") },
           }
@@ -752,7 +776,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           .getElementById("rss_feed_btn")
           .addEventListener("click", () => {
             window.open(
-              "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings/rss",
+              "https://proiect-web-server-pwvczq0w4-crismariudenis1s-projects.vercel.app/rankings/rss",
               "_blank"
             );
           });
