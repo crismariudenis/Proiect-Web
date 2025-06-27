@@ -1,6 +1,6 @@
 # Proiect-Web
 
-## 📝 Description
+##  Description
 
 **Superhero Quiz** is an educational, interactive web application designed for children, combining fun gameplay with learning elements based on popular Marvel and DC superheroes. The goal of the app is to engage young users in a playful way while helping them improve their general knowledge about superhero characters.
 
@@ -12,7 +12,7 @@ The app also features internationalization, supporting English and Romanian, wit
 
 Technically, the project follows a clear separation of concerns. The frontend is built using HTML, CSS, and JavaScript, running directly in the browser and handling UI interactions. The backend is powered by Node.js, exposing RESTful APIs that handle user authentication, quiz data, answer validation, and score tracking. All persistent data, including user accounts and quiz questions, is stored in a lightweight SQLite database accessed via the sqlite3 module.
 
-## 🚀 Features
+##  Features
 
 -  Multiple quiz categories with superhero trivia
 -  User authentication (login/register)
@@ -37,7 +37,7 @@ Technically, the project follows a clear separation of concerns. The frontend is
 - SQLite (via `sqlite3` package)
 - REST API (for quiz management, auth, score tracking)
 
-- ## ⚙️ Installation
+- ##  Installation
 
 1. **Clone the repository**
    ```bash
@@ -52,7 +52,7 @@ Technically, the project follows a clear separation of concerns. The frontend is
 4.**Open your browser** 
 at http://localhost:3000
 
-## 🧩 Diagrams
+##  Diagrams
 
 
 ![alt text](./assets/c1.png)
