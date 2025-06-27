@@ -194,3 +194,10 @@ main .content .button {
 #dashboard_controls button.active {
   color: var(--red-color);
 }
+
+/* fix invalid fallback in FontAwesome’s fa-rotate-by */
+.fa-rotate-by {
+  /* ensure fallback is a valid angle */
+  --fa-rotate-angle: 0deg !important;
+  transform: rotate(var(--fa-rotate-angle)) !important;
+}

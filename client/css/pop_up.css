@@ -202,7 +202,7 @@
   .pop_up_footer button {
     padding: clamp(0.05rem, 1.5vw, 1.7rem) clamp(1rem, 1.9vw, 2.3rem);
     font-size: clamp(0.6rem, 0.7vw, 1rem);
-    border-radius: 0.3 rem;
+    border-radius: 0.3rem;
   }
 
   .pop_up_footer {
