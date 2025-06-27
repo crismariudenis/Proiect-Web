@@ -23,7 +23,7 @@
       /* override invalid none‐fallback in FontAwesome .fa-rotate-by */
       .fa-rotate-by {
         --fa-rotate-angle: 0deg !important;
-        transform: rotate(var(--fa-rotate-angle)) !important;
+        transform: rotate(var(--fa-rotate-angle, 0deg)) !important;
       }
     </style>
   </head>
