@@ -1,4 +1,6 @@
 let currentLanguage;
+let gameOver = true;
+let currentScore = 0;
 if (currentLanguage == null) {
   currentLanguage = "en";
   localStorage.setItem("language", currentLanguage);
@@ -164,7 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   return response.json().then((json) => {
                     alert(
                       json.eroare ||
-                        "Password must be at least 9 characters, include an uppercase letter and a digit"
+                      "Password must be at least 9 characters, include an uppercase letter and a digit"
                     );
                   });
                 }
@@ -353,6 +355,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         quizContainer = quizWindowElement;
         quizContainer.classList.remove("active");
         quizContainer.innerHTML = html;
+
         window.openQuizWindow = async () => {
           if (!quizContainer) return;
           let questionText = [];
@@ -471,90 +474,104 @@ document.addEventListener("DOMContentLoaded", async () => {
           .querySelectorAll(".quiz_button1, .quiz_button2")
           .forEach((button) => {
             button.addEventListener("click", () => {
-              const selectedAnswer = button.textContent.trim();
-              const auth = localStorage.getItem("authToken");
-              fetch("http://127.0.0.1:3000/answer", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: auth,
-                },
-                body: JSON.stringify({
-                  id: currentQuizIndex,
-                  answer: selectedAnswer,
-                }),
-              })
-                .then((r) => r.json())
-                .then((data) => {
-                  console.log(data.correct);
-                  currentQuizIndex++;
+              if (!gameOver) {
+                const selectedAnswer = button.textContent.trim();
+                const auth = localStorage.getItem("authToken");
+                fetch("http://127.0.0.1:3000/answer", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: auth,
+                  },
+                  body: JSON.stringify({
+                    id: currentQuizIndex,
+                    answer: selectedAnswer,
+                  }),
+                })
+                  .then((r) => r.json())
+                  .then((data) => {
+                    console.log(data.correct);
+                    currentQuizIndex++;
 
-                  // if we've exhausted this batch, bump offset and load next
-                  if (currentQuizIndex >= quizData.length) {
-                    questionOffset += quizData.length;
-                    fetch("http://127.0.0.1:3000/selectedCard", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: auth,
-                      },
-                      body: JSON.stringify({ cardId: currentCard }),
-                    })
-                      .then(() =>
-                        fetch("http://127.0.0.1:3000/quizzes", {
+                    // if we've exhausted this batch, bump offset and load next
+                    if (currentQuizIndex >= quizData.length) {
+                      questionOffset += quizData.length;
+                      fetch("http://127.0.0.1:3000/selectedCard", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: auth,
+                        },
+                        body: JSON.stringify({ cardId: currentCard }),
+                      })
+                        .then(() =>
+                          fetch("http://127.0.0.1:3000/quizzes", {
+                            method: "GET",
+                            headers: {
+                              Accept: "application/json",
+                              Authorization: auth,
+                            },
+                          })
+                        )
+                        .then((r) => r.json())
+                        .then((newBatch) => {
+                          quizData = newBatch;
+                          currentQuizIndex = 0;
+                          remainingLives = 3;
+                          document
+                            .querySelectorAll(".heart")
+                            .forEach((h) => (h.style.visibility = "visible"));
+                          openQuizWindow();
+                        })
+                        .catch(console.error);
+                      return;
+                    }
+
+                    // ...existing correct/incorrect handling...
+                    if (!data.correct) {
+                      remainingLives--;
+                      if (remainingLives <= 0) {
+                        const auth = localStorage.getItem("authToken");
+                        fetch("http://127.0.0.1:3000/score", {
                           method: "GET",
                           headers: {
                             Accept: "application/json",
                             Authorization: auth,
                           },
                         })
-                      )
-                      .then((r) => r.json())
-                      .then((newBatch) => {
-                        quizData = newBatch;
-                        currentQuizIndex = 0;
-                        remainingLives = 3;
-                        document
-                          .querySelectorAll(".heart")
-                          .forEach((h) => (h.style.visibility = "visible"));
-                        openQuizWindow();
-                      })
-                      .catch(console.error);
-                    return;
-                  }
+                          .then((response) => response.json())
+                          .then((data) => {
 
-                  // ...existing correct/incorrect handling...
-                  if (!data.correct) {
-                    remainingLives--;
-                    if (remainingLives <= 0) {
-                      const auth = localStorage.getItem("authToken");
-                      fetch("http://127.0.0.1:3000/score", {
-                        method: "GET",
-                        headers: {
-                          Accept: "application/json",
-                          Authorization: auth,
-                        },
-                      })
-                        .then((response) => response.json())
-                        .then((data) => {
-                          const score = data.score;
-                          console.log("Your score: " + score);
-                        })
-                        .catch((error) => {
-                          console.error("Erorr : couldn't get score", error);
-                        });
-                      quizContainer.classList.remove("active");
+                            currentScore = data.score;
+                            console.log("Your score: " + currentScore);
+                            gameOver = true;
+                            document.getElementById("quiz-close-button").classList.remove("hidden");
+                            console.log(currentScore);
+                            document.getElementById("quiz_score").innerText = langData[currentLanguage].score1 + currentScore + langData[currentLanguage].score2;
+                            document.getElementById("quiz_score").classList.remove("hidden");
+                            document.getElementById("quiz-close-button").addEventListener("click", function () {
+                              quizContainer.classList.remove("active");
+                            });
+
+                          })
+                          .catch((error) => {
+                            console.error("Erorr : couldn't get score", error);
+                          });
+
+
+                        //quizContainer.classList.remove("active");
+                      } else {
+                        document.querySelectorAll(".heart")[
+                          remainingLives
+                        ].style.visibility = "hidden";
+                        openQuizWindow();
+                      }
                     } else {
-                      document.querySelectorAll(".heart")[
-                        remainingLives
-                      ].style.visibility = "hidden";
                       openQuizWindow();
                     }
-                  } else {
-                    openQuizWindow();
-                  }
-                })
-                .catch(console.error);
+                  })
+                  .catch(console.error);
+              }
             });
           });
       })
@@ -598,9 +615,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               const rankingBody = document.getElementById("ranking_body");
               rankingBody.innerHTML = "";
               data.forEach((entry, index) => {
-                rankingBody.innerHTML += `${index + 1}. ${entry.username} - ${
-                  entry.score
-                } points <br>`;
+                rankingBody.innerHTML += `${index + 1}. ${entry.username} - ${entry.score
+                  } points <br>`;
                 console.log(
                   `${index + 1}. ${entry.username} - ${entry.score} points <br>`
                 );
@@ -678,6 +694,10 @@ document.addEventListener("DOMContentLoaded", async () => {
               document
                 .querySelectorAll(".heart")
                 .forEach((h) => (h.style.visibility = "visible"));
+              gameOver = false;
+              currentScore = 0;
+              document.getElementById("quiz-close-button").classList.add("hidden");
+              document.getElementById("quiz_score").classList.add("hidden");
               window.openQuizWindow();
             })
             .catch((err) => {
@@ -704,9 +724,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           .map(
             (e, i) => `
         <tr>
-          <td>${i + 1}</td><td>${e.username}</td><td>${e.question_id}</td><td>${
-              e.score
-            }</td>
+          <td>${i + 1}</td><td>${e.username}</td><td>${e.question_id}</td><td>${e.score
+              }</td>
         </tr>
       `
           )

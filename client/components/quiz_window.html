@@ -8,6 +8,9 @@
       <div class="quiz_title_text">
         <p class="super_hero_title" id="quiz-title">Superhero Quiz</p>
       </div>
+      <div class="quiz_close">
+        <button class="quiz_close_button hidden" id="quiz-close-button" type="button">Exit</button>
+      </div>
     </div>
     <div class="quiz_main">
       <div class="quiz_question">
@@ -17,8 +20,9 @@
           </p>
         </div>
         <div class="quiz_answers">
-          <button class="quiz_button1">Marvel</button>
-          <button class="quiz_button2">DC</button>
+          <button class="quiz_button1" type="button">Marvel</button>
+          <button class="quiz_button2" type="button">DC</button>
+          <p class="quiz_score hidden" id="quiz_score"></p>
 
         </div>
 
@@ -45,42 +49,46 @@
         <path
           d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
       </svg>
+      <button class="quiz_button_close">Close</button>
 
     </div>
 
   </div>
-  <div class="quiz_main">
-    <div class="quiz_question">
-      <div class="quiz_question_text">
-        <p class="question">From which universe is Captain America?</p>
-      </div>
-      <div class="quiz_answers">
-        <button class="quiz_button1">Marvel</button>
-        <button class="quiz_button2">DC</button>
-      </div>
+</div>
+<div class="quiz_main">
+  <div class="quiz_question">
+    <div class="quiz_question_text">
+      <p class="question">From which universe is Captain America?</p>
     </div>
-    <div class="quiz_image">
-      <img src="./images/CaptainAmericaHughes(1).jpg" alt="Captain America" />
+    <div class="quiz_answers">
+      <button class="quiz_button1" type="button">Marvel</button>
+      <button class="quiz_button2" type="button">DC</button>
     </div>
   </div>
-  <div class="quiz_footer">
-    <svg class="heart" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
-    </svg>
-
-    <svg class="heart" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
-    </svg>
-
-    <svg class="heart" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
-    </svg>
-
+  <div class="quiz_image">
+    <img src="./images/CaptainAmericaHughes(1).jpg" alt="Captain America" />
   </div>
-  <!-- closed quiz_footer -->
+</div>
+<div class="quiz_footer">
+  <svg class="heart" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
+  </svg>
+
+  <svg class="heart" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
+  </svg>
+
+  <svg class="heart" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M23.6,0 c-3.4,0-6.4,2.1-7.6,5.1 C14.8,2.1,11.8,0,8.4,0 C3.8,0,0,3.8,0,8.4 c0,9.5,16,21.2,16,21.2 s16-11.7,16-21.2 C32,3.8,28.2,0,23.6,0z" />
+  </svg>
+  <button class="quiz_button_close" type="button">Close</button>
+
+
+</div>
+<!-- closed quiz_footer -->
 </div>
 <!-- closed quiz_content -->
 </div>

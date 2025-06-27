@@ -61,7 +61,9 @@
             "title": "Who’s Saving the Day Behind the Screen?",
             "description": "Behind every great quiz, there's a great team. Connect with us below!",
             "footer": "Website made for Web Development course at FII UAIC."
-        }
+        },
+        "score1": "Game Over! Your score: ",
+        "score2": " points"
     },
     "ro": {
         "landing": {
@@ -192,6 +194,8 @@
             "title": "Cine salvează ziua din spatele ecranului?",
             "description": "În spatele fiecărui quiz grozav, se află o echipă pe măsură. Conectează-te cu noi!",
             "footer": "Site realizat pentru cursul de Tehnologii Web la FII UAIC."
-        }
+        },
+        "score1": "Sfârșitul jocului! Scorul tău: ",
+        "score2": " puncte"
     }
 }
