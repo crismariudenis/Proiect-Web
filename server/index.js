@@ -185,36 +185,26 @@ if (method === "GET" && pathname === "/rankings/rss") {
       res.writeHead(500, { "Content-Type": "text/plain" });
       return res.end("Server error");
     }
-
-    res.writeHead(200, {
-      "Content-Type": "application/rss+xml; charset=UTF-8",
-    });
-
-    const baseUrl = "https://proiect-web-server.vercel.app";
+    res.writeHead(200, { "Content-Type": "application/xml" });
     let rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
   <title>HEROQuizz Rankings</title>
-  <link>${baseUrl}/rankings</link>
-  <description>Latest HEROQuizz overall rankings</description>
-  <language>en-us</language>
-  <ttl>60</ttl>`;
+  <link>http://localhost:3000/rankings/rss</link>
+  <description>Latest HEROQuizz overall rankings</description>`;
 
     rows.forEach((e, i) => {
-      const itemLink = `${baseUrl}/users/${encodeURIComponent(e.username)}/questions/${e.question_id}`;
       rss += `
-<item>
-  <title>${escapeXml(e.username)}</title>
-  <link>${itemLink}</link>
-  <description>Score: ${e.score} (Question ${e.question_id})</description>
-  <guid isPermaLink="false">${i + 1}-${escapeXml(e.username)}-${e.question_id}</guid>
-</item>`;
+  <item>
+    <title>${e.username}</title>
+    <description>Score: ${e.score} (Question ${e.question_id})</description>
+    <guid isPermaLink="false">${i + 1}-${e.username}-${e.question_id}</guid>
+  </item>`;
     });
 
     rss += `
 </channel>
 </rss>`;
-
     res.end(rss);
   });
   return;
