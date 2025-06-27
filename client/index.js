@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               .value.trim();
             const password = document.getElementById("login_password").value;
             const L = document.getElementById("login");
-            fetch("http://127.0.0.1:3000/adauga", {
+            fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/adauga", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               .value.trim();
             const password = document.getElementById("login_password").value;
 
-            fetch("http://127.0.0.1:3000/login", {
+            fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
@@ -471,7 +471,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               if (!gameOver) {
                 const selectedAnswer = button.textContent.trim();
                 const auth = localStorage.getItem("authToken");
-                fetch("http://127.0.0.1:3000/answer", {
+                fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/answer", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -489,7 +489,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     if (currentQuizIndex >= quizData.length) {
                       questionOffset += quizData.length;
-                      fetch("http://127.0.0.1:3000/selectedCard", {
+                      fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/selectedCard", {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         body: JSON.stringify({ cardId: currentCard }),
                       })
                         .then(() =>
-                          fetch("http://127.0.0.1:3000/quizzes", {
+                          fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/quizzes", {
                             method: "GET",
                             headers: {
                               Accept: "application/json",
@@ -524,7 +524,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                       remainingLives--;
                       if (remainingLives <= 0) {
                         const auth = localStorage.getItem("authToken");
-                        fetch("http://127.0.0.1:3000/score", {
+                        fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/score", {
                           method: "GET",
                           headers: {
                             Accept: "application/json",
@@ -604,9 +604,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           ranking.innerText = pop_up.ranking;
 
           // pop-up rankings
-          fetch(`localhost:3000/rankings?question=${cardId}`, {
-            headers: { Authorization: auth },
-          })
+          fetch(
+            `https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings?question=${cardId}`,
+            {
+              headers: { Authorization: auth },
+            }
+          )
             .then((response) => response.json())
             .then((data) => {
               const rankingBody = document.getElementById("ranking_body");
@@ -664,7 +667,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           e.preventDefault();
           e.stopPropagation();
           const auth = localStorage.getItem("authToken");
-          fetch("http://127.0.0.1:3000/selectedCard", {
+          fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/selectedCard", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -673,7 +676,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             body: JSON.stringify({ cardId: currentCard }),
           })
             .then(() =>
-              fetch("http://127.0.0.1:3000/quizzes", {
+              fetch("https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/quizzes", {
                 method: "GET",
                 headers: {
                   Accept: "application/json",
@@ -713,9 +716,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadRanking() {
       rankingContainer.textContent = "Loading...";
       try {
-        const res = await fetch("localhost:3000/rankings", {
-          headers: { Authorization: localStorage.getItem("authToken") },
-        });
+        const res = await fetch(
+          "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings",
+          {
+            headers: { Authorization: localStorage.getItem("authToken") },
+          }
+        );
         if (!res.ok) throw new Error("Access denied");
         const list = await res.json();
         const rows = list
@@ -745,7 +751,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document
           .getElementById("rss_feed_btn")
           .addEventListener("click", () => {
-            window.open("localhost:3000/rankings/rss", "_blank");
+            window.open(
+              "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings/rss",
+              "_blank"
+            );
           });
       } catch (e) {
         rankingContainer.textContent = e.message;
