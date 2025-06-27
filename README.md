@@ -46,10 +46,13 @@ Technically, the project follows a clear separation of concerns. The frontend is
 2. **Install dependencies**
       ```bash
    npm install
-  3. **Start the server**
+3. **Start the server**
      ```bash
    node server.js
-  4.**Open your browser** at http://localhost:3000
+4.**Open your browser** 
+at http://localhost:3000
+
+## 🧩 Diagrams
 
 
 ![alt text](./assets/c1.png)
