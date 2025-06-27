@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   return response.json().then((json) => {
                     alert(
                       json.eroare ||
-                      "Password must be at least 9 characters, include an uppercase letter and a digit"
+                        "Password must be at least 9 characters, include an uppercase letter and a digit"
                     );
                   });
                 }
@@ -533,23 +533,29 @@ document.addEventListener("DOMContentLoaded", async () => {
                         })
                           .then((response) => response.json())
                           .then((data) => {
-
                             currentScore = data.score;
                             console.log("Your score: " + currentScore);
                             gameOver = true;
-                            document.getElementById("quiz-close-button").classList.remove("hidden");
+                            document
+                              .getElementById("quiz-close-button")
+                              .classList.remove("hidden");
                             console.log(currentScore);
-                            document.getElementById("quiz_score").innerText = langData[currentLanguage].score1 + currentScore + langData[currentLanguage].score2;
-                            document.getElementById("quiz_score").classList.remove("hidden");
-                            document.getElementById("quiz-close-button").addEventListener("click", function () {
-                              quizContainer.classList.remove("active");
-                            });
-
+                            document.getElementById("quiz_score").innerText =
+                              langData[currentLanguage].score1 +
+                              currentScore +
+                              langData[currentLanguage].score2;
+                            document
+                              .getElementById("quiz_score")
+                              .classList.remove("hidden");
+                            document
+                              .getElementById("quiz-close-button")
+                              .addEventListener("click", function () {
+                                quizContainer.classList.remove("active");
+                              });
                           })
                           .catch((error) => {
                             console.error("Erorr : couldn't get score", error);
                           });
-
 
                         //quizContainer.classList.remove("active");
                       } else {
@@ -597,16 +603,20 @@ document.addEventListener("DOMContentLoaded", async () => {
           description.innerText = pop_up.description;
           ranking.innerText = pop_up.ranking;
 
-          fetch(`http://localhost:3000/rankings?question=${cardId}`, {
-            headers: { Authorization: auth },
-          })
+          fetch(
+            `https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings?question=${cardId}`,
+            {
+              headers: { Authorization: auth },
+            }
+          )
             .then((response) => response.json())
             .then((data) => {
               const rankingBody = document.getElementById("ranking_body");
               rankingBody.innerHTML = "";
               data.forEach((entry, index) => {
-                rankingBody.innerHTML += `${index + 1}. ${entry.username} - ${entry.score
-                  } points <br>`;
+                rankingBody.innerHTML += `${index + 1}. ${entry.username} - ${
+                  entry.score
+                } points <br>`;
                 console.log(
                   `${index + 1}. ${entry.username} - ${entry.score} points <br>`
                 );
@@ -685,7 +695,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .forEach((h) => (h.style.visibility = "visible"));
               gameOver = false;
               currentScore = 0;
-              document.getElementById("quiz-close-button").classList.add("hidden");
+              document
+                .getElementById("quiz-close-button")
+                .classList.add("hidden");
               document.getElementById("quiz_score").classList.add("hidden");
               window.openQuizWindow();
             })
@@ -703,17 +715,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadRanking() {
       rankingContainer.textContent = "Loading...";
       try {
-        const res = await fetch("http://localhost:3000/rankings", {
-          headers: { Authorization: localStorage.getItem("authToken") },
-        });
+        const res = await fetch(
+          "https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings",
+          {
+            headers: { Authorization: localStorage.getItem("authToken") },
+          }
+        );
         if (!res.ok) throw new Error("Access denied");
         const list = await res.json();
         const rows = list
           .map(
             (e, i) => `
         <tr>
-          <td>${i + 1}</td><td>${e.username}</td><td>${e.question_id}</td><td>${e.score
-              }</td>
+          <td>${i + 1}</td><td>${e.username}</td><td>${e.question_id}</td><td>${
+              e.score
+            }</td>
         </tr>
       `
           )
@@ -734,7 +750,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document
           .getElementById("rss_feed_btn")
           .addEventListener("click", () => {
-            window.open("http://localhost:3000/rankings/rss", "_blank");
+            window.open(
+              "https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings/rss",
+              "_blank"
+            );
           });
       } catch (e) {
         rankingContainer.textContent = e.message;

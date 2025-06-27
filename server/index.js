@@ -152,9 +152,9 @@ const server = http.createServer((req, res) => {
 <rss version="2.0">
 <channel>
   <title>HEROQuizz Rankings</title>
-  <link>http://localhost:3000/rankings/rss</link>
+  <link>https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings/rss</link>
   <description>Latest HEROQuizz overall rankings</description>`;
-      
+
       rows.forEach((e, i) => {
         rss += `
   <item>
