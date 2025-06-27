@@ -19,7 +19,8 @@
             ],
             "headers": {
                 "Access-Control-Allow-Origin": "*"
-            }
+            },
+            "dest": "/index.js"
         }
     ]
 }
