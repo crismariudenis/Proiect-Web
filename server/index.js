@@ -2,19 +2,6 @@ const http = require("http");
 const url = require("url");
 const db = require("./db");
 const bcrypt = require("bcrypt");
-const express = require("express");
-const app = express();
-
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Replace * with your frontend URL in production
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
-
-// Handle OPTIONS requests (preflight)
-app.options("*", (req, res) => res.sendStatus(200));
 
 const port = 3000;
 const userAnswersMap = {};
