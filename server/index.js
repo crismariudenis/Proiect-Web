@@ -146,12 +146,11 @@ const server = http.createServer((req, res) => {
         return res.end("Server error");
       }
       res.writeHead(200, { "Content-Type": "application/xml" });
-      let rss = `
-<?xml version="1.0" encoding="UTF-8"?>
+      let rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
   <title>HEROQuizz Rankings</title>
-  <link>localhost:3000/rankings/rss</link>
+  <link>https://proiect-web-server.vercel.app/rankings/rss</link>
   <description>Latest HEROQuizz overall rankings</description>`;
 
       rows.forEach((e, i) => {
