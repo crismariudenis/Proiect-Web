@@ -23,7 +23,7 @@ db.numberOfRows((err, count) => {
   }
 });
 
-db.loadChoices((choicesMap) => {});
+db.loadChoices((choicesMap) => { });
 
 function authenticate(req, res, next) {
   const token = req.headers.authorization;
@@ -101,6 +101,7 @@ const server = http.createServer((req, res) => {
     return authenticate(req, res, () => {
       const username = req.authUser;
       const score = userScoreMap[username];
+      console.log("Final score: " + score);
       if (score === undefined) {
         res.writeHead(404, { "Content-Type": "application/json" });
         return res.end(JSON.stringify({ error: "No score." }));
@@ -111,9 +112,10 @@ const server = http.createServer((req, res) => {
           res.writeHead(500);
           return res.end("Server error");
         }
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ score }));
+
       });
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ score }));
     });
   }
 
