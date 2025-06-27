@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" prefix="schema: http://schema.org/">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>System Requirements Specification - Superhero Quiz</title>
+    <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "ScholarlyArticle",
+    "name": "System Requirements Specification - Superhero Quiz",
+    "author": {
+      "@type": "Person",
+      "name": "Echipa Superhero Quiz"
+    },
+    "datePublished": "2025-06-27"
+  }
+  </script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+
+<body resource="#it" typeof="schema:ScholarlyArticle">
+    <h1 property="schema:name">System Requirements Specification - Superhero Quiz</h1>
+
+    <section id="introduction">
+        <h2>1. Introducere</h2>
+        <p>
+            Acest document descrie cerințele software și arhitectura aplicației web <strong>Superhero Quiz</strong>, un
+            joc educativ destinat copiilor, care oferă quiz-uri tematice despre supereroii Marvel și DC. Aplicația oferă
+            o experiență interactivă de învățare, încurajând participarea prin mecanici de joc precum scor, vieți și
+            clasamente.
+        </p>
+    </section>
+
+    <section id="general-description">
+        <h2>2. Descriere generală</h2>
+        <p>
+            Superhero Quiz este o aplicație web compusă dintr-un frontend dezvoltat în HTML, CSS și JavaScript și un
+            backend Node.js, conectat la o bază de date SQLite. Utilizatorii trebuie să fie autentificați pentru a
+            accesa quiz-urile, care includ întrebări cu variante de răspuns și feedback imediat.
+        </p>
+        <p>
+            Aplicația este complet responsive, implementând suport pentru internaționalizare și accesibilitate conform
+            standardelor WAI-ARIA.
+        </p>
+    </section>
+
+    <section id="functional-requirements">
+        <h2>3. Cerințe funcționale</h2>
+        <ul>
+            <li>RF1: Creare și autentificare conturi utilizator.</li>
+            <li>RF2: Acces restricționat la quiz-uri doar pentru utilizatori autentificați.</li>
+            <li>RF3: 6 quiz-uri disponibile cu tematici Marvel și DC.</li>
+            <li>RF4: Întrebări cu variante multiple de răspuns.</li>
+            <li>RF5: Feedback imediat pentru fiecare răspuns.</li>
+            <li>RF6: Sistem de vieți: utilizatorul are 3 vieți per quiz.</li>
+            <li>RF7: Calcularea și afișarea scorului la final.</li>
+            <li>RF8: Clasament global cu toți utilizatorii.</li>
+            <li>RF9: Suport pentru limbi multiple (i18n).</li>
+            <li>RF10: Interfață responsive și accesibilă.</li>
+        </ul>
+    </section>
+
+    <section id="non-functional-requirements">
+        <h2>4. Cerințe non-funcționale</h2>
+        <ul>
+            <li>NFR1: Timp de răspuns sub 1 secundă pentru interacțiuni uzuale.</li>
+            <li>NFR2: Compatibilitate cu browsere moderne.</li>
+            <li>NFR3: Persistența fiabilă a datelor în SQLite.</li>
+            <li>NFR4: Cod modular și documentat.</li>
+            <li>NFR5: Suport cel puțin pentru română și engleză.</li>
+            <li>NFR6: Design adaptabil pentru mobil și desktop.</li>
+        </ul>
+    </section>
+
+    <section id="development-stages">
+        <h2>5. Etapele dezvoltării</h2>
+        <ol>
+            <li><strong>Analiză cerințe</strong> – definirea funcționalităților esențiale.</li>
+            <li><strong>Prototip UI</strong> – machetă statică HTML/CSS.</li>
+            <li><strong>Backend API</strong> – autentificare, scor, vieți, ranking.</li>
+            <li><strong>Persistență</strong> – conectare cu SQLite pentru salvare date.</li>
+            <li><strong>Funcționalități avansate</strong> – feedback per întrebare, vieți, ranking live.</li>
+            <li><strong>Testare și responsive</strong> – validare UX/UI pe dispozitive diverse.</li>
+            <li><strong>Publicare și documentație</strong> – integrare Scholarly HTML și lansare finală.</li>
+        </ol>
+    </section>
+
+    <section id="architecture">
+        <h2>6. Arhitectura de ansamblu (Modelul C4)</h2>
+
+        <h3>6.1. Nivel 1 – Context Diagram</h3>
+        <img src="./../images/c1.png" alt="C1-Context">
+
+        <h3>6.2. Nivel 2 – Container Diagram</h3>
+        <img src="./../images/c2.png" alt="C2-Containers">
+
+        <h3>6.3. Nivel 3 – Component Diagram </h3>
+        <img src="./../images/c3.png" alt="C3-Conmponents">
+    </section>
+
+    <section id="conclusion">
+        <h2>7. Concluzii</h2>
+        <p>
+            Superhero Quiz oferă o platformă educațională interactivă pentru copii, construită cu tehnologii web
+            moderne, ce respectă cerințele de accesibilitate, responsivitate și internaționalizare. Arhitectura modulară
+            și abordarea incrementală de dezvoltare permit scalabilitate și mentenanță facilă.
+        </p>
+    </section>
+
+    <footer>
+        <p>© 2025 Echipa Superhero Quiz</p>
+    </footer>
+</body>
+
+</html>

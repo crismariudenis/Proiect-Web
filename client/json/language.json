@@ -40,6 +40,8 @@
         },
         "quiz": {
             "title": "Superhero Quizz",
+            "close": "Exit",
+            "score": "Game over! Your score:",
             "question": {
                 "id": "What is the identity of the hero ",
                 "align1": "What is ",
@@ -102,6 +104,8 @@
         },
         "quiz": {
             "title": "Quiz cu Supereroi",
+            "close": "Închide",
+            "score": "Sfârșitul jocului! Scorul tău: ",
             "question": {
                 "id": "Care este identitatea eroului ",
                 "align1": "Care este alinierea morală a eroului ",

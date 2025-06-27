@@ -1,4 +1,5 @@
 let currentLanguage;
+let gameOver = true;
 if (currentLanguage == null) {
   currentLanguage = "en";
   localStorage.setItem("language", currentLanguage);
@@ -336,6 +337,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             let questionText = [];
             quizContainer.classList.add("active");
             const questionElement = quizContainer.querySelector(".question");
+
             if (questionElement) {
               const field = quizData[currentQuizIndex].field;
               const wiki = quizData[currentQuizIndex].wiki;
@@ -347,16 +349,48 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                   const imageElement =
                     quizContainer.querySelector(".quiz_image img");
+                  // const imageContainer = quizContainer.querySelector(".quiz_image");
+                  // const mainContainer = quizContainer.querySelector(".quiz_main");
                   if (imageElement) {
+                    //             if (currentCard == 2) {
+
+                    //               imageContainer.innerHTML =
+                    //                 `
+
+                    // <div class="quiz_question2">
+                    // <div class="quiz_question_text2">
+                    //   <p class="question2">
+                    //     Answers:
+                    //   </p>
+                    // </div>
+                    // <div class="quiz_answers2">
+                    //   <button class="quiz_button3">Marvel</button>
+                    //   <button class="quiz_button4">DC</button>
+
+                    // </div>`
+                    //               const buttons = document.querySelectorAll('.quiz_answers button, .quiz_answers2 button');
+                    //               buttons.forEach(btn => console.log(btn.offsetWidth, btn.offsetHeight));
+                    //               mainContainer.style.flex = '1 1 100%';
+                    //               mainContainer.style.display = 'flex';
+                    //               mainContainer.style.flexDirection = 'row';
+                    //               mainContainer.style.gap = '20px';
+                    //               document.querySelector('.quiz_question').style.overflow = 'auto';
+                    //               document.querySelector('.quiz_question2').style.overflow = 'auto';
+
+                    //             }
+                    //             else {
                     imageElement.src = imageLink.startsWith("http")
                       ? imageLink
                       : "https://" + imageLink;
                     imageElement.alt = "Quiz image";
+                    // }
                   }
                 }
               }
               const quiz = langData[currentLanguage].quiz;
               document.getElementById("quiz-title").innerHTML = quiz.title;
+              // document.getElementById("quiz-close-button").textContent = quiz.close;
+              // document.getElementById("quiz_score").textContent = quiz.score;
               const question = quiz.question;
               const firstButton = quizContainer.querySelector(".quiz_button1");
               const secondButton = quizContainer.querySelector(".quiz_button2");
@@ -446,6 +480,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                   break;
               }
               questionElement.textContent = questionText.join("");
+              // const questionElement2 = quizContainer.querySelector(".question2");
+              // if (questionElement2 != null)
+              //   questionElement2.textContent = questionText.join("");
 
               const counter = quizContainer.querySelector(".counter");
               counter.textContent = questionOffset + currentQuizIndex + 1;
@@ -454,93 +491,115 @@ document.addEventListener("DOMContentLoaded", async () => {
           quizContainer
             .querySelectorAll(".quiz_button1, .quiz_button2")
             .forEach((button) => {
-              button.addEventListener("click", () => {
-                const selectedAnswer = button.textContent.trim();
-                const auth = localStorage.getItem("authToken");
-                fetch("http://127.0.0.1:3000/answer", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: auth,
-                  },
-                  body: JSON.stringify({
-                    id: currentQuizIndex,
-                    answer: selectedAnswer,
-                  }),
-                })
-                  .then((r) => r.json())
-                  .then((data) => {
-                    console.log(data.correct);
-                    currentQuizIndex++;
+              button.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (!gameOver) {
+                  const selectedAnswer = button.textContent.trim();
+                  const auth = localStorage.getItem("authToken");
+                  fetch("http://127.0.0.1:3000/answer", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: auth,
+                    },
+                    body: JSON.stringify({
+                      id: currentQuizIndex,
+                      answer: selectedAnswer,
+                    }),
+                  })
+                    .then((r) => r.json())
+                    .then((data) => {
+                      console.log(data.correct);
+                      currentQuizIndex++;
 
-                    // if we've exhausted this batch, bump offset and load next
-                    if (currentQuizIndex >= quizData.length) {
-                      questionOffset += quizData.length;
-                      fetch("http://127.0.0.1:3000/selectedCard", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: auth,
-                        },
-                        body: JSON.stringify({ cardId: currentCard }),
-                      })
-                        .then(() =>
-                          fetch("http://127.0.0.1:3000/quizzes", {
+                      // if we've exhausted this batch, bump offset and load next
+                      if (currentQuizIndex >= quizData.length) {
+                        questionOffset += quizData.length;
+                        fetch("http://127.0.0.1:3000/selectedCard", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: auth,
+                          },
+                          body: JSON.stringify({ cardId: currentCard }),
+                        })
+                          .then(() =>
+                            fetch("http://127.0.0.1:3000/quizzes", {
+                              method: "GET",
+                              headers: {
+                                Accept: "application/json",
+                                Authorization: auth,
+                              },
+                            })
+                          )
+                          .then((r) => r.json())
+                          .then((newBatch) => {
+                            quizData = newBatch;
+                            currentQuizIndex = 0;
+                            remainingLives = 3;
+                            document
+                              .querySelectorAll(".heart")
+                              .forEach((h) => (h.style.visibility = "visible"));
+                            openQuizWindow();
+                          })
+                          .catch(console.error);
+                        return;
+                      }
+
+                      // ...existing correct/incorrect handling...
+                      if (!data.correct) {
+                        remainingLives--;
+                        if (remainingLives <= 0) {
+                          const auth = localStorage.getItem("authToken");
+                          fetch("http://127.0.0.1:3000/score", {
                             method: "GET",
                             headers: {
                               Accept: "application/json",
                               Authorization: auth,
                             },
                           })
-                        )
-                        .then((r) => r.json())
-                        .then((newBatch) => {
-                          quizData = newBatch;
-                          currentQuizIndex = 0;
-                          remainingLives = 3;
-                          document
-                            .querySelectorAll(".heart")
-                            .forEach((h) => (h.style.visibility = "visible"));
+                            .then(response => response.json())
+                            .then(data => {
+                              const score = data.score;
+                              console.log("Your score: " + score);
+                              if (currentLanguage == "en")
+                                document.getElementById("quiz_score").textContent = "Game over! Your score: " + score + " points"
+                              else document.getElementById("quiz_score").textContent = "Sfârșitul jocului! Scorul tău: " + score + " puncte"
+
+
+
+                              document.getElementById("quiz_score").classList.remove("hidden");
+
+                              document.querySelectorAll(".quiz_close_button").forEach(button => {
+                                button.classList.remove("hidden");
+                                button.addEventListener("click", (e) => {
+                                  e.preventDefault();
+                                  quizContainer.classList.remove("active");
+                                });
+
+                              });
+
+                            }
+                            )
+                            .catch(error => {
+                              console.error("Erorr : couldn't get score", error);
+                            });
+                          gameOver = true;
                           openQuizWindow();
-                        })
-                        .catch(console.error);
-                      return;
-                    }
 
-                    // ...existing correct/incorrect handling...
-                    if (!data.correct) {
-                      remainingLives--;
-                      if (remainingLives <= 0) {
-                        const auth = localStorage.getItem("authToken");
-                        fetch("http://127.0.0.1:3000/score", {
-                          method: "GET",
-                          headers: {
-                            Accept: "application/json",
-                            Authorization: auth,
-                          },
-                        })
-                          .then(response => response.json())
-                          .then(data => {
-                            const score = data.score;
-                            console.log("Your score: " + score);
-                          }
-                          )
-                          .catch(error => {
-                            console.error("Erorr : couldn't get score", error);
-                          });
-                        quizContainer.classList.remove("active");
-
+                        }
+                        else {
+                          document.querySelectorAll(".heart")[
+                            remainingLives
+                          ].style.visibility = "hidden";
+                          openQuizWindow();
+                        }
                       } else {
-                        document.querySelectorAll(".heart")[
-                          remainingLives
-                        ].style.visibility = "hidden";
                         openQuizWindow();
                       }
-                    } else {
-                      openQuizWindow();
-                    }
-                  })
-                  .catch(console.error);
+                    })
+                    .catch(console.error);
+                }
               });
             });
         });
@@ -552,6 +611,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           container.innerHTML = html;
 
           const imageElement = container.querySelector(".pop_up_img img");
+          // const imageContainer = container.querySelector(".pop_up_img ");
           const descriptionElement =
             container.querySelector(".description_body");
           const description = container.querySelector(".description");
@@ -621,12 +681,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                 break;
             }
             container.classList.add("active");
+            document.getElementById("quiz_score").classList.add("hidden");
+
+            document.querySelectorAll(".quiz_close_button").forEach(button => {
+              button.classList.add("hidden");
+              button.addEventListener("click", (e) => {
+                e.preventDefault();
+                quizContainer.classList.add("active");
+              });
+
+            });
           };
 
-          closeBtn.addEventListener("click", () =>
+          closeBtn.addEventListener("click", (e) => {
+            e.preventDefault();
             container.classList.remove("active")
+          }
           );
           playBtn.addEventListener("click", (e) => {
+            gameOver = false;
             e.preventDefault();
             e.stopPropagation();
             const auth = localStorage.getItem("authToken");
