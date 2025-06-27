@@ -205,6 +205,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (method === "POST" && pathname === "/adauga") {
+    setCORSHeaders(res);
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
@@ -261,6 +262,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (method === "POST" && pathname === "/login") {
+    setCORSHeaders(res);
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
