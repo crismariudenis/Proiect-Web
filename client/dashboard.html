@@ -39,7 +39,7 @@
           container.textContent = "Loading...";
           try {
             const res = await fetch(
-              "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/dashboard",
+              "https://proiect-web-7xcq.onrender.com/dashboard",
               {
                 headers: { Authorization: localStorage.getItem("authToken") },
               }
@@ -83,7 +83,7 @@
               btn.addEventListener("click", async () => {
                 const id = btn.dataset.id;
                 await fetch(
-                  "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/grantAdmin",
+                  "https://proiect-web-7xcq.onrender.com/grantAdmin",
                   {
                     method: "POST",
                     headers: {
@@ -105,7 +105,7 @@
           container.textContent = "Loading...";
           try {
             const res = await fetch(
-              "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/rankings",
+              "https://proiect-web-7xcq.onrender.com/rankings",
               {
                 headers: { Authorization: localStorage.getItem("authToken") },
               }
@@ -145,7 +145,7 @@
               .getElementById("rss_feed_btn")
               .addEventListener("click", () =>
                 window.open(
-                  "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/rankings/rss",
+                  "https://proiect-web-7xcq.onrender.com/rankings/rss",
                   "_blank"
                 )
               );
