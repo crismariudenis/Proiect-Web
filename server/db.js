@@ -1,8 +1,18 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
-const db = new sqlite3.Database("baza.db");
+const path = require("path");
+
+const dbPath = path.join(__dirname, "baza.db");
+const heroesPath = path.join(__dirname, "heroes.db");
+
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) console.error("Failed to open baza.db:", err);
+});
+const heroes = new sqlite3.Database(heroesPath, (err) => {
+  if (err) console.error("Failed to open heroes.db:", err);
+});
+
 const saltRounds = 10;
-const heroes = new sqlite3.Database("heroes.db");
 
 db.prepare(
   `
@@ -65,7 +75,6 @@ function getValidUrl(link, universe) {
     return url;
   }
   if (url == null) return null;
-
 }
 
 function shuffleArray(array) {

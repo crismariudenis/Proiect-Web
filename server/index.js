@@ -12,9 +12,8 @@ let usersUpdatingScores = {};
 db.numberOfRows((err, count) => {
   if (err) {
     console.error("Couldn't find rowcount", err);
-    res.writeHead(500);
-    res.end("Server error");
-    return;
+    // if res isn’t in scope here, just exit process
+    process.exit(1);
   } else {
     console.log("Rows:" + count);
     heroesRowsCount = count;
@@ -152,7 +151,7 @@ const server = http.createServer((req, res) => {
 <rss version="2.0">
 <channel>
   <title>HEROQuizz Rankings</title>
-  <link>https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings/rss</link>
+  <link>https://proiect-web-server.vercel.app/rankings/rss</link>
   <description>Latest HEROQuizz overall rankings</description>`;
 
       rows.forEach((e, i) => {

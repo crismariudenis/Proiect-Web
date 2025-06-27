@@ -603,12 +603,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           description.innerText = pop_up.description;
           ranking.innerText = pop_up.ranking;
 
-          fetch(
-            `https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings?question=${cardId}`,
-            {
-              headers: { Authorization: auth },
-            }
-          )
+          // pop-up rankings
+          fetch(`https://proiect-web-server.vercel.app/rankings?question=${cardId}`, {
+            headers: { Authorization: auth },
+          })
             .then((response) => response.json())
             .then((data) => {
               const rankingBody = document.getElementById("ranking_body");
@@ -715,12 +713,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadRanking() {
       rankingContainer.textContent = "Loading...";
       try {
-        const res = await fetch(
-          "https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings",
-          {
-            headers: { Authorization: localStorage.getItem("authToken") },
-          }
-        );
+        const res = await fetch("https://proiect-web-server.vercel.app/rankings", {
+          headers: { Authorization: localStorage.getItem("authToken") },
+        });
         if (!res.ok) throw new Error("Access denied");
         const list = await res.json();
         const rows = list
@@ -751,7 +746,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           .getElementById("rss_feed_btn")
           .addEventListener("click", () => {
             window.open(
-              "https://vercel.com/crismariudenis1s-projects/proiect-web-server/rankings/rss",
+              "https://proiect-web-server.vercel.app/rankings/rss",
               "_blank"
             );
           });
