@@ -162,7 +162,23 @@ const server = http.createServer((req, res) => {
       }
     });
   }
-
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+    }
+  });
+}
+  
 if (method === "GET" && pathname === "/rankings/rss") {
   db.getOverallRanking((err, rows) => {
     if (err) {
@@ -185,17 +201,13 @@ if (method === "GET" && pathname === "/rankings/rss") {
   <ttl>60</ttl>`;
 
     rows.forEach((e, i) => {
-      const itemLink = `${baseUrl}/users/${encodeURIComponent(
-        e.username
-      )}/questions/${e.question_id}`;
+      const itemLink = `${baseUrl}/users/${encodeURIComponent(e.username)}/questions/${e.question_id}`;
       rss += `
 <item>
   <title>${escapeXml(e.username)}</title>
   <link>${itemLink}</link>
   <description>Score: ${e.score} (Question ${e.question_id})</description>
-  <guid isPermaLink="false">${i + 1}-${escapeXml(e.username)}-${
-        e.question_id
-      }</guid>
+  <guid isPermaLink="false">${i + 1}-${escapeXml(e.username)}-${e.question_id}</guid>
 </item>`;
     });
 
