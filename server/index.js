@@ -101,6 +101,8 @@ const server = http.createServer((req, res) => {
           const id = parsedData.cardId;
           console.log("Id: " + id);
           currentCard = id;
+          userScoreMap[req.authUser] = 0;
+          usersUpdatingScores[req.authUser] = 1;
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ message: "Card received" }));
         } catch (error) {
