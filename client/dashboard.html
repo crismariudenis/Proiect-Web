@@ -26,10 +26,8 @@
     <script src="index.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
-        // navbar was already loaded & wired up by index.js
         if (window.updateNavbar) window.updateNavbar();
 
-        // render footer
         fetch("./components/footer.html")
           .then((r) => r.text())
           .then((html) => {
@@ -78,7 +76,6 @@
               <tbody>${rows}</tbody>
             </table>
           `;
-            // wire the grant buttons
             document.querySelectorAll(".grant-btn").forEach((btn) =>
               btn.addEventListener("click", async () => {
                 const id = btn.dataset.id;
@@ -123,7 +120,6 @@
               )
               .join("");
 
-            // inject RSS button and table
             container.innerHTML = `
       <div style="margin-bottom:1em;">
         <button id="rss_feed_btn">🔗 RSS Feed</button>
@@ -136,7 +132,6 @@
       </table>
       `;
 
-            // wire the RSS button
             document
               .getElementById("rss_feed_btn")
               .addEventListener("click", () =>
@@ -167,7 +162,6 @@
             setActive("dashboard_show_ranking");
           });
 
-        // initial view
         setActive("dashboard_show_users");
         loadUsers();
       });

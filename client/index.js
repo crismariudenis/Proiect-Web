@@ -97,7 +97,7 @@ function updateLanguage() {
   const navbar = langData[currentLanguage].navbar;
   document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
   document.getElementById("navbar-about").textContent = navbar.about;
-  document.getElementById("navbar-dashboard").textContent = navbar.dashboard; // new
+  document.getElementById("navbar-dashboard").textContent = navbar.dashboard;
   document.getElementById("nav_login_btn").textContent = navbar.join;
   const footer = langData[currentLanguage].footer;
   document.getElementById("footer-left").textContent = footer.left;
@@ -134,7 +134,6 @@ function updateLanguage() {
 document.addEventListener("DOMContentLoaded", async () => {
   await loadLanguageData();
 
-  // only load login UI if placeholder exists
   const loginContainer = document.getElementById("login");
   if (loginContainer) {
     fetch("./components/login.html")
@@ -228,7 +227,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("navbar-quizzes").textContent = navbar.quizzes;
       document.getElementById("navbar-about").textContent = navbar.about;
       document.getElementById("navbar-dashboard").textContent =
-        navbar.dashboard; // new
+        navbar.dashboard;
       document.getElementById("nav_login_btn").textContent = navbar.join;
 
       window.toggleMenu = function () {
@@ -245,7 +244,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const navBtn = document.getElementById("nav_login_btn");
       const userSpan = document.getElementById("user-name");
 
-      // updateNavbar exposed globally so we can call it after login
       window.updateNavbar = function () {
         const username = localStorage.getItem("username");
         if (username) {
@@ -259,7 +257,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       navBtn.addEventListener("click", () => {
         if (localStorage.getItem("username")) {
-          // logout
           localStorage.removeItem("authToken");
           localStorage.removeItem("username");
           window.updateNavbar();
@@ -281,7 +278,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("footer-right").textContent = footer.right;
     });
 
-  // landing
   fetch("./components/landing.html")
     .then((r) => r.text())
     .then((html) => {
@@ -298,7 +294,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
     .catch(console.error);
 
-  // quizzes
   fetch("./components/quizzes.html")
     .then((r) => r.text())
     .then((html) => {
@@ -368,7 +363,6 @@ document.addEventListener("DOMContentLoaded", async () => {
               const imageLink = await getImageFromURL(wiki);
               if (imageLink != null) {
                 console.log(imageLink);
-                // await downloadImage(imageLink);
 
                 const imageElement =
                   quizContainer.querySelector(".quiz_image img");
@@ -493,7 +487,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     console.log(data.correct);
                     currentQuizIndex++;
 
-                    // if we've exhausted this batch, bump offset and load next
                     if (currentQuizIndex >= quizData.length) {
                       questionOffset += quizData.length;
                       fetch("http://127.0.0.1:3000/selectedCard", {
@@ -527,7 +520,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                       return;
                     }
 
-                    // ...existing correct/incorrect handling...
                     if (!data.correct) {
                       remainingLives--;
                       if (remainingLives <= 0) {
@@ -602,11 +594,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           const auth = localStorage.getItem("authToken");
           const quizzes = langData[currentLanguage].quizzes;
           const pop_up = langData[currentLanguage].pop_up;
-          // update header to include question number
           description.innerText = pop_up.description;
           ranking.innerText = pop_up.ranking;
 
-          // fetch only this question’s top-4
           fetch(`http://localhost:3000/rankings?question=${cardId}`, {
             headers: { Authorization: auth },
           })
@@ -630,7 +620,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           playBtn.innerText = pop_up.play;
           closeBtn.innerText = pop_up.close;
 
-          // set image and specific description
           switch (cardId) {
             case 1:
               imageElement.src = "./images/marvel_vs_dc.jpg";
@@ -709,7 +698,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       .catch(console.error);
   }
 
-  // rankings
   const rankingContainer = document.getElementById("ranking");
   if (rankingContainer) {
     async function loadRanking() {
@@ -731,7 +719,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           )
           .join("");
 
-        // inject RSS button and table
         rankingContainer.innerHTML = `
       <div style="margin-bottom:1em;">
         <button id="rss_feed_btn">🔗 RSS Feed</button>
@@ -744,7 +731,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       </table>
     `;
 
-        // wire the RSS button
         document
           .getElementById("rss_feed_btn")
           .addEventListener("click", () => {

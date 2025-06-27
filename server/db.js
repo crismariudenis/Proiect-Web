@@ -14,7 +14,6 @@ db.prepare(
   )`
 ).run();
 
-// include question_id and enforce one row per (username, question):
 db.prepare(
   `
   CREATE TABLE IF NOT EXISTS rankings (
@@ -39,11 +38,7 @@ function addUser(username, password, callback) {
 const choicesMap = {};
 
 const fields = ["ID", "ALIGN", "EYE", "universe", "year", "HAIR"];
-const SOURCES = [
-  { name: "wikipedia", base: "https://en.wikipedia.org" },
-  { name: "marvel", base: "https://marvel.fandom.com" },
-  { name: "dc", base: "https://dc.fandom.com" },
-];
+
 const https = require("https");
 let answersToQuizzes = [];
 
@@ -56,20 +51,6 @@ function cleanLink(link) {
     newLink = "/" + newLink;
   }
   return newLink;
-}
-
-function createUrl(sourceBase, relativePath) {
-  return `${sourceBase}/wiki${relativePath}`;
-}
-
-function urlExists(url) {
-  return new Promise((resolve) => {
-    const req = https.request(url, { method: "HEAD" }, (res) => {
-      resolve(res.statusCode === 200);
-    });
-    req.on("error", () => resolve(false));
-    req.end();
-  });
 }
 
 function getValidUrl(link, universe) {
@@ -85,7 +66,6 @@ function getValidUrl(link, universe) {
   }
   if (url == null) return null;
 
-  //console.log(url);
 }
 
 function shuffleArray(array) {
@@ -151,7 +131,6 @@ function numberOfRows(callback) {
 }
 
 function getQuizzes(n, countRows, card, callback) {
-  // const fields = ["ID", "ALIGN", "EYE", "UNIVERSE", "YEAR", "HAIR"];
   const results = [];
 
   function next(i) {
@@ -249,7 +228,6 @@ function getChoices(column, callback) {
   });
 }
 
-// grantAdmin: flip isAdmin flag on a user
 function grantAdmin(id, callback) {
   const sql = "UPDATE users SET isAdmin = 1 WHERE id = ?";
   db.run(sql, [id], function (err) {
@@ -257,7 +235,6 @@ function grantAdmin(id, callback) {
   });
 }
 
-// updateRanking now takes questionId
 function updateRanking(score, username, questionId, callback) {
   const sql = `SELECT * FROM rankings WHERE username = ? AND question_id = ?`;
   db.get(sql, [username, questionId], (err, row) => {
@@ -278,7 +255,6 @@ function updateRanking(score, username, questionId, callback) {
   });
 }
 
-/* getRanking now filters by questionId and limits to top 4 */
 function getRanking(questionId, callback) {
   const sql = `
     SELECT username, score, question_id
