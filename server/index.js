@@ -16,8 +16,6 @@ function setCORSHeaders(res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 }
 
-
-
 db.numberOfRows((err, count) => {
   if (err) {
     console.error("Couldn't find rowcount", err);
@@ -261,34 +259,36 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (method === "POST" && pathname === "/login") {
-    setCORSHeaders(res);
-    let body = "";
-    req.on("data", (chunk) => (body += chunk));
-    req.on("end", () => {
-      const { username, password } = JSON.parse(body);
-      db.getUserByUsername(username, (err, user) => {
-        if (!user) {
+if (method === "POST" && pathname === "/login") {
+  setCORSHeaders(res);
+  let body = "";
+  req.on("data", (chunk) => (body += chunk));
+  req.on("end", () => {
+    const { username, password } = JSON.parse(body);
+    db.getUserByUsername(username, (err, user) => {
+      if (!user) {
+        setCORSHeaders(res); // Ensure CORS header before response
+        res.writeHead(401, { "Content-Type": "application/json" });
+        return res.end(
+          JSON.stringify({ succes: false, eroare: "User not found" })
+        );
+      }
+      bcrypt.compare(password, user.password, (err, match) => {
+        setCORSHeaders(res); // Again, ensure header before response
+        if (match) {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ succes: true }));
+        } else {
           res.writeHead(401, { "Content-Type": "application/json" });
-          return res.end(
-            JSON.stringify({ succes: false, eroare: "User not found" })
+          res.end(
+            JSON.stringify({ succes: false, eroare: "Invalid credentials" })
           );
         }
-        bcrypt.compare(password, user.password, (err, match) => {
-          if (match) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ succes: true }));
-          } else {
-            res.writeHead(401, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({ succes: false, eroare: "Invalid credentials" })
-            );
-          }
-        });
       });
     });
-    return;
-  }
+  });
+  return;
+}
   if (method === "POST" && pathname === "/answer") {
     return authenticate(req, res, () => {
       let body = "";
