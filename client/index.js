@@ -1,3 +1,7 @@
+
+
+
+
 let currentLanguage;
 let gameOver = true;
 let currentScore = 0;
@@ -151,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const password = document.getElementById("login_password").value;
             const L = document.getElementById("login");
             fetch(
-              "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/adauga",
+              "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/adauga",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -199,7 +203,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const password = document.getElementById("login_password").value;
 
             fetch(
-              "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/login",
+              "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/login",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -478,7 +482,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const selectedAnswer = button.textContent.trim();
                 const auth = localStorage.getItem("authToken");
                 fetch(
-                  "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/answer",
+                  "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/answer",
                   {
                     method: "POST",
                     headers: {
@@ -499,7 +503,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (currentQuizIndex >= quizData.length) {
                       questionOffset += quizData.length;
                       fetch(
-                        "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/selectedCard",
+                        "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/selectedCard",
                         {
                           method: "POST",
                           headers: {
@@ -511,7 +515,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                       )
                         .then(() =>
                           fetch(
-                            "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/quizzes",
+                            "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/quizzes",
                             {
                               method: "GET",
                               headers: {
@@ -540,7 +544,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                       if (remainingLives <= 0) {
                         const auth = localStorage.getItem("authToken");
                         fetch(
-                          "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/score",
+                          "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/score",
                           {
                             method: "GET",
                             headers: {
@@ -623,7 +627,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           // pop-up rankings
           fetch(
-            `https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/rankings?question=${cardId}`,
+            `https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/rankings?question=${cardId}`,
             {
               headers: { Authorization: auth },
             }
@@ -686,7 +690,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           e.stopPropagation();
           const auth = localStorage.getItem("authToken");
           fetch(
-            "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/selectedCard",
+            "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/selectedCard",
             {
               method: "POST",
               headers: {
@@ -698,7 +702,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           )
             .then(() =>
               fetch(
-                "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/quizzes",
+                "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/quizzes",
                 {
                   method: "GET",
                   headers: {
@@ -741,7 +745,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       rankingContainer.textContent = "Loading...";
       try {
         const res = await fetch(
-          "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/rankings",
+          "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/rankings",
           {
             headers: { Authorization: localStorage.getItem("authToken") },
           }
@@ -776,7 +780,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           .getElementById("rss_feed_btn")
           .addEventListener("click", () => {
             window.open(
-              "https://proiect-web-server-cz33ajyxx-crismariudenis1s-projects.vercel.app/rankings/rss",
+              "https://proiect-web-server-git-master-crismariudenis1s-projects.vercel.app/rankings/rss",
               "_blank"
             );
           });
