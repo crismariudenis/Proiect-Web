@@ -170,7 +170,7 @@ const server = http.createServer((req, res) => {
         return res.end("Server error");
       }
       res.writeHead(200, {
-        "Content-Type": "application/rss+xml; charset=UTF-8",
+        "Content-Type": "application/xml; charset=UTF-8",
       });
       let rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
