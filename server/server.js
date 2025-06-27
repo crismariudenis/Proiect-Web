@@ -196,9 +196,11 @@ const server = http.createServer((req, res) => {
         db.getAnswers((err, answers) => {
           userAnswersMap[req.authUser] = answers;
           console.log(answers);
-          // initialize user's score and multiplier
-          userScoreMap[req.authUser] = 0;
-          usersUpdatingScores[req.authUser] = 1;
+          // initialize user’s score and multiplier only on first batch
+          if (!(req.authUser in userScoreMap)) {
+            userScoreMap[req.authUser] = 0;
+            usersUpdatingScores[req.authUser] = 1;
+          }
         });
 
         res.writeHead(200, { "Content-Type": "application/json" });
