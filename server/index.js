@@ -33,7 +33,13 @@ function authenticate(req, res, next) {
   setCORSHeaders(res);
   const token = req.headers.authorization;
   if (!token) {
-    res.writeHead(401, { "Content-Type": "application/json" });
+    res.writeHead(401, {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+
     return res.end(JSON.stringify({ error: "Unauthorized" }));
   }
   let creds;
@@ -46,7 +52,13 @@ function authenticate(req, res, next) {
   const [username, password] = creds;
   db.getUserByUsername(username, (err, user) => {
     if (err || !user) {
-      res.writeHead(401, { "Content-Type": "application/json" });
+      res.writeHead(401, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      });
+
       return res.end(JSON.stringify({ error: "Unauthorized" }));
     }
     bcrypt.compare(password, user.password, (err, match) => {
@@ -54,7 +66,13 @@ function authenticate(req, res, next) {
         req.authUser = username;
         return next();
       }
-      res.writeHead(401, { "Content-Type": "application/json" });
+      res.writeHead(401, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      });
+
       res.end(JSON.stringify({ error: "Unauthorized" }));
     });
   });
@@ -62,10 +80,15 @@ function authenticate(req, res, next) {
 
 const server = http.createServer((req, res) => {
   setCORSHeaders(res);
-  if (req.method === "OPTIONS") {
-    res.writeHead(204);
-    return res.end();
-  }
+if (method === "OPTIONS") {
+  res.writeHead(204, {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  });
+  return res.end();
+}
+
 
   const parsedUrl = url.parse(req.url, true);
   const method = req.method;
@@ -259,36 +282,48 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-if (method === "POST" && pathname === "/login") {
-  setCORSHeaders(res);
-  let body = "";
-  req.on("data", (chunk) => (body += chunk));
-  req.on("end", () => {
-    const { username, password } = JSON.parse(body);
-    db.getUserByUsername(username, (err, user) => {
-      if (!user) {
-        setCORSHeaders(res); // Ensure CORS header before response
-        res.writeHead(401, { "Content-Type": "application/json" });
-        return res.end(
-          JSON.stringify({ succes: false, eroare: "User not found" })
-        );
-      }
-      bcrypt.compare(password, user.password, (err, match) => {
-        setCORSHeaders(res); // Again, ensure header before response
-        if (match) {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ succes: true }));
-        } else {
-          res.writeHead(401, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({ succes: false, eroare: "Invalid credentials" })
+  if (method === "POST" && pathname === "/login") {
+    setCORSHeaders(res);
+    let body = "";
+    req.on("data", (chunk) => (body += chunk));
+    req.on("end", () => {
+      const { username, password } = JSON.parse(body);
+      db.getUserByUsername(username, (err, user) => {
+        if (!user) {
+          setCORSHeaders(res); // Ensure CORS header before response
+          res.writeHead(401, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          });
+
+          return res.end(
+            JSON.stringify({ succes: false, eroare: "User not found" })
           );
         }
+        bcrypt.compare(password, user.password, (err, match) => {
+          setCORSHeaders(res); // Again, ensure header before response
+          if (match) {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ succes: true }));
+          } else {
+            res.writeHead(401, {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+              "Access-Control-Allow-Headers": "Content-Type",
+            });
+
+            res.end(
+              JSON.stringify({ succes: false, eroare: "Invalid credentials" })
+            );
+          }
+        });
       });
     });
-  });
-  return;
-}
+    return;
+  }
   if (method === "POST" && pathname === "/answer") {
     return authenticate(req, res, () => {
       let body = "";
@@ -321,7 +356,13 @@ if (method === "POST" && pathname === "/login") {
     return authenticate(req, res, () => {
       db.getUserByUsername(req.authUser, (err, user) => {
         if (err || !user) {
-          res.writeHead(401, { "Content-Type": "application/json" });
+          res.writeHead(401, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          });
+
           return res.end(JSON.stringify({ error: "Unauthorized" }));
         }
         if (user.isAdmin) {
@@ -345,7 +386,13 @@ if (method === "POST" && pathname === "/login") {
     return authenticate(req, res, () => {
       db.getUserByUsername(req.authUser, (err, user) => {
         if (err || !user || !user.isAdmin) {
-          res.writeHead(401, { "Content-Type": "application/json" });
+          res.writeHead(401, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          });
+
           return res.end(JSON.stringify({ error: "Unauthorized" }));
         }
         let body = "";
