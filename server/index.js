@@ -163,38 +163,51 @@ const server = http.createServer((req, res) => {
     });
   }
 
-  if (method === "GET" && pathname === "/rankings/rss") {
-    db.getOverallRanking((err, rows) => {
-      if (err) {
-        res.writeHead(500, { "Content-Type": "text/plain" });
-        return res.end("Server error");
-      }
-      res.writeHead(200, {
-        "Content-Type": "application/xml; charset=UTF-8",
-      });
-      let rss = `<?xml version="1.0" encoding="UTF-8"?>
+if (method === "GET" && pathname === "/rankings/rss") {
+  db.getOverallRanking((err, rows) => {
+    if (err) {
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      return res.end("Server error");
+    }
+
+    res.writeHead(200, {
+      "Content-Type": "application/rss+xml; charset=UTF-8",
+    });
+
+    const baseUrl = "https://proiect-web-server.vercel.app";
+    let rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
   <title>HEROQuizz Rankings</title>
-  <link>https://proiect-web-server.vercel.app/rankings/rss</link>
-  <description>Latest HEROQuizz overall rankings</description>`;
+  <link>${baseUrl}/rankings</link>
+  <description>Latest HEROQuizz overall rankings</description>
+  <language>en-us</language>
+  <ttl>60</ttl>`;
 
-      rows.forEach((e, i) => {
-        rss += `
-<item>
-  <title>${e.username}</title>
-  <description>Score: ${e.score} (Question ${e.question_id})</description>
-  <guid isPermaLink="false">${i + 1}-${e.username}-${e.question_id}</guid>
-</item>`;
-      });
-
+    rows.forEach((e, i) => {
+      const itemLink = `${baseUrl}/users/${encodeURIComponent(
+        e.username
+      )}/questions/${e.question_id}`;
       rss += `
+<item>
+  <title>${escapeXml(e.username)}</title>
+  <link>${itemLink}</link>
+  <description>Score: ${e.score} (Question ${e.question_id})</description>
+  <guid isPermaLink="false">${i + 1}-${escapeXml(e.username)}-${
+        e.question_id
+      }</guid>
+</item>`;
+    });
+
+    rss += `
 </channel>
 </rss>`;
-      res.end(rss);
-    });
-    return;
-  }
+
+    res.end(rss);
+  });
+  return;
+}
+
 
   if (method === "GET" && pathname === "/quizzes") {
     return authenticate(req, res, () => {
