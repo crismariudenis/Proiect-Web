@@ -169,7 +169,9 @@ const server = http.createServer((req, res) => {
         res.writeHead(500, { "Content-Type": "text/plain" });
         return res.end("Server error");
       }
-      res.writeHead(200, { "Content-Type": "application/xml" });
+      res.writeHead(200, {
+        "Content-Type": "application/rss+xml; charset=UTF-8",
+      });
       let rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
@@ -180,7 +182,10 @@ const server = http.createServer((req, res) => {
       rows.forEach((e, i) => {
         rss += `
   <item>
-    <title>${e.username}</title>
+    <title>Entry ${i + 1}: ${e.username}</title>
+    <link>https://proiect-web-server.vercel.app/user/${encodeURIComponent(
+      e.username
+    )}</link>
     <description>Score: ${e.score} (Question ${e.question_id})</description>
     <guid isPermaLink="false">${i + 1}-${e.username}-${e.question_id}</guid>
   </item>`;
