@@ -9,6 +9,14 @@ let heroesRowsCount;
 let currentCard;
 let usersUpdatingScores = {};
 
+function setCORSHeaders(res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
+
+
+
 db.numberOfRows((err, count) => {
   if (err) {
     console.error("Couldn't find rowcount", err);
@@ -23,6 +31,7 @@ db.numberOfRows((err, count) => {
 db.loadChoices((choicesMap) => {});
 
 function authenticate(req, res, next) {
+  setCORSHeaders(res);
   const token = req.headers.authorization;
   if (!token) {
     res.writeHead(401, { "Content-Type": "application/json" });
@@ -53,10 +62,7 @@ function authenticate(req, res, next) {
 }
 
 const server = http.createServer((req, res) => {
-  // CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  setCORSHeaders(res);
   if (req.method === "OPTIONS") {
     res.writeHead(204);
     return res.end();

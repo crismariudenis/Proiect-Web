@@ -38,9 +38,12 @@
         async function loadUsers() {
           container.textContent = "Loading...";
           try {
-            const res = await fetch("http://localhost:3000/dashboard", {
-              headers: { Authorization: localStorage.getItem("authToken") },
-            });
+            const res = await fetch(
+              "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/dashboard",
+              {
+                headers: { Authorization: localStorage.getItem("authToken") },
+              }
+            );
             if (!res.ok) {
               if (res.status === 401) {
                 openLogin();
@@ -79,14 +82,17 @@
             document.querySelectorAll(".grant-btn").forEach((btn) =>
               btn.addEventListener("click", async () => {
                 const id = btn.dataset.id;
-                await fetch("http://localhost:3000/grantAdmin", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: localStorage.getItem("authToken"),
-                  },
-                  body: JSON.stringify({ id }),
-                });
+                await fetch(
+                  "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/grantAdmin",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: localStorage.getItem("authToken"),
+                    },
+                    body: JSON.stringify({ id }),
+                  }
+                );
                 loadUsers();
               })
             );
@@ -98,9 +104,12 @@
         async function loadRanking() {
           container.textContent = "Loading...";
           try {
-            const res = await fetch("http://localhost:3000/rankings", {
-              headers: { Authorization: localStorage.getItem("authToken") },
-            });
+            const res = await fetch(
+              "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings",
+              {
+                headers: { Authorization: localStorage.getItem("authToken") },
+              }
+            );
             if (!res.ok) {
               if (res.status === 401) {
                 openLogin();
@@ -135,7 +144,10 @@
             document
               .getElementById("rss_feed_btn")
               .addEventListener("click", () =>
-                window.open("http://localhost:3000/rankings/rss", "_blank")
+                window.open(
+                  "https://proiect-web-server-3nbmwrb1k-crismariudenis1s-projects.vercel.app/rankings/rss",
+                  "_blank"
+                )
               );
           } catch (e) {
             container.textContent = e.message;
