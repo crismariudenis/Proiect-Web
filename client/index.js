@@ -80,6 +80,7 @@ async function getImageFromURL(url) {
 }
 
 let currentCard;
+let questionOffset = 0;
 
 async function loadLanguageData() {
   try {
