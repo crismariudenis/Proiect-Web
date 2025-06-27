@@ -104,27 +104,20 @@ const server = http.createServer((req, res) => {
       const score = userScoreMap[username];
       console.log("Score from server: " + score);
 
+      db.updateRanking(score, username, (err) => {
+        if (err) {
+          console.error("Couldn't update ranking", err);
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          return res.end("Server error");
+        }
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ score }));
 
-      if (score === undefined) {
-        res.writeHead(404, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: "No score." }));
-      }
-      else {
-        db.updateRanking(score, username, err => {
-          if (err) {
-            console.error("Couldn't get quizzes", err);
-            res.writeHead(500);
-            res.end("Server error");
-            return;
-          }
-        });
+      });
 
-      }
-
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ score }));
     });
   }
+
 
   if (method === "GET" && pathname === "/rankings") {
     return authenticate(req, res, () => {

@@ -238,18 +238,22 @@ function getChoices(column, callback) {
 
 function updateRanking(score, username, callback) {
   const sql = `SELECT * FROM rankings WHERE username = ?`;
-  db.get(sql, [username], (err, row) => {
-    if (err) return callback(err);
+  try {
+    db.get(sql, [username], (err, row) => {
+      if (err) return callback(err);
 
-    if (row) {
-      const updateSql = `UPDATE rankings SET score = ? WHERE username = ?`;
-      db.run(updateSql, [score, username], callback);
-    } else {
-      const insertSql = `INSERT INTO rankings (username, score) VALUES (?, ?)`;
-      db.run(insertSql, [username, score], callback);
-    }
-  });
-
+      if (row) {
+        const updateSql = `UPDATE rankings SET score = ? WHERE username = ?`;
+        db.run(updateSql, [score, username], callback);
+      } else {
+        const insertSql = `INSERT INTO rankings (username, score) VALUES (?, ?)`;
+        db.run(insertSql, [username, score], callback);
+      }
+    });
+  }
+  catch (e) {
+    console.log("DB EXCEPTION" + e);
+  }
 }
 
 function getRanking(callback) {
