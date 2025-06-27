@@ -202,5 +202,3 @@ main .content .button {
     rotate(var(--fa-rotate-angle, 0deg))
   ) !important;
 }
-
-
