@@ -80,19 +80,15 @@ function authenticate(req, res, next) {
 
 const server = http.createServer((req, res) => {
   setCORSHeaders(res);
-if (method === "OPTIONS") {
-  res.writeHead(204, {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  });
-  return res.end();
-}
 
-
-  const parsedUrl = url.parse(req.url, true);
   const method = req.method;
+  const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
+
+  if (method === "OPTIONS") {
+    res.writeHead(204);
+    return res.end();
+  }
 
   console.log(pathname);
   if (method === "POST" && pathname === "/selectedCard") {
