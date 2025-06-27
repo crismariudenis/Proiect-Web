@@ -162,54 +162,42 @@ const server = http.createServer((req, res) => {
       }
     });
   }
-  function escapeXml(unsafe) {
-    return unsafe.replace(/[<>&'"]/g, function (c) {
-      switch (c) {
-        case "<":
-          return "&lt;";
-        case ">":
-          return "&gt;";
-        case "&":
-          return "&amp;";
-        case "'":
-          return "&apos;";
-        case '"':
-          return "&quot;";
-      }
-    });
-  }
-
-  if (method === "GET" && pathname === "/rankings/rss") {
-    db.getOverallRanking((err, rows) => {
-      if (err) {
-        res.writeHead(500, { "Content-Type": "text/plain" });
-        return res.end("Server error");
-      }
-      // proper RSS content type
-      res.writeHead(200, {
-        "Content-Type": "application/rss+xml; charset=UTF-8",
-      });
-      let rss = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+    }
+  });
+}
+  
+if (method === "GET" && pathname === "/rankings/rss") {
+  db.getOverallRanking((err, rows) => {
+    if (err) {
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      return res.end("Server error");
+    }
+      res.writeHead(200, { "Content-Type": "application/xml" });
+      let rss = `<rss version="2.0">
 <channel>
   <title>HEROQuizz Rankings</title>
   <link>http://localhost:3000/rankings/rss</link>
-  <description>Latest HEROQuizz overall rankings</description>
-  <language>en-us</language>
-  <ttl>60</ttl>`;
+  <description>Latest HEROQuizz overall rankings</description>`;
 
       rows.forEach((e, i) => {
-        const title = escapeXml(e.username);
-        const desc = escapeXml(`Score: ${e.score} (Question ${e.question_id})`);
-        const link = `http://localhost:3000/rankings?question=${e.question_id}`;
-        const guid = `${i + 1}-${escapeXml(e.username)}-${e.question_id}`;
-
         rss += `
   <item>
-    <title>${title}</title>
-    <link>${link}</link>
-    <description>${desc}</description>
-    <guid isPermaLink="false">${guid}</guid>
+    <title>${e.username}</title>
+    <description>Score: ${e.score} (Question ${e.question_id})</description>
+    <guid isPermaLink="false">${i + 1}-${e.username}-${e.question_id}</guid>
   </item>`;
       });
 
@@ -220,6 +208,7 @@ const server = http.createServer((req, res) => {
     });
     return;
   }
+
 
   if (method === "GET" && pathname === "/quizzes") {
     return authenticate(req, res, () => {
