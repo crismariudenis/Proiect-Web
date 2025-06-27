@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
+    <link rel="shortcut icon" href="#">
   </head>
   <body>
     <div id="navbar"></div>
@@ -42,7 +43,13 @@
             const res = await fetch("http://localhost:3000/dashboard", {
               headers: { Authorization: localStorage.getItem("authToken") },
             });
-            if (!res.ok) throw new Error("Access denied");
+            if (!res.ok) {
+              if (res.status === 401) {
+                openLogin();
+                return;
+              }
+              throw new Error("Access denied");
+            }
             const { users } = await res.json();
             const rows = users
               .map(
@@ -97,34 +104,44 @@
             const res = await fetch("http://localhost:3000/rankings", {
               headers: { Authorization: localStorage.getItem("authToken") },
             });
-            if (!res.ok) throw new Error("Access denied");
+            if (!res.ok) {
+              if (res.status === 401) {
+                openLogin();
+                return;
+              }
+              throw new Error("Access denied");
+            }
             const list = await res.json();
-
-            // build rows including question_id
             const rows = list
               .map(
                 (e, i) => `
-            <tr>
-              <td>${i + 1}</td>
-              <td>${e.username}</td>
-              <td>${e.question_id}</td>
-              <td>${e.score}</td>
-            </tr>
-          `
+        <tr>
+          <td>${i + 1}</td><td>${e.username}</td><td>${e.question_id}</td><td>${
+                  e.score
+                }</td>
+        </tr>`
               )
               .join("");
 
-            // render header with a Question ID column
+            // inject RSS button and table
             container.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>#</th><th>Username</th><th>Question ID</th><th>Score</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
+      <div style="margin-bottom:1em;">
+        <button id="rss_feed_btn">🔗 RSS Feed</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Username</th><th>Question ID</th><th>Score</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
       `;
+
+            // wire the RSS button
+            document
+              .getElementById("rss_feed_btn")
+              .addEventListener("click", () =>
+                window.open("http://localhost:3000/rankings/rss", "_blank")
+              );
           } catch (e) {
             container.textContent = e.message;
           }

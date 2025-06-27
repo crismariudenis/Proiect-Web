@@ -78,6 +78,7 @@
   background-color: rgb(28, 31, 38);
   display: flex;
   flex-direction: column;
+  justify-content: space-between; /* push ranking to bottom */
 }
 
 .pop_up_descr {
@@ -86,14 +87,11 @@
 }
 
 .pop_up_rank {
-  flex: 0 0 35%;
+  flex: 0 0 auto;
+  margin-top: auto; /* ensure it sits at the bottom of its container */
   background-color: rgb(28, 31, 38);
 }
 
-.pop_up_tags {
-  flex: 0 0 20%;
-  background-color: rgb(28, 31, 38);
-}
 
 .pop_up_img {
   width: 40%;
@@ -120,7 +118,7 @@
   text-align: left;
   color: rgb(230, 57, 70);
   font-weight: bold;
-  font-size: clamp(0.0rem, 1.3vw, 1.3rem);
+  font-size: clamp(0rem, 1.3vw, 1.3rem);
 }
 
 .description_body,
@@ -129,7 +127,7 @@
   color: white;
   /* font-size: 100%; */
   word-wrap: break-word;
-  font-size: clamp(0.0rem, 1.2vw, 1.3rem);
+  font-size: clamp(0rem, 1.2vw, 1.3rem);
 }
 
 .pop_up_footer button {
@@ -149,7 +147,7 @@
 @media (max-width: 500px) {
   .pop_up_footer button {
     padding: clamp(0.05rem, 2.7vw, 2.9rem) clamp(1rem, 1.9vw, 2.3rem);
-    font-size: clamp(0.0rem, 0.7vw, 0.9rem);
+    font-size: clamp(0rem, 0.7vw, 0.9rem);
   }
 }
 
@@ -162,13 +160,13 @@
   .description,
   .ranking,
   .tags {
-    font-size: clamp(0.0rem, 1.1vw, 1.3rem);
+    font-size: clamp(0rem, 1.1vw, 1.3rem);
   }
 
   .description_body,
   .ranking_body,
   .pop_up_footer button {
-    font-size: clamp(0.0rem, 1vw, 1.2rem);
+    font-size: clamp(0rem, 1vw, 1.2rem);
     word-wrap: break-word;
   }
 
@@ -178,7 +176,7 @@
 
   .pop_up_footer button {
     padding: clamp(0.05rem, 2vw, 2rem) clamp(1rem, 1.5vw, 2rem);
-    font-size: clamp(0.0rem, 0.7vw, 0.9rem);
+    font-size: clamp(0rem, 0.7vw, 0.9rem);
   }
 }
 

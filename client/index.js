@@ -586,7 +586,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const pop_up = langData[currentLanguage].pop_up;
           // update header to include question number
           description.innerText = pop_up.description;
-          ranking.innerText = `${pop_up.ranking} (#${cardId})`;
+          ranking.innerText = pop_up.ranking;
 
           // fetch only this question’s top-4
           fetch(`http://localhost:3000/rankings?question=${cardId}`, {
@@ -686,5 +686,54 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       })
       .catch(console.error);
+  }
+
+  // rankings
+  const rankingContainer = document.getElementById("ranking");
+  if (rankingContainer) {
+    async function loadRanking() {
+      rankingContainer.textContent = "Loading...";
+      try {
+        const res = await fetch("http://localhost:3000/rankings", {
+          headers: { Authorization: localStorage.getItem("authToken") },
+        });
+        if (!res.ok) throw new Error("Access denied");
+        const list = await res.json();
+        const rows = list
+          .map(
+            (e, i) => `
+        <tr>
+          <td>${i + 1}</td><td>${e.username}</td><td>${e.question_id}</td><td>${
+              e.score
+            }</td>
+        </tr>
+      `
+          )
+          .join("");
+
+        // inject RSS button and table
+        rankingContainer.innerHTML = `
+      <div style="margin-bottom:1em;">
+        <button id="rss_feed_btn">🔗 RSS Feed</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Username</th><th>Question ID</th><th>Score</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+
+        // wire the RSS button
+        document
+          .getElementById("rss_feed_btn")
+          .addEventListener("click", () => {
+            window.open("http://localhost:3000/rankings/rss", "_blank");
+          });
+      } catch (e) {
+        rankingContainer.textContent = e.message;
+      }
+    }
+    loadRanking();
   }
 });

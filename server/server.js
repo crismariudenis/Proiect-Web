@@ -117,18 +117,66 @@ const server = http.createServer((req, res) => {
     });
   }
 
+  // GET /rankings  (with optional ?question=)
   if (method === "GET" && pathname === "/rankings") {
     return authenticate(req, res, () => {
-      db.getOverallRanking((err, rows) => {
-        if (err) {
-          res.writeHead(500, { "Content-Type": "application/json" });
-          return res.end(JSON.stringify({ error: "DB error" }));
-        }
-        console.log("Ranking rows:", rows);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(rows));
-      });
+      // parse query
+      const parsed = new URL(req.url, `http://${req.headers.host}`);
+      const q = parsed.searchParams.get("question");
+      if (q) {
+        // top-4 for one question
+        db.getRanking(q, (err, rows) => {
+          if (err) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "DB error" }));
+          }
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify(rows));
+        });
+      } else {
+        // overall ranking
+        db.getOverallRanking((err, rows) => {
+          if (err) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ error: "DB error" }));
+          }
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify(rows));
+        });
+      }
     });
+  }
+
+  // RSS feed for overall rankings (no auth required)
+  if (method === "GET" && pathname === "/rankings/rss") {
+    db.getOverallRanking((err, rows) => {
+      if (err) {
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        return res.end("Server error");
+      }
+      res.writeHead(200, { "Content-Type": "application/xml" });
+      let rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>HEROQuizz Rankings</title>
+  <link>http://localhost:3000/rankings/rss</link>
+  <description>Latest HEROQuizz overall rankings</description>`;
+
+      rows.forEach((e, i) => {
+        rss += `
+  <item>
+    <title>${e.username}</title>
+    <description>Score: ${e.score} (Question ${e.question_id})</description>
+    <guid isPermaLink="false">${i + 1}-${e.username}-${e.question_id}</guid>
+  </item>`;
+      });
+
+      rss += `
+</channel>
+</rss>`;
+      res.end(rss);
+    });
+    return;
   }
 
   // /quizzes: generate and store answers per user
