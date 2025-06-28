@@ -1,22 +1,16 @@
-# Proiect-Web
+# Web-Project
 
-Table of Contents
+## Table of Contents
 
-Description
-
-Features
-
-Diagrams
-
-Technologies Used
-
-Frontend
-
-Backend
-
-Installation (Local)
-
-Contact
+- [Description](#description)
+- [Features](#features)
+- [Diagrams](#diagrams)
+- [Technologies Used](#technologies-used)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+- [Installation Local](#installation-local)
+- [Live Demo](#live-demo)
+- [Contact](#contact)
 
 ##  Description
 
@@ -62,7 +56,7 @@ Technically, the project follows a clear separation of concerns. The frontend is
 - JavaScript 
 
 ### Backend
-- Node.js (Express)
+- Node.js 
 - SQLite (via `sqlite3` package)
 - REST API (for quiz management, auth, score tracking)
 
@@ -78,11 +72,15 @@ Technically, the project follows a clear separation of concerns. The frontend is
 3. **Start the server**
      ```bash
    node server.js
-4.**Open your browser** 
-at http://localhost:5000
+ 4.**Open your browser** 
+ at http://localhost:5000
+
+ ##  Live Demo
+https://www.youtube.com/watch?v=nsiF8j-S6KA
 
 
 ##  Contact
 Denis Crismariu - https://www.linkedin.com/in/crismariu-denis-347778223/
+
 Georgiana Matcovici - https://www.linkedin.com/in/georgiana-matcovici-b9450b295/
 
