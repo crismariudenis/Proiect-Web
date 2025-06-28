@@ -22,7 +22,7 @@ To play, users must first authenticate by logging into their account. Their perf
 
 The app also features internationalization, supporting English and Romanian, with the interface text loaded dynamically from JSON translation files.
 
-Technically, the project follows a clear separation of concerns. The frontend is built using HTML, CSS, and JavaScript, running directly in the browser and handling UI interactions. The backend is powered by Node.js, exposing RESTful APIs that handle user authentication, quiz data, answer validation, and score tracking. All persistent data, including user accounts and quiz questions, is stored in a lightweight SQLite database accessed via the sqlite3 module.
+Technically, the frontend is built using HTML, CSS, and JavaScript, running directly in the browser and handling UI interactions. The backend is powered by Node.js, exposing RESTful APIs that handle user authentication, quiz data, answer validation, and score tracking. All persistent data, including user accounts and quiz questions, is stored in a lightweight SQLite database accessed via the sqlite3 module.
 
 ##  Features
 
