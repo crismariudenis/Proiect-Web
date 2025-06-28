@@ -38,13 +38,13 @@ Technically, the frontend is built using HTML, CSS, and JavaScript, running dire
 ---
 
 ##  Diagrams
-C1
+•**C1**
 ![alt text](./assets/c1.png)
 
-C2
+•**C2**
 ![alt text](./assets/c2.png)
 
-C3
+•**C3**
 ![alt text](./assets/c3.png)
 
 
