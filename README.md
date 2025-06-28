@@ -1,4 +1,4 @@
-# SuperHero Quizz
+# Superhero Quiz
 
 ## Table of Contents
 
