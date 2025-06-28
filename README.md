@@ -1,4 +1,4 @@
-# Web-Project
+# SuperHero Quizz
 
 ## Table of Contents
 
