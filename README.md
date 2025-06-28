@@ -39,12 +39,13 @@ Technically, the frontend is built using HTML, CSS, and JavaScript, running dire
 
 ##  Diagrams
 
-
+1.C1
 ![alt text](./assets/c1.png)
 
-
+2.C2
 ![alt text](./assets/c2.png)
 
+3.C3
 ![alt text](./assets/c3.png)
 
 
